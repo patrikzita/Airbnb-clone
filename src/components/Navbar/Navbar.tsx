@@ -1,33 +1,28 @@
+import LanguageIcon from "@mui/icons-material/Language";
+import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
-  Toolbar,
-  styled,
-  Box,
-  Button,
-  Menu,
-  Tooltip,
-  IconButton,
   Avatar,
+  Button,
+  IconButton,
+  Menu,
   MenuItem,
-  Typography,
   Stack,
-  ButtonGroup,
+  Toolbar,
+  Typography,
+  styled
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import LanguageIcon from "@mui/icons-material/Language";
-import SearchIcon from "@mui/icons-material/Search";
 import Link from "next/link";
 import { useState } from "react";
 import SearchBar from "./SearchBar";
 
-const StyledToolBar = styled(Toolbar)({
+const StyledToolBar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-around",
-  padding: 2,
   "& > *": {
     flex: "1",
   },
-});
+}));
 const settings = [
   "Sign Up",
   "Log in",
@@ -66,6 +61,7 @@ const Navbar = () => {
             sx={{
               padding: ".5rem",
               borderRadius: "1rem",
+              letterSpacing: "1px"
             }}
           >
             Airbnb your home

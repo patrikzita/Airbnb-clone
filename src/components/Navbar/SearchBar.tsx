@@ -13,7 +13,6 @@ const SearchContainer = styled(Box)({
   flexDirection: "row",
   justifyContent: "center",
   alignItems: "center",
-  padding: 2,
   borderRadius: "4rem",
   backgroundColor: "white",
   boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
@@ -32,14 +31,39 @@ const SearchBar = () => {
         },
       }}
     >
-      <Button>Anywhere</Button>
-      <Button>Any week</Button>
-      <Button>Add guest</Button>
+      <Button
+        sx={{
+          fontWeight: "bold",
+          letterSpacing: "3px",
+          paddingInline: 3,
+          fontSize: { xs: ".7rem", sm: "1rem" },
+        }}
+      >
+        Anywhere
+      </Button>
+      <Button
+        sx={{
+          fontWeight: "bold",
+          letterSpacing: "3px",
+          fontSize: { xs: ".7rem", sm: "1rem" },
+        }}
+      >
+        Any week
+      </Button>
+      <Button
+        sx={{
+          fontWeight: "bold",
+          letterSpacing: "3px",
+          fontSize: { xs: ".7rem", sm: "1rem" },
+        }}
+      >
+        Add guest
+      </Button>
       <Button
         sx={{
           backgroundColor: "red",
           "&:hover": {
-            backgroundColor: "red",
+            backgroundColor: "#ff7279",
           },
         }}
       >
