@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import Navbar from "@/components/Navbar/Navbar";
+import ModalContainer from "@/components/modals/modal";
+import RegisterModal from "@/components/modals/RegisterModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +20,7 @@ export default function Home() {
       </Head>
       <main>
         <Navbar />
-        <Typography>Ok</Typography>
+        <RegisterModal />
       </main>
     </>
   );

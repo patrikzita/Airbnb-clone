@@ -10,28 +10,28 @@ import {
   Stack,
   Toolbar,
   Typography,
-  styled
+  styled,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import Link from "next/link";
 import { useState } from "react";
 import SearchBar from "./SearchBar";
+import Image from "next/image";
+import useRegisterModal from "@/hooks/useRegisterModal";
 
 const StyledToolBar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-around",
-  "& > *": {
-    flex: "1",
-  },
 }));
-const settings = [
-  "Sign Up",
-  "Log in",
-  "Airbnb your home",
-  "Host an experience",
-  "Help",
-];
+const settings = ["Airbnb your home", "Host an experience", "Help"];
 
 const Navbar = () => {
+  const theme = useTheme();
+  const registerModal = useRegisterModal();
+
+  const isXsorSM = useMediaQuery(theme.breakpoints.down("sm"));
+
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -41,7 +41,7 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  return (
+  return !isXsorSM ? (
     <AppBar
       position="sticky"
       color="transparent"
@@ -52,16 +52,22 @@ const Navbar = () => {
     >
       <StyledToolBar>
         <Link href="/">
-          <img src="/airbnb-icon.svg" style={{ width: "35px" }} />
+          <Image
+            src="/images/airbnb-icon.svg"
+            alt="Airbnb logo"
+            height="40"
+            width="40"
+          />
         </Link>
         <SearchBar />
         <Stack direction="row" gap={2} justifyContent="end">
           <Button
             color="secondary"
             sx={{
+              display: { xs: "none", md: "block" },
               padding: ".5rem",
               borderRadius: "1rem",
-              letterSpacing: "1px"
+              letterSpacing: "1px",
             }}
           >
             Airbnb your home
@@ -104,6 +110,12 @@ const Navbar = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
+            <MenuItem onClick={registerModal.onOpen}>
+              <Typography textAlign="center">Sign Up</Typography>
+            </MenuItem>
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Typography textAlign="center">Sign In</Typography>
+            </MenuItem>
             {settings.map((setting) => (
               <MenuItem key={setting} onClick={handleCloseUserMenu}>
                 <Typography textAlign="center">{setting}</Typography>
@@ -113,7 +125,7 @@ const Navbar = () => {
         </Stack>
       </StyledToolBar>
     </AppBar>
-  );
+  ) : null;
 };
 
 export default Navbar;

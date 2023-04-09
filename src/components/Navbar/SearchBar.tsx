@@ -1,24 +1,5 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  IconButton,
-  styled,
-  TextField,
-} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-
-const SearchContainer = styled(Box)({
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "center",
-  alignItems: "center",
-  borderRadius: "4rem",
-  backgroundColor: "white",
-  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-  gap: 1,
-});
-
+import { Button, ButtonGroup } from "@mui/material";
 const SearchBar = () => {
   return (
     <ButtonGroup
@@ -26,42 +7,43 @@ const SearchBar = () => {
       variant="outlined"
       sx={{
         justifyContent: "center",
+        padding: 0,
         "& .MuiButton-root": {
           borderRadius: "4rem",
         },
       }}
     >
       <Button
+        disableElevation
         sx={{
-          fontWeight: "bold",
+          fontWeight: "medium",
           letterSpacing: "3px",
-          paddingInline: 3,
-          fontSize: { xs: ".7rem", sm: "1rem" },
+          fontSize: { xs: ".7rem", sm: ".9rem" },
         }}
       >
         Anywhere
       </Button>
       <Button
         sx={{
-          fontWeight: "bold",
+          fontWeight: "medium",
           letterSpacing: "3px",
-          fontSize: { xs: ".7rem", sm: "1rem" },
+          fontSize: { xs: ".7rem", sm: ".9rem" },
         }}
       >
         Any week
       </Button>
       <Button
         sx={{
-          fontWeight: "bold",
+          fontWeight: "medium",
           letterSpacing: "3px",
-          fontSize: { xs: ".7rem", sm: "1rem" },
+          fontSize: { xs: ".7rem", sm: ".9rem" },
         }}
       >
         Add guest
       </Button>
       <Button
         sx={{
-          backgroundColor: "red",
+          backgroundColor: "#ff9bad",
           "&:hover": {
             backgroundColor: "#ff7279",
           },
