@@ -10,7 +10,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: "Helvetica Neue, sans-serif",
+    fontFamily: "Poppins, sans-serif",
   },
 });
 
