@@ -6,8 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const response = await axios.get("https://restcountries.com/v2/all");
-
+    const response = await axios.get("https://restcountries.com/v3.1/all?fields=name,idd");
     res.status(200).json(response.data);
   } catch (error) {
     console.error("Error fetching fruit data:", error);

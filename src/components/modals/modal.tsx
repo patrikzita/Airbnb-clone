@@ -1,23 +1,18 @@
+import { CountryType, countries } from "@/utils/countries";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  Autocomplete,
+  FormGroup,
+  IconButton,
+  InputAdornment,
+  TextField
+} from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
 import Fade from "@mui/material/Fade";
-import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { QueryClient, dehydrate, useQuery } from "@tanstack/react-query";
-import {
-  FormControl,
-  FormHelperText,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  styled,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
 
 type ModalProps = {
   isOpen: boolean;
@@ -26,46 +21,71 @@ type ModalProps = {
   title?: string;
   body?: React.ReactElement;
 };
-const fetchData = async () => {
-  const response = await axios.get("/api/phone-prefixes");
-  const countries = response.data;
-  const phonePrefixes = countries.map((country: any) => ({
-    name: country.name,
-    prefix: country.callingCodes[0],
-  }));
-  return phonePrefixes;
-};
 
 const CountrySelect = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["Prefixes"],
-    queryFn: fetchData,
-  });
-
-  const [selectedPrefix, setSelectedPrefix] = useState("");
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectedPrefix(event.target.value as string);
+  const [selectedCountry, setSelectedCountry] = useState<CountryType | null>(
+    null)
+  const handleCountryChange = (event: any, newValue: CountryType | null) => {
+    setSelectedCountry(newValue);
   };
+ 
 
-  if (!data) return <h1>error</h1>;
+  console.log(selectedCountry);
+
   return (
     <Box>
-      <FormControl sx={{ width: "100%" }}>
-        <InputLabel id="phone-prefix-select-label">Country/Region</InputLabel>
-        <Select
-          value={selectedPrefix}
-          label="Country/Region"
-          onChange={handleChange}
-          disabled={isLoading}
-        >
-          {data.map((country: any) => (
-            <MenuItem key={country.name} value={country.prefix}>
-              {country.name} (+{country.prefix})
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <FormGroup>
+        <Autocomplete
+          id="country-select"
+          sx={{ width: "100%" }}
+          options={countries}
+          autoHighlight
+          getOptionLabel={(option) => `${option.label} (+${option.phone})`}
+          onChange={handleCountryChange}
+          renderOption={(props, option) => (
+            <Box
+              component="li"
+              sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+              {...props}
+            >
+              <img
+                loading="lazy"
+                width="20"
+                src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                alt=""
+              />
+              {option.label} ({option.code}) +{option.phone}
+            </Box>
+          )}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Choose a country"
+              variant="outlined"
+              inputProps={{
+                ...params.inputProps,
+                autoComplete: "new-password",
+              }}
+            />
+          )}
+        />
+        {selectedCountry && (
+          <TextField
+            label="Phone Number"
+            variant="outlined"
+            sx={{ width: "100%", mt: 2 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  +{selectedCountry.phone}
+                </InputAdornment>
+              ),
+            }}
+            inputProps={{ type: "number" }}
+          />
+        )}
+      </FormGroup>
     </Box>
   );
 };
