@@ -19,6 +19,9 @@ import { useState } from "react";
 import SearchBar from "./SearchBar";
 import Image from "next/image";
 import useRegisterModal from "@/hooks/useRegisterModal";
+import type { User } from "@prisma/client";
+import { signOut, useSession } from "next-auth/react";
+import React from "react";
 
 const StyledToolBar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
@@ -26,9 +29,14 @@ const StyledToolBar = styled(Toolbar)(({ theme }) => ({
 }));
 const settings = ["Airbnb your home", "Host an experience", "Help"];
 
-const Navbar = () => {
+type NavbarProps = {
+  currentUser?: User | null;
+};
+
+const Navbar = ({ currentUser }: NavbarProps) => {
   const theme = useTheme();
   const registerModal = useRegisterModal();
+  const { data: session } = useSession();
 
   const isXsorSM = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -41,6 +49,8 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  console.log(session);
+
   return !isXsorSM ? (
     <AppBar
       position="sticky"
@@ -90,8 +100,8 @@ const Navbar = () => {
             <MenuIcon sx={{ mr: 1, color: "common.black" }} />
             <Avatar
               alt=""
-              src="/static/images/avatar/2.jpg"
-              sx={{ width: 24, height: 24 }}
+              src={session?.user?.image?.toString()}
+              sx={{ width: 30, height: 30 }}
             />
           </Button>
           <Menu
@@ -110,17 +120,38 @@ const Navbar = () => {
             open={Boolean(anchorElUser)}
             onClose={handleCloseUserMenu}
           >
-            <MenuItem onClick={registerModal.onOpen}>
-              <Typography textAlign="center">Sign Up</Typography>
-            </MenuItem>
-            <MenuItem onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Sign In</Typography>
-            </MenuItem>
-            {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">{setting}</Typography>
-              </MenuItem>
-            ))}
+            {session
+              ? React.Children.toArray([
+                  <MenuItem>
+                    <Typography textAlign="center">My trips</Typography>
+                  </MenuItem>,
+                  <MenuItem>
+                    <Typography textAlign="center">My favorites</Typography>
+                  </MenuItem>,
+                  <MenuItem>
+                    <Typography textAlign="center">My reservations</Typography>
+                  </MenuItem>,
+                  <MenuItem>
+                    <Typography textAlign="center">Airbnb my home</Typography>
+                  </MenuItem>,
+                  <hr />,
+                  <MenuItem onClick={() => signOut()}>
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem>,
+                ])
+              : React.Children.toArray([
+                  <MenuItem onClick={registerModal.onOpen}>
+                    <Typography textAlign="center">Sign Up</Typography>
+                  </MenuItem>,
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Sign In</Typography>
+                  </MenuItem>,
+                  ...settings.map((setting) => (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  )),
+                ])}
           </Menu>
         </Stack>
       </StyledToolBar>

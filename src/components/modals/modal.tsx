@@ -2,10 +2,13 @@ import { CountryType, countries } from "@/utils/countries";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   Autocomplete,
+  Button,
+  Divider,
   FormGroup,
   IconButton,
   InputAdornment,
-  TextField
+  Stack,
+  TextField,
 } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -13,6 +16,11 @@ import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import GoogleIcon from "@mui/icons-material/Google";
+import AppleIcon from "@mui/icons-material/Apple";
+import EmailIcon from "@mui/icons-material/Email";
+import { signIn } from "next-auth/react";
 
 type ModalProps = {
   isOpen: boolean;
@@ -23,17 +31,16 @@ type ModalProps = {
 };
 
 const CountrySelect = () => {
+  const defaultCountry =
+    countries.find((country) => country.code === "CZ") || null;
   const [selectedCountry, setSelectedCountry] = useState<CountryType | null>(
-    null)
+    defaultCountry
+  );
   const handleCountryChange = (event: any, newValue: CountryType | null) => {
     setSelectedCountry(newValue);
   };
- 
-
-  console.log(selectedCountry);
-
   return (
-    <Box>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <FormGroup>
         <Autocomplete
           id="country-select"
@@ -41,6 +48,7 @@ const CountrySelect = () => {
           options={countries}
           autoHighlight
           getOptionLabel={(option) => `${option.label} (+${option.phone})`}
+          value={selectedCountry}
           onChange={handleCountryChange}
           renderOption={(props, option) => (
             <Box
@@ -74,7 +82,18 @@ const CountrySelect = () => {
           <TextField
             label="Phone Number"
             variant="outlined"
-            sx={{ width: "100%", mt: 2 }}
+            sx={{
+              width: "100%",
+              mt: 2,
+              "& input[type=number]": {
+                MozAppearance: "textfield",
+              },
+              "& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button":
+                {
+                  WebkitAppearance: "none",
+                  margin: 0,
+                },
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -86,7 +105,66 @@ const CountrySelect = () => {
           />
         )}
       </FormGroup>
+      <Button
+        variant="contained"
+        sx={{
+          width: "100%",
+          borderRadius: 2,
+          paddingY: 1,
+        }}
+      >
+        Continue
+      </Button>
     </Box>
+  );
+};
+
+const SocialButtons = () => {
+  const handleFacebookSignIn = () => {};
+
+  const handleGoogleSignIn = () => {
+    signIn("google");
+  };
+
+  const handleAppleSignIn = () => {};
+
+  const handleEmailSignIn = () => {};
+
+  return (
+    <Stack spacing={2} direction="column">
+      <Button
+        variant="outlined"
+        color="secondary"
+        startIcon={<FacebookIcon sx={{ color: "#1877F2" }} />}
+        onClick={handleFacebookSignIn}
+      >
+        Continue with Facebook
+      </Button>
+      <Button
+        variant="outlined"
+        color="secondary"
+        startIcon={<GoogleIcon sx={{ color: "#4285F4" }} />}
+        onClick={() => signIn('google')}
+      >
+        Continue with Google
+      </Button>
+      <Button
+        variant="outlined"
+        color="secondary"
+        startIcon={<AppleIcon />}
+        onClick={handleAppleSignIn}
+      >
+        Continue with Apple
+      </Button>
+      <Button
+        variant="outlined"
+        color="secondary"
+        startIcon={<EmailIcon />}
+        onClick={handleEmailSignIn}
+      >
+        Continue with email
+      </Button>
+    </Stack>
   );
 };
 
@@ -161,6 +239,10 @@ const ModalContainer = ({
                 Welcome to Airbnb
               </Typography>
               <CountrySelect />
+              <Divider orientation="horizontal">
+                <Typography>or</Typography>
+              </Divider>
+              <SocialButtons />
             </Box>
           </Box>
         </Fade>

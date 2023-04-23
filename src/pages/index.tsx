@@ -6,10 +6,11 @@ import { Button } from "@mui/material";
 import Navbar from "@/components/Navbar/Navbar";
 import ModalContainer from "@/components/modals/modal";
 import RegisterModal from "@/components/modals/RegisterModal";
+import getCurrentUser from "@/actions/getCurrentUser";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default  function Home() {
   return (
     <>
       <Head>
@@ -19,7 +20,7 @@ export default function Home() {
         <link rel="icon" href="/airbnb-icon.svg" />
       </Head>
       <main>
-        <Navbar />
+        <Navbar  />
         <RegisterModal />
       </main>
     </>
