@@ -4,6 +4,7 @@ import {
   AppBar,
   Avatar,
   Button,
+  Divider,
   IconButton,
   Menu,
   MenuItem,
@@ -27,7 +28,6 @@ const StyledToolBar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-around",
 }));
-const settings = ["Airbnb your home", "Host an experience", "Help"];
 
 type NavbarProps = {
   currentUser?: User | null;
@@ -134,7 +134,7 @@ const Navbar = ({ currentUser }: NavbarProps) => {
                   <MenuItem>
                     <Typography textAlign="center">Airbnb my home</Typography>
                   </MenuItem>,
-                  <hr />,
+                   <Divider light />,
                   <MenuItem onClick={() => signOut()}>
                     <Typography textAlign="center">Logout</Typography>
                   </MenuItem>,
@@ -144,13 +144,15 @@ const Navbar = ({ currentUser }: NavbarProps) => {
                     <Typography textAlign="center">Sign Up</Typography>
                   </MenuItem>,
                   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Sign In</Typography>
+                    <Typography textAlign="center">Log In</Typography>
                   </MenuItem>,
-                  ...settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
-                    </MenuItem>
-                  )),
+                  <Divider light />,
+                    <MenuItem  onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center">Airbnb my home</Typography>
+                    </MenuItem>,
+                    <MenuItem  onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center">Help</Typography>
+                    </MenuItem>                
                 ])}
           </Menu>
         </Stack>
