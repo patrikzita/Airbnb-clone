@@ -21,14 +21,8 @@ import GoogleIcon from "@mui/icons-material/Google";
 import AppleIcon from "@mui/icons-material/Apple";
 import EmailIcon from "@mui/icons-material/Email";
 import { signIn } from "next-auth/react";
+import useRegisterModal from "@/hooks/useRegisterModal";
 
-type ModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onSubmit?: () => void;
-  title?: string;
-  body?: React.ReactElement;
-};
 
 const CountrySelect = () => {
   const defaultCountry =
@@ -144,7 +138,7 @@ const SocialButtons = () => {
         variant="outlined"
         color="secondary"
         startIcon={<GoogleIcon sx={{ color: "#4285F4" }} />}
-        onClick={() => signIn('google')}
+        onClick={() => signIn("google")}
       >
         Continue with Google
       </Button>
@@ -168,13 +162,7 @@ const SocialButtons = () => {
   );
 };
 
-const ModalContainer = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  title,
-  body,
-}: ModalProps) => {
+const ModalContainer = () => {
   const modalStyle = {
     position: "absolute" as "absolute",
     top: "50%",
@@ -185,13 +173,14 @@ const ModalContainer = ({
     borderRadius: "1rem",
     boxShadow: 24,
   };
+  const registerModal = useRegisterModal();
   return (
     <>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={isOpen}
-        onClose={onClose}
+        open={registerModal.isOpen}
+        onClose={registerModal.onClose}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -200,7 +189,7 @@ const ModalContainer = ({
           },
         }}
       >
-        <Fade in={isOpen}>
+        <Fade in={registerModal.isOpen}>
           <Box sx={modalStyle}>
             <Box
               sx={{
@@ -214,7 +203,7 @@ const ModalContainer = ({
                 paddingY: 2,
               }}
             >
-              <IconButton onClick={onClose}>
+              <IconButton onClick={registerModal.onClose}>
                 <CloseIcon />
               </IconButton>
               <Typography
@@ -223,7 +212,7 @@ const ModalContainer = ({
                 fontWeight={700}
                 fontSize={16}
               >
-                {title}
+                Log in or sign up
               </Typography>
               <div></div>
             </Box>

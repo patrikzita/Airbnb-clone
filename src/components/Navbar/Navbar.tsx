@@ -23,17 +23,14 @@ import useRegisterModal from "@/hooks/useRegisterModal";
 import type { User } from "@prisma/client";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
+import useSearchModal from "@/hooks/useSearchModal";
 
 const StyledToolBar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-around",
 }));
 
-type NavbarProps = {
-  currentUser?: User | null;
-};
-
-const Navbar = ({ currentUser }: NavbarProps) => {
+const Navbar = () => {
   const theme = useTheme();
   const registerModal = useRegisterModal();
   const { data: session } = useSession();

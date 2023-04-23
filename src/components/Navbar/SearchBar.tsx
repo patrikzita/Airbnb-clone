@@ -1,6 +1,8 @@
+import useSearchModal from "@/hooks/useSearchModal";
 import SearchIcon from "@mui/icons-material/Search";
 import { Button, ButtonGroup } from "@mui/material";
 const SearchBar = () => {
+  const searchModal = useSearchModal();
   return (
     <ButtonGroup
       color="secondary"
@@ -12,6 +14,7 @@ const SearchBar = () => {
           borderRadius: "4rem",
         },
       }}
+      
     >
       <Button
         disableElevation
@@ -20,6 +23,7 @@ const SearchBar = () => {
           letterSpacing: "3px",
           fontSize: { xs: ".7rem", sm: ".9rem" },
         }}
+        onClick={searchModal.onOpen}
       >
         Anywhere
       </Button>
@@ -29,6 +33,7 @@ const SearchBar = () => {
           letterSpacing: "3px",
           fontSize: { xs: ".7rem", sm: ".9rem" },
         }}
+        onClick={searchModal.onOpen}
       >
         Any week
       </Button>
@@ -38,6 +43,7 @@ const SearchBar = () => {
           letterSpacing: "3px",
           fontSize: { xs: ".7rem", sm: ".9rem" },
         }}
+        onClick={searchModal.onOpen}
       >
         Add guest
       </Button>
@@ -48,6 +54,7 @@ const SearchBar = () => {
             backgroundColor: "#ff7279",
           },
         }}
+        onClick={searchModal.onOpen}
       >
         <SearchIcon sx={{ color: "common.white" }} />
       </Button>

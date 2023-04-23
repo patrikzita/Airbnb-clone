@@ -5,8 +5,7 @@ import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import Navbar from "@/components/Navbar/Navbar";
 import ModalContainer from "@/components/modals/modal";
-import RegisterModal from "@/components/modals/RegisterModal";
-import getCurrentUser from "@/actions/getCurrentUser";
+import SearchModal from "@/components/modals/SearchModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +20,8 @@ export default  function Home() {
       </Head>
       <main>
         <Navbar  />
-        <RegisterModal />
+        <ModalContainer />
+        <SearchModal />
       </main>
     </>
   );
