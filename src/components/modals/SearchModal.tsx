@@ -16,25 +16,35 @@ import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { useState, useMemo } from "react";
-import dynamic from 'next/dynamic'
+import dynamic from "next/dynamic";
+import { Range, DateRange, RangeKeyDict } from "react-date-range";
+
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import Counter from "../Others/Counter";
+
 type CountrySelectValue = {
-    flag: string;
-    label: string;
-    latlng: number[],
-    region: string;
-    value: string
-  }
-const CountrySelect = () => {
+  flag: string;
+  label: string;
+  latlng: number[];
+  region: string;
+  value: string;
+};
+
+type CountrySelectProps = {
+  nextStep: () => void;
+  value?: CountrySelectValue;
+  onChange: (value: CountrySelectValue) => void;
+};
+const CountrySelect = ({ nextStep, value, onChange }: CountrySelectProps) => {
   const { getAll } = useCountries();
-  const [selectedCountry, setSelectedCountry] = useState<CountrySelectValue>();
-  const handleCountryChange = (event: any, newValue: any | null) => {
-    setSelectedCountry(newValue);
-  };
-
-  const Map = useMemo(() => dynamic(() => import('../Others/Map'), { 
-    ssr: false 
-  }), [selectedCountry]);
-
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("../Others/Map"), {
+        ssr: false,
+      }),
+    [value]
+  );
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       <FormGroup>
@@ -43,8 +53,10 @@ const CountrySelect = () => {
           sx={{ width: "100%" }}
           options={getAll()}
           autoHighlight
-          getOptionLabel={(option) => `${option.flag} ${" "} ${option.label}, ${option.region}`}
-          onChange={handleCountryChange}
+          getOptionLabel={(option) =>
+            `${option.flag} ${" "} ${option.label}, ${option.region}`
+          }
+          onChange={(event, newValue) => onChange(newValue as CountrySelectValue)}
           renderOption={(props, option) => (
             <Box
               component="li"
@@ -54,7 +66,13 @@ const CountrySelect = () => {
               <div>{option.flag}</div>
               <Stack direction="row" alignItems="center" gap={1}>
                 <Typography>{option.label},</Typography>
-                <Typography component="p" variant="subtitle1" sx={{color:" rgb(115, 115, 115)"}}>{option.region}</Typography>
+                <Typography
+                  component="p"
+                  variant="subtitle1"
+                  sx={{ color: " rgb(115, 115, 115)" }}
+                >
+                  {option.region}
+                </Typography>
               </Stack>
             </Box>
           )}
@@ -72,7 +90,7 @@ const CountrySelect = () => {
         />
       </FormGroup>
       <Divider light />
-      <Map center={selectedCountry?.latlng} />
+      <Map center={value?.latlng} />
       <Button
         variant="contained"
         sx={{
@@ -80,12 +98,130 @@ const CountrySelect = () => {
           borderRadius: 2,
           paddingY: 1,
         }}
+        onClick={nextStep}
       >
         Next
       </Button>
     </Box>
   );
 };
+
+type DateSelectProps = {
+  nextStep: () => void;
+  previousStep: () => void;
+  value: Range;
+  onChange: (value: RangeKeyDict) => void;
+};
+const DateSelect = ({
+  nextStep,
+  previousStep,
+  value,
+  onChange,
+}: DateSelectProps) => {
+  return (
+    <>
+      <DateRange
+        rangeColors={["#262626"]}
+        date={new Date()}
+        ranges={[value]}
+        onChange={onChange}
+        direction="vertical"
+        showDateDisplay={false}
+        minDate={new Date()}
+      />
+      <Stack direction="row" gap={2}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          sx={{
+            width: "100%",
+            borderRadius: 2,
+            paddingY: 1,
+          }}
+          onClick={previousStep}
+        >
+          Back
+        </Button>
+        <Button
+          variant="contained"
+          sx={{
+            width: "100%",
+            borderRadius: 2,
+            paddingY: 1,
+          }}
+          onClick={nextStep}
+        >
+          Next
+        </Button>
+      </Stack>
+    </>
+  );
+};
+type InfoSelectProps = {
+  previousStep: () => void;
+  valueGuest: number;
+  onChangeGuest: (value: number) => void;
+  valueRoom: number;
+  onChangeRoom: (value: number) => void;
+  onSubmit: () => void
+};
+const InfoSelect = ({
+  previousStep,
+  valueGuest,
+  onChangeGuest,
+  valueRoom,
+  onChangeRoom,
+  onSubmit
+}: InfoSelectProps) => {
+  return (
+    <>
+      <Counter
+        title="Guests"
+        subtitle="How many guests are coming?"
+        onChange={onChangeGuest}
+        value={valueGuest}
+      />
+      <Divider />
+      <Counter
+        title="Rooms"
+        subtitle="How many rooms do you need?"
+        onChange={onChangeRoom}
+        value={valueRoom}
+      />
+      <Stack direction="row" gap={2} mt={2}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          sx={{
+            width: "100%",
+            borderRadius: 2,
+            paddingY: 1,
+          }}
+          onClick={previousStep}
+        >
+          Back
+        </Button>
+        <Button
+          variant="contained"
+          sx={{
+            width: "100%",
+            borderRadius: 2,
+            paddingY: 1,
+          }}
+          onClick={onSubmit}
+        >
+          Search
+        </Button>
+      </Stack>
+    </>
+  );
+};
+
+enum STEPS {
+  LOCATION = 0,
+  DATE = 1,
+  INFO = 2,
+}
 
 const SearchModal = () => {
   const modalStyle = {
@@ -99,65 +235,117 @@ const SearchModal = () => {
     boxShadow: 24,
   };
   const searchModal = useSearchModal();
+  const [step, setStep] = useState(0);
+
+  const [selectedCountry, setSelectedCountry] = useState<CountrySelectValue>();
+  const [dateRange, setDateRange] = useState<Range>({
+    startDate: new Date(),
+    endDate: new Date(),
+    key: "selection",
+  });
+  const [guestCount, setGuestCount] = useState(1);
+  const [roomCount, setRoomCount] = useState(1);
+
+  const nextStep = () => {
+    setStep((prevStep) => prevStep + 1);
+  };
+
+  const previousStep = () => {
+    setStep((prevStep) => prevStep - 1);
+  };
+
+  const onSubmit = () => {
+    const query = {
+      locationValue: selectedCountry?.value,
+      guestCount,
+      roomCount
+    }
+
+    console.log(query)
+  };
   return (
-    <>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={searchModal.isOpen}
-        onClose={searchModal.onClose}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={searchModal.isOpen}>
-          <Box sx={modalStyle}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                bgcolor: "#f4f4f4",
-                borderTopLeftRadius: 10,
-                borderTopRightRadius: 10,
-                paddingInline: 1,
-                paddingY: 2,
-              }}
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      open={searchModal.isOpen}
+      onClose={searchModal.onClose}
+      closeAfterTransition
+      slots={{ backdrop: Backdrop }}
+      slotProps={{
+        backdrop: {
+          timeout: 500,
+        },
+      }}
+    >
+      <Fade in={searchModal.isOpen}>
+        <Box sx={modalStyle}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              bgcolor: "#f4f4f4",
+              borderTopLeftRadius: 10,
+              borderTopRightRadius: 10,
+              paddingInline: 1,
+              paddingY: 2,
+            }}
+          >
+            <IconButton onClick={searchModal.onClose}>
+              <CloseIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              component="h1"
+              fontWeight={700}
+              fontSize={16}
             >
-              <IconButton onClick={searchModal.onClose}>
-                <CloseIcon />
-              </IconButton>
-              <Typography
-                variant="h6"
-                component="h1"
-                fontWeight={700}
-                fontSize={16}
-              >
-                Filters
-              </Typography>
-              <div></div>
-            </Box>
-            <Box
-              sx={{
-                p: 4,
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-              }}
-            >
-              <Typography variant="h5" component="h2" fontWeight={500}>
-                Where do you wanna go?
-              </Typography>
-              <CountrySelect />
-            </Box>
+              Filters
+            </Typography>
+            <div></div>
           </Box>
-        </Fade>
-      </Modal>
-    </>
+          <Box
+            sx={{
+              p: 4,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <Typography variant="h5" component="h2" fontWeight={500}>
+              Where do you wanna go?
+            </Typography>
+            {step === STEPS.LOCATION && (
+              <CountrySelect
+                nextStep={nextStep}
+                value={selectedCountry}
+                onChange={(value) =>
+                  setSelectedCountry(value as CountrySelectValue)
+                }
+              />
+            )}
+            {step === STEPS.DATE && (
+              <DateSelect
+                nextStep={nextStep}
+                previousStep={previousStep}
+                value={dateRange}
+                onChange={(value) => setDateRange(value.selection)}
+              />
+            )}
+            {step === STEPS.INFO && (
+              <InfoSelect
+                previousStep={previousStep}
+                valueGuest={guestCount}
+                onChangeGuest={(value) => setGuestCount(value)}
+                valueRoom={roomCount}
+                onChangeRoom={(value) => setRoomCount(value)}
+                onSubmit={onSubmit}
+              />
+            )}
+          </Box>
+        </Box>
+      </Fade>
+    </Modal>
   );
 };
 
