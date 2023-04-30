@@ -1,8 +1,62 @@
+"use client";
+import useCountries from "@/hooks/useCountries";
 import useSearchModal from "@/hooks/useSearchModal";
 import SearchIcon from "@mui/icons-material/Search";
 import { Button, ButtonGroup } from "@mui/material";
+import { useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 const SearchBar = () => {
   const searchModal = useSearchModal();
+  const params = useSearchParams();
+  const { getByValue } = useCountries();
+
+  const locationValue = params?.get("locationValue");
+  const guestCount = params?.get("guestCount");
+  const startDate = params?.get("startDate");
+  const endDate = params?.get("endDate");
+
+  const locationLabel = useMemo(() => {
+    if (locationValue) {
+      return getByValue(locationValue as string)?.label;
+    }
+    return "Anywhere";
+  }, [locationValue, getByValue]);
+
+  const dateLabel = useMemo(() => {
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      if (start.toDateString() === end.toDateString()) {
+        return start.toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+        });
+      } else if (start.getMonth() === end.getMonth()) {
+        return `${start.toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+        })} - ${end.getDate()}`;
+      } else {
+        return `${start.toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+        })} - ${end.toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+        })}`;
+      }
+    }
+    return "Any week";
+  }, [startDate, endDate]);
+
+  const guestLabel = useMemo(() => {
+    if (guestCount) {
+      const plular = Number(guestCount) > 1 ? " guests" : " guest";
+      return guestCount + plular;
+    }
+    return "Add guest";
+  }, [guestCount]);
+
   return (
     <ButtonGroup
       color="secondary"
@@ -14,7 +68,6 @@ const SearchBar = () => {
           borderRadius: "4rem",
         },
       }}
-      
     >
       <Button
         disableElevation
@@ -25,7 +78,7 @@ const SearchBar = () => {
         }}
         onClick={searchModal.onOpen}
       >
-        Anywhere
+        {locationLabel}
       </Button>
       <Button
         sx={{
@@ -35,7 +88,7 @@ const SearchBar = () => {
         }}
         onClick={searchModal.onOpen}
       >
-        Any week
+        {dateLabel}
       </Button>
       <Button
         sx={{
@@ -45,7 +98,7 @@ const SearchBar = () => {
         }}
         onClick={searchModal.onOpen}
       >
-        Add guest
+        {guestLabel}
       </Button>
       <Button
         sx={{

@@ -18,10 +18,12 @@ import Typography from "@mui/material/Typography";
 import { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { Range, DateRange, RangeKeyDict } from "react-date-range";
-
+import { useRouter, useSearchParams } from "next/navigation";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Counter from "../Others/Counter";
+import { formatISO } from "date-fns";
+import qs from "query-string";
 
 type CountrySelectValue = {
   flag: string;
@@ -56,7 +58,9 @@ const CountrySelect = ({ nextStep, value, onChange }: CountrySelectProps) => {
           getOptionLabel={(option) =>
             `${option.flag} ${" "} ${option.label}, ${option.region}`
           }
-          onChange={(event, newValue) => onChange(newValue as CountrySelectValue)}
+          onChange={(event, newValue) =>
+            onChange(newValue as CountrySelectValue)
+          }
           renderOption={(props, option) => (
             <Box
               component="li"
@@ -163,7 +167,7 @@ type InfoSelectProps = {
   onChangeGuest: (value: number) => void;
   valueRoom: number;
   onChangeRoom: (value: number) => void;
-  onSubmit: () => void
+  onSubmit: () => void;
 };
 const InfoSelect = ({
   previousStep,
@@ -171,7 +175,7 @@ const InfoSelect = ({
   onChangeGuest,
   valueRoom,
   onChangeRoom,
-  onSubmit
+  onSubmit,
 }: InfoSelectProps) => {
   return (
     <>
@@ -234,7 +238,9 @@ const SearchModal = () => {
     borderRadius: "1rem",
     boxShadow: 24,
   };
+  const router = useRouter();
   const searchModal = useSearchModal();
+  const params = useSearchParams();
   const [step, setStep] = useState(0);
 
   const [selectedCountry, setSelectedCountry] = useState<CountrySelectValue>();
@@ -255,13 +261,38 @@ const SearchModal = () => {
   };
 
   const onSubmit = () => {
-    const query = {
+    let currentQuery = {};
+    if (params) {
+      currentQuery = qs.parse(params.toString());
+    }
+    const query: any = {
+      ...currentQuery,
       locationValue: selectedCountry?.value,
       guestCount,
-      roomCount
+      roomCount,
+    };
+
+    if (dateRange.startDate) {
+      query.startDate = formatISO(dateRange.startDate);
+    }
+    if (dateRange.endDate) {
+      query.endDate = formatISO(dateRange.endDate);
     }
 
-    console.log(query)
+    const newUrl = qs.stringifyUrl(
+      {
+        url: "/",
+        query: query,
+      },
+      { skipNull: true }
+    );
+
+    console.log("URL", newUrl);
+
+    searchModal.onClose();
+    setStep(STEPS.LOCATION);
+    console.log(query);
+    router.push(newUrl)
   };
   return (
     <Modal
