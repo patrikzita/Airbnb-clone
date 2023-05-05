@@ -1,15 +1,14 @@
-import { Stack, SvgIcon, Typography } from "@mui/material";
+import { SvgIcon, Tab } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
 import qs from "query-string";
+import { useCallback } from "react";
 
 type CategoryItemProps = {
   icon: typeof SvgIcon;
   label: string;
-  selected: boolean;
 };
 
-const CategoryItem = ({ label, icon: Icon, selected }: CategoryItemProps) => {
+const CategoryItem = ({ label, icon: Icon }: CategoryItemProps) => {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -34,25 +33,18 @@ const CategoryItem = ({ label, icon: Icon, selected }: CategoryItemProps) => {
   }, [label, router, params]);
 
   return (
-    <Stack
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      pb={1}
+    <Tab
+      icon={<SvgIcon component={Icon} />}
+      label={label}
+      onClick={handleClick}
       sx={{
         borderBottom: "2px solid",
-        borderColor: selected ? "customGray.main" : "transparent",
-        transition: "border-color 0.3s",
-        cursor: "pointer",
-        ":hover": {
-          borderColor: "customGray.main",
+        borderColor: "transparent",
+        "&:hover": {
+          borderColor: "#c1bcbc",
         },
       }}
-      onClick={handleClick}
-    >
-      <Icon sx={{color: "customGray.main"}} />
-      <Typography>{label}</Typography>
-    </Stack>
+    />
   );
 };
 
