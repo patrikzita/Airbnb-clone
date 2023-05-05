@@ -1,4 +1,3 @@
-"use client";
 import useCountries from "@/hooks/useCountries";
 import useSearchModal from "@/hooks/useSearchModal";
 import SearchIcon from "@mui/icons-material/Search";
@@ -61,20 +60,35 @@ const SearchBar = () => {
     <ButtonGroup
       color="secondary"
       variant="outlined"
+      disableRipple
       sx={{
         justifyContent: "center",
         padding: 0,
         "& .MuiButton-root": {
+          borderWidth: "1px",
           borderRadius: "4rem",
+          borderColor: "rgba(209, 209, 209, 0.5)",
+          
+        },
+        "&:hover": {
+          borderRadius: "4rem",
+          borderColor: "rgba(209, 209, 209, 0.5)",
+          boxShadow: "0px 1px 1px 1px rgba(0,0,0,0.3)",
+          transition: "200ms ease-in-out",
         },
       }}
     >
       <Button
-        disableElevation
         sx={{
+          textTransform: "capitalize",
           fontWeight: "medium",
-          letterSpacing: "3px",
           fontSize: { xs: ".7rem", sm: ".9rem" },
+          "&:hover": {
+            borderColor: "rgba(209, 209, 209, 0.5)",
+            borderRight: "1px solid rgba(209, 209, 209, 0.5)",
+            borderLeft: "1px solid rgba(209, 209, 209, 0.5)",
+            
+          },
         }}
         onClick={searchModal.onOpen}
       >
@@ -83,8 +97,12 @@ const SearchBar = () => {
       <Button
         sx={{
           fontWeight: "medium",
-          letterSpacing: "3px",
           fontSize: { xs: ".7rem", sm: ".9rem" },
+          "&:hover": {
+            borderColor: "rgba(209, 209, 209, 0.5)",
+            borderRight: "1px solid rgba(209, 209, 209, 0.5)",
+            borderLeft: "1px solid rgba(209, 209, 209, 0.5)",
+          },
         }}
         onClick={searchModal.onOpen}
       >
@@ -92,9 +110,12 @@ const SearchBar = () => {
       </Button>
       <Button
         sx={{
-          fontWeight: "medium",
-          letterSpacing: "3px",
+          fontWeight: "100",
           fontSize: { xs: ".7rem", sm: ".9rem" },
+          textTransform: "capitalize",
+          "&:hover": {
+            borderColor: "rgba(209, 209, 209, 0.5)",
+          },
         }}
         onClick={searchModal.onOpen}
       >
@@ -102,7 +123,7 @@ const SearchBar = () => {
       </Button>
       <Button
         sx={{
-          backgroundColor: "#ff9bad",
+          backgroundColor: "red",
           "&:hover": {
             backgroundColor: "#ff7279",
           },

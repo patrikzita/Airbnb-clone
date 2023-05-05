@@ -15,7 +15,7 @@ import Box from "@mui/material/Box";
 import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { Range, DateRange, RangeKeyDict } from "react-date-range";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -260,7 +260,7 @@ const SearchModal = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(async () => {
     let currentQuery = {};
     if (params) {
       currentQuery = qs.parse(params.toString());
@@ -286,14 +286,23 @@ const SearchModal = () => {
       },
       { skipNull: true }
     );
-
-    console.log("URL", newUrl);
-
-    searchModal.onClose();
     setStep(STEPS.LOCATION);
-    console.log(query);
-    router.push(newUrl)
-  };
+    searchModal.onClose();
+    router.push(newUrl);
+  }, [
+    step,
+    searchModal,
+    dateRange,
+    router,
+    params,
+    guestCount,
+    roomCount,
+    selectedCountry,
+  ]);
+  if (!searchModal.isOpen) {
+    return null;
+  }
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -307,6 +316,7 @@ const SearchModal = () => {
           timeout: 500,
         },
       }}
+      disableEnforceFocus
     >
       <Fade in={searchModal.isOpen}>
         <Box sx={modalStyle}>

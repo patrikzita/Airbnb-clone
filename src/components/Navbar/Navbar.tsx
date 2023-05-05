@@ -96,7 +96,7 @@ const Navbar = () => {
           >
             <MenuIcon sx={{ mr: 1, color: "common.black" }} />
             <Avatar
-              alt=""
+              alt={`${session?.user?.name}'s name`}
               src={session?.user?.image?.toString()}
               sx={{ width: 30, height: 30 }}
             />
@@ -131,7 +131,7 @@ const Navbar = () => {
                   <MenuItem>
                     <Typography textAlign="center">Airbnb my home</Typography>
                   </MenuItem>,
-                   <Divider light />,
+                  <Divider light />,
                   <MenuItem onClick={() => signOut()}>
                     <Typography textAlign="center">Logout</Typography>
                   </MenuItem>,
@@ -144,12 +144,12 @@ const Navbar = () => {
                     <Typography textAlign="center">Log In</Typography>
                   </MenuItem>,
                   <Divider light />,
-                    <MenuItem  onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">Airbnb my home</Typography>
-                    </MenuItem>,
-                    <MenuItem  onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">Help</Typography>
-                    </MenuItem>                
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Airbnb my home</Typography>
+                  </MenuItem>,
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Help</Typography>
+                  </MenuItem>,
                 ])}
           </Menu>
         </Stack>
