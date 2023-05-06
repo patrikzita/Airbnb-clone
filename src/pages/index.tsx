@@ -7,10 +7,17 @@ import Navbar from "@/components/Navbar/Navbar";
 import ModalContainer from "@/components/modals/modal";
 import SearchModal from "@/components/modals/SearchModal";
 import CreateHomeModal from "@/components/modals/CreateHomeModal";
+import { generateReactHelpers } from "@uploadthing/react";
+import { OurFileRouter } from "@/libs/uploadthing";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default  function Home() {
+const { useUploadThing } = generateReactHelpers<OurFileRouter>();
+
+export default function Home() {
+  const { getRootProps, getInputProps, isDragActive, files, startUpload } =
+    useUploadThing("imageUploader");
+
   return (
     <>
       <Head>
@@ -20,11 +27,24 @@ export default  function Home() {
         <link rel="icon" href="/airbnb-icon.svg" />
       </Head>
       <main>
-        <Navbar  />
+        <Navbar />
         <ModalContainer />
         <SearchModal />
         <CreateHomeModal />
       </main>
+      <section style={{margin: "10rem"}}>
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <div>
+            {files.length > 0 && (
+              <button onClick={() => startUpload()}>
+                Upload {files.length} files
+              </button>
+            )}
+          </div>
+          Drop files here!
+        </div>
+      </section>
     </>
   );
 }

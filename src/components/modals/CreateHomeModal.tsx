@@ -314,19 +314,9 @@ const CreateHomeModal = () => {
     borderRadius: "1rem",
     boxShadow: 24,
   };
-  const router = useRouter();
   const createHomeModal = useCreateHomeModal();
-  const params = useSearchParams();
   const [step, setStep] = useState(0);
 
-  const [selectedCountry, setSelectedCountry] = useState<CountrySelectValue>();
-  const [dateRange, setDateRange] = useState<Range>({
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  });
-  const [guestCount, setGuestCount] = useState(1);
-  const [roomCount, setRoomCount] = useState(1);
 
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
