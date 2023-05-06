@@ -1,22 +1,14 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import { Typography } from "@mui/material";
-import { Button } from "@mui/material";
 import Navbar from "@/components/Navbar/Navbar";
-import ModalContainer from "@/components/modals/modal";
-import SearchModal from "@/components/modals/SearchModal";
 import CreateHomeModal from "@/components/modals/CreateHomeModal";
-import { generateReactHelpers } from "@uploadthing/react";
-import { OurFileRouter } from "@/libs/uploadthing";
+import SearchModal from "@/components/modals/SearchModal";
+import ModalContainer from "@/components/modals/modal";
+import { Inter } from "next/font/google";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const { useUploadThing } = generateReactHelpers<OurFileRouter>();
-
 export default function Home() {
-  const { getRootProps, getInputProps, isDragActive, files, startUpload } =
-    useUploadThing("imageUploader");
+
 
   return (
     <>
@@ -32,19 +24,6 @@ export default function Home() {
         <SearchModal />
         <CreateHomeModal />
       </main>
-      <section style={{margin: "10rem"}}>
-        <div {...getRootProps()}>
-          <input {...getInputProps()} />
-          <div>
-            {files.length > 0 && (
-              <button onClick={() => startUpload()}>
-                Upload {files.length} files
-              </button>
-            )}
-          </div>
-          Drop files here!
-        </div>
-      </section>
     </>
   );
 }

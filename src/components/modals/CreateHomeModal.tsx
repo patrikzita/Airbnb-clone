@@ -31,6 +31,7 @@ import { categories } from "@/utils/categories";
 import CategoryItem from "../Others/CategoryItem";
 import CategoryInput from "../Others/CategoryInput";
 import { useFormik } from "formik";
+import ImageUpload from "../Others/ImageUpload";
 
 type CategorySelectProps = {
   nextStep: () => void;
@@ -448,6 +449,13 @@ const CreateHomeModal = () => {
                 onChangeRoom={(value) =>
                   formik.setFieldValue("roomCount", value)
                 }
+              />
+            )}
+             {step === STEPS.IMAGES && (
+              <ImageUpload
+                nextStep={nextStep}
+                previousStep={previousStep}
+                
               />
             )}
           </Box>
