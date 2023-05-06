@@ -30,15 +30,22 @@ import Counter from "../Others/Counter";
 import { categories } from "@/utils/categories";
 import CategoryItem from "../Others/CategoryItem";
 import CategoryInput from "../Others/CategoryInput";
+import { useFormik } from "formik";
 
 type CategorySelectProps = {
   nextStep: () => void;
+  selectedCategory: string;
+  onSelectCategory: (category: string) => void;
 };
 
-const CategorySelect = ({ nextStep }: CategorySelectProps) => {
+const CategorySelect = ({
+  nextStep,
+  selectedCategory,
+  onSelectCategory,
+}: CategorySelectProps) => {
   // TODO: Změnit selection pro formik
   const params = useSearchParams();
- 
+
   return (
     <>
       <Grid container spacing={2}>
@@ -47,7 +54,8 @@ const CategorySelect = ({ nextStep }: CategorySelectProps) => {
             <CategoryInput
               label={categoryItem.label}
               icon={categoryItem.icon}
-              
+              selected={selectedCategory === categoryItem.label}
+              onSelectCategory={onSelectCategory}
             />
           </Grid>
         ))}
@@ -80,8 +88,8 @@ type CountrySelectValue = {
 type CountrySelectProps = {
   nextStep: () => void;
   previousStep: () => void;
-  value?: CountrySelectValue;
-  onChange: (value: CountrySelectValue) => void;
+  value?: CountrySelectValue | null;
+  onChange: (location: CountrySelectValue) => void;
 };
 const CountrySelect = ({
   nextStep,
@@ -226,20 +234,20 @@ const DateSelect = ({
   );
 };
 type InfoSelectProps = {
+  nextStep: () => void;
   previousStep: () => void;
   valueGuest: number;
   onChangeGuest: (value: number) => void;
   valueRoom: number;
   onChangeRoom: (value: number) => void;
-  onSubmit: () => void;
 };
 const InfoSelect = ({
+  nextStep,
   previousStep,
   valueGuest,
   onChangeGuest,
   valueRoom,
   onChangeRoom,
-  onSubmit,
 }: InfoSelectProps) => {
   return (
     <>
@@ -256,7 +264,7 @@ const InfoSelect = ({
         onChange={onChangeRoom}
         value={valueRoom}
       />
-      <Stack direction="row" gap={2} mt={2}>
+      <Stack direction="row" gap={2}>
         <Button
           variant="outlined"
           color="secondary"
@@ -276,9 +284,9 @@ const InfoSelect = ({
             borderRadius: 2,
             paddingY: 1,
           }}
-          onClick={onSubmit}
+          onClick={nextStep}
         >
-          Search
+          Next
         </Button>
       </Stack>
     </>
@@ -328,45 +336,34 @@ const CreateHomeModal = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const onSubmit = useCallback(async () => {
-    let currentQuery = {};
-    if (params) {
-      currentQuery = qs.parse(params.toString());
-    }
-    const query: any = {
-      ...currentQuery,
-      locationValue: selectedCountry?.value,
-      guestCount,
-      roomCount,
-    };
-
-    if (dateRange.startDate) {
-      query.startDate = formatISO(dateRange.startDate);
-    }
-    if (dateRange.endDate) {
-      query.endDate = formatISO(dateRange.endDate);
-    }
-
-    const newUrl = qs.stringifyUrl(
-      {
-        url: "/",
-        query: query,
+  const formik = useFormik({
+    initialValues: {
+      category: "",
+      location: null,
+      guestCount: 1,
+      roomCount: 1,
+      date: {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: "selection",
       },
-      { skipNull: true }
-    );
-    setStep(STEPS.LOCATION);
-    createHomeModal.onClose();
-    router.push(newUrl);
-  }, [
-    step,
-    createHomeModal,
-    dateRange,
-    router,
-    params,
-    guestCount,
-    roomCount,
-    selectedCountry,
-  ]);
+      imageUrl: "",
+      title: "",
+      description: "",
+      price: 1,
+    },
+    onSubmit: (values) => {
+      console.log(values);
+    },
+  });
+
+  const onSelectCategory = (category: string) => {
+    formik.setFieldValue("category", category);
+  };
+  const onSelectLocation = (location: CountrySelectValue) => {
+    formik.setFieldValue("location", location);
+  };
+
   if (!createHomeModal.isOpen) {
     return null;
   }
@@ -424,36 +421,47 @@ const CreateHomeModal = () => {
             <Typography variant="h5" component="h2" fontWeight={500}>
               Create home for others
             </Typography>
-            {step === STEPS.CATEGORY && <CategorySelect nextStep={nextStep} />}
+            {step === STEPS.CATEGORY && (
+              <CategorySelect
+                nextStep={nextStep}
+                selectedCategory={formik.values.category}
+                onSelectCategory={onSelectCategory}
+              />
+            )}
             {step === STEPS.LOCATION && (
               <CountrySelect
                 nextStep={nextStep}
                 previousStep={previousStep}
-                value={selectedCountry}
-                onChange={(value) =>
-                  setSelectedCountry(value as CountrySelectValue)
-                }
+                value={formik.values.location}
+                onChange={onSelectLocation}
               />
             )}
             {step === STEPS.DATE && (
               <DateSelect
                 nextStep={nextStep}
                 previousStep={previousStep}
-                value={dateRange}
-                onChange={(value) => setDateRange(value.selection)}
+                value={formik.values.date}
+                onChange={(value) =>
+                  formik.setFieldValue("date", value.selection)
+                }
               />
             )}
             {step === STEPS.INFO && (
               <InfoSelect
+                nextStep={nextStep}
                 previousStep={previousStep}
-                valueGuest={guestCount}
-                onChangeGuest={(value) => setGuestCount(value)}
-                valueRoom={roomCount}
-                onChangeRoom={(value) => setRoomCount(value)}
-                onSubmit={onSubmit}
+                valueGuest={formik.values.guestCount}
+                onChangeGuest={(value) =>
+                  formik.setFieldValue("guestCount", value)
+                }
+                valueRoom={formik.values.roomCount}
+                onChangeRoom={(value) =>
+                  formik.setFieldValue("roomCount", value)
+                }
               />
             )}
           </Box>
+          <pre>{JSON.stringify(formik.values, null, 2)}</pre>
         </Box>
       </Fade>
     </Modal>
