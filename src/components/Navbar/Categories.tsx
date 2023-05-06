@@ -28,6 +28,11 @@ const Categories = () => {
           variant="scrollable"
           indicatorColor="secondary"
           scrollButtons
+          sx={{
+            [`& .${tabsClasses.scrollButtons}`]: {
+              "&.Mui-disabled": { opacity: 0.3 },
+            },
+          }}
         >
           {categories.map((categoryItem) => (
             <CategoryItem
@@ -39,6 +44,7 @@ const Categories = () => {
         </Tabs>
         <Button
           color="secondary"
+          disableRipple
           sx={{
             display: { xs: "none", md: "flex" },
             border: "1px solid #ddd",

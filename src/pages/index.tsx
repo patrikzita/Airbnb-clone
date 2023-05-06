@@ -6,6 +6,7 @@ import { Button } from "@mui/material";
 import Navbar from "@/components/Navbar/Navbar";
 import ModalContainer from "@/components/modals/modal";
 import SearchModal from "@/components/modals/SearchModal";
+import CreateHomeModal from "@/components/modals/CreateHomeModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default  function Home() {
         <Navbar  />
         <ModalContainer />
         <SearchModal />
+        <CreateHomeModal />
       </main>
     </>
   );

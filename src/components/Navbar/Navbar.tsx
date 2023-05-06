@@ -25,6 +25,7 @@ import { signOut, useSession } from "next-auth/react";
 import React from "react";
 import useSearchModal from "@/hooks/useSearchModal";
 import Categories from "./Categories";
+import useCreateHomeModal from "@/hooks/useCreateHomeModal";
 
 const StyledToolBar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
@@ -34,6 +35,7 @@ const StyledToolBar = styled(Toolbar)(({ theme }) => ({
 const Navbar = () => {
   const theme = useTheme();
   const registerModal = useRegisterModal();
+  const createHomeModal = useCreateHomeModal();
   const { data: session } = useSession();
 
   const isXsorSM = useMediaQuery(theme.breakpoints.down("sm"));
@@ -79,6 +81,10 @@ const Navbar = () => {
                   borderRadius: "1rem",
                   letterSpacing: "1px",
                 }}
+                onClick={()=>{
+                  createHomeModal.onOpen()
+                  handleCloseUserMenu();
+                }}
               >
                 Airbnb your home
               </Button>
@@ -87,6 +93,7 @@ const Navbar = () => {
               </IconButton>
               <Button
                 onClick={handleOpenUserMenu}
+                color="secondary"
                 sx={{
                   p: 1,
                   border: "1px solid rgba(209, 209, 209, 0.5)",
@@ -133,7 +140,10 @@ const Navbar = () => {
                           My reservations
                         </Typography>
                       </MenuItem>,
-                      <MenuItem>
+                      <MenuItem onClick={()=>{
+                        createHomeModal.onOpen()
+                        handleCloseUserMenu();
+                      }}>
                         <Typography textAlign="center">
                           Airbnb my home
                         </Typography>

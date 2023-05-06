@@ -6,9 +6,10 @@ import { useCallback } from "react";
 type CategoryItemProps = {
   icon: typeof SvgIcon;
   label: string;
+  selected?: boolean
 };
 
-const CategoryItem = ({ label, icon: Icon }: CategoryItemProps) => {
+const CategoryItem = ({ label, icon: Icon, selected }: CategoryItemProps) => {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -37,6 +38,7 @@ const CategoryItem = ({ label, icon: Icon }: CategoryItemProps) => {
       icon={<SvgIcon component={Icon} />}
       label={label}
       onClick={handleClick}
+      disableRipple
       sx={{
         borderBottom: "2px solid",
         borderColor: "transparent",
