@@ -1,43 +1,28 @@
-import useCountries from "@/hooks/useCountries";
 import useCreateHomeModal from "@/hooks/useCreateHomeModal";
 import CloseIcon from "@mui/icons-material/Close";
 import {
-  Autocomplete,
   Button,
-  Divider,
-  FormControl,
-  FormGroup,
-  Grid,
   IconButton,
   InputAdornment,
-  InputLabel,
-  OutlinedInput,
   Stack,
-  Tabs,
-  TextField,
-  tabsClasses,
+  TextField
 } from "@mui/material";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
 import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { formatISO } from "date-fns";
-import dynamic from "next/dynamic";
-import { useRouter, useSearchParams } from "next/navigation";
-import qs from "query-string";
-import { useCallback, useMemo, useState } from "react";
-import { DateRange, Range, RangeKeyDict } from "react-date-range";
+import { FormikProps, useFormik } from "formik";
+import { useState } from "react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import Counter from "../Others/Counter";
-import { categories } from "@/utils/categories";
-import CategoryItem from "../Others/CategoryItem";
-import CategoryInput from "../Others/CategoryInput";
-import { FormikProps, useFormik } from "formik";
-import ImageUpload from "../Others/ImageUpload";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+import ImageUpload from "../Others/ImageUpload";
+import CategorySelect from "../shared/inputs/CategorySelect";
+import CountrySelect, { CountrySelectValue } from "../shared/inputs/CountrySelect";
+import DateSelect from "../shared/inputs/DateSelect";
+import InfoSelect from "../shared/inputs/InfoSelect";
 
 type MainInfoSelectProps = {
   previousStep: () => void;
@@ -129,268 +114,6 @@ const MainInfoSelect = ({
   );
 };
 
-type CategorySelectProps = {
-  nextStep: () => void;
-  selectedCategory: string;
-  onSelectCategory: (category: string) => void;
-  formik: FormikProps<FormikValues>
-};
-const CategorySelect = ({
-  nextStep,
-  selectedCategory,
-  onSelectCategory,
-  formik
-}: CategorySelectProps) => {
-  return (
-    <>
-      <Grid container spacing={2}>
-        {categories.map((categoryItem) => (
-          <Grid item xs={12} sm={6} md={6} key={categoryItem.label}>
-            <CategoryInput
-              label={categoryItem.label}
-              icon={categoryItem.icon}
-              selected={selectedCategory === categoryItem.label}
-              onSelectCategory={onSelectCategory}
-            />
-          </Grid>
-        ))}
-      </Grid>
-      <Stack direction="row" gap={2} marginTop={2}>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={nextStep}
-          disabled={!formik.values.category}
-        >
-          Next
-        </Button>
-      </Stack>
-    </>
-  );
-};
-
-type CountrySelectValue = {
-  flag: string;
-  label: string;
-  latlng: number[];
-  region: string;
-  value: string;
-};
-
-type CountrySelectProps = {
-  nextStep: () => void;
-  previousStep: () => void;
-  value?: CountrySelectValue | null;
-  onChange: (location: CountrySelectValue) => void;
-  formik: FormikProps<FormikValues>
-};
-const CountrySelect = ({
-  nextStep,
-  value,
-  onChange,
-  previousStep,
-  formik,
-}: CountrySelectProps) => {
-  const { getAll } = useCountries();
-  const Map = useMemo(
-    () =>
-      dynamic(() => import("../Others/Map"), {
-        ssr: false,
-      }),
-    [value]
-  );
-  return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <FormGroup>
-        <Autocomplete
-          id="country-select"
-          sx={{ width: "100%" }}
-          options={getAll()}
-          autoHighlight
-          getOptionLabel={(option) =>
-            `${option.flag} ${" "} ${option.label}, ${option.region}`
-          }
-          onChange={(event, newValue) =>
-            onChange(newValue as CountrySelectValue)
-          }
-          renderOption={(props, option) => (
-            <Box
-              component="li"
-              {...props}
-              sx={{ display: "flex", flexDirection: "row", gap: 2 }}
-            >
-              <div>{option.flag}</div>
-              <Stack direction="row" alignItems="center" gap={1}>
-                <Typography>{option.label},</Typography>
-                <Typography
-                  component="p"
-                  variant="subtitle1"
-                  sx={{ color: " rgb(115, 115, 115)" }}
-                >
-                  {option.region}
-                </Typography>
-              </Stack>
-            </Box>
-          )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Choose a country"
-              variant="outlined"
-              inputProps={{
-                ...params.inputProps,
-                autoComplete: "new-password",
-              }}
-            />
-          )}
-        />
-      </FormGroup>
-      <Divider light />
-      <Map center={value?.latlng} />
-      <Stack direction="row" gap={2}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={previousStep}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={nextStep}
-          disabled={!formik.values.location}
-        >
-          Next
-        </Button>
-      </Stack>
-    </Box>
-  );
-};
-
-type DateSelectProps = {
-  nextStep: () => void;
-  previousStep: () => void;
-  value: Range;
-  onChange: (value: RangeKeyDict) => void;
-};
-const DateSelect = ({
-  nextStep,
-  previousStep,
-  value,
-  onChange,
-}: DateSelectProps) => {
-  return (
-    <>
-      <DateRange
-        rangeColors={["#262626"]}
-        date={new Date()}
-        ranges={[value]}
-        onChange={onChange}
-        direction="vertical"
-        showDateDisplay={false}
-        minDate={new Date()}
-      />
-      <Stack direction="row" gap={2}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={previousStep}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={nextStep}
-        >
-          Next
-        </Button>
-      </Stack>
-    </>
-  );
-};
-type InfoSelectProps = {
-  nextStep: () => void;
-  previousStep: () => void;
-  valueGuest: number;
-  onChangeGuest: (value: number) => void;
-  valueRoom: number;
-  onChangeRoom: (value: number) => void;
-};
-const InfoSelect = ({
-  nextStep,
-  previousStep,
-  valueGuest,
-  onChangeGuest,
-  valueRoom,
-  onChangeRoom,
-}: InfoSelectProps) => {
-  return (
-    <>
-      <Counter
-        title="Guests"
-        subtitle="How many guests are coming?"
-        onChange={onChangeGuest}
-        value={valueGuest}
-      />
-      <Divider />
-      <Counter
-        title="Rooms"
-        subtitle="How many rooms do you need?"
-        onChange={onChangeRoom}
-        value={valueRoom}
-      />
-      <Stack direction="row" gap={2}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={previousStep}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={nextStep}
-        >
-          Next
-        </Button>
-      </Stack>
-    </>
-  );
-};
 
 enum STEPS {
   CATEGORY = 0,
@@ -417,7 +140,7 @@ const Schema = z.object({
   price: z.number({required_error: "Number is required."}),
 });
 
-interface FormikValues {
+export interface FormikValues {
   category: string;
   location: null | CountrySelectValue;
   guestCount: number;
