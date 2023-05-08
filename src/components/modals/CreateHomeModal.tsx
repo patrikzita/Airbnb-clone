@@ -5,9 +5,13 @@ import {
   Autocomplete,
   Button,
   Divider,
+  FormControl,
   FormGroup,
   Grid,
   IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
   Stack,
   Tabs,
   TextField,
@@ -30,23 +34,96 @@ import Counter from "../Others/Counter";
 import { categories } from "@/utils/categories";
 import CategoryItem from "../Others/CategoryItem";
 import CategoryInput from "../Others/CategoryInput";
-import { useFormik } from "formik";
+import { FormikProps, useFormik } from "formik";
 import ImageUpload from "../Others/ImageUpload";
+
+type MainInfoSelectProps = {
+  previousStep: () => void;
+  nextStep: () => void;
+  onSubmit: () => void;
+  formik: FormikProps<FormikValues>;
+};
+
+const MainInfoSelect = ({
+  previousStep,
+  nextStep,
+  onSubmit,
+  formik,
+}: MainInfoSelectProps) => {
+  return (
+    <>
+      <TextField label="Title" color="secondary" variant="outlined" name="title" onChange={formik.handleChange} />
+      <TextField
+        label="Description"
+        variant="outlined"
+        color="secondary"
+        name="description"
+        onChange={formik.handleChange}
+        multiline
+        rows={4}
+        placeholder="Describe your place..."
+      />
+
+      <TextField
+        label="Price per day"
+        variant="outlined"
+        name="price"
+        onChange={formik.handleChange}
+        color="secondary"
+        sx={{
+          width: "100%",
+          mt: 2,
+          "& input[type=number]::-webkit-outer-spin-button, & input[type=number]::-webkit-inner-spin-button":
+            {
+              WebkitAppearance: "none",
+              margin: 0,
+            },
+        }}
+        InputProps={{
+          startAdornment: <InputAdornment position="start">$</InputAdornment>,
+        }}
+        inputProps={{ type: "number" }}
+      />
+
+      <Stack direction="row" gap={2}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          sx={{
+            width: "100%",
+            borderRadius: 2,
+            paddingY: 1,
+          }}
+          onClick={previousStep}
+        >
+          Back
+        </Button>
+        <Button
+          variant="contained"
+          sx={{
+            width: "100%",
+            borderRadius: 2,
+            paddingY: 1,
+          }}
+          onClick={onSubmit}
+        >
+          Create
+        </Button>
+      </Stack>
+    </>
+  );
+};
 
 type CategorySelectProps = {
   nextStep: () => void;
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
 };
-
 const CategorySelect = ({
   nextStep,
   selectedCategory,
   onSelectCategory,
 }: CategorySelectProps) => {
-  // TODO: Změnit selection pro formik
-  const params = useSearchParams();
-
   return (
     <>
       <Grid container spacing={2}>
@@ -301,7 +378,22 @@ enum STEPS {
   DATE = 3,
   IMAGES = 4,
   DESCRIPTION = 5,
-  PRICE = 6,
+}
+
+interface FormikValues {
+  category: string;
+  location: null | CountrySelectValue;
+  guestCount: number;
+  roomCount: number;
+  date: {
+    startDate: Date;
+    endDate: Date;
+    key: string;
+  };
+  imageUrl: string;
+  title: string;
+  description: string;
+  price: number;
 }
 
 const CreateHomeModal = () => {
@@ -318,7 +410,6 @@ const CreateHomeModal = () => {
   const createHomeModal = useCreateHomeModal();
   const [step, setStep] = useState(0);
 
-
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
   };
@@ -327,7 +418,7 @@ const CreateHomeModal = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const formik = useFormik({
+  const formik = useFormik<FormikValues>({
     initialValues: {
       category: "",
       location: null,
@@ -345,6 +436,8 @@ const CreateHomeModal = () => {
     },
     onSubmit: (values) => {
       console.log(values);
+      setStep(0);
+      createHomeModal.onClose();
     },
   });
 
@@ -451,11 +544,19 @@ const CreateHomeModal = () => {
                 }
               />
             )}
-             {step === STEPS.IMAGES && (
+            {step === STEPS.IMAGES && (
               <ImageUpload
                 nextStep={nextStep}
                 previousStep={previousStep}
-                
+                onSetImage={(value) => formik.setFieldValue("imageUrl", value)}
+              />
+            )}
+            {step === STEPS.DESCRIPTION && (
+              <MainInfoSelect
+                nextStep={nextStep}
+                previousStep={previousStep}
+                onSubmit={formik.handleSubmit}
+                formik={formik}
               />
             )}
           </Box>

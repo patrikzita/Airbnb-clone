@@ -1,22 +1,21 @@
 import { OurFileRouter } from "@/libs/uploadthing";
 import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  Button,
-  IconButton,
-  Paper,
-  Stack,
-  Typography
-} from "@mui/material";
+import { Button, IconButton, Paper, Stack, Typography } from "@mui/material";
 import { generateReactHelpers } from "@uploadthing/react";
 
 type ImageUploadProps = {
   nextStep: () => void;
   previousStep: () => void;
+  onSetImage: (value: string) => void;
 };
 
 const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
-const ImageUpload = ({ nextStep, previousStep }: ImageUploadProps) => {
+const ImageUpload = ({
+  nextStep,
+  previousStep,
+  onSetImage,
+}: ImageUploadProps) => {
   const {
     getRootProps,
     getInputProps,
@@ -25,6 +24,17 @@ const ImageUpload = ({ nextStep, previousStep }: ImageUploadProps) => {
     startUpload,
     resetFiles,
   } = useUploadThing("imageUploader");
+
+  const handleUpload = async () => {
+    const uploadedFiles = await startUpload();
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      uploadedFiles.forEach((uploadedFile) => {
+        onSetImage(uploadedFile.fileUrl);
+      });
+    } else {
+      console.error("Failed to obtain image URLs.");
+    }
+  };
 
   return (
     <>
@@ -70,7 +80,7 @@ const ImageUpload = ({ nextStep, previousStep }: ImageUploadProps) => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => startUpload()}
+          onClick={() => handleUpload()}
           sx={{
             flexGrow: 1,
             borderRadius: 2,
