@@ -1,17 +1,12 @@
 import useCreateHomeModal from "@/hooks/useCreateHomeModal";
-import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
-  IconButton,
   InputAdornment,
   Stack,
-  TextField
+  TextField,
+  Typography,
 } from "@mui/material";
-import Backdrop from "@mui/material/Backdrop";
-import Box from "@mui/material/Box";
-import Fade from "@mui/material/Fade";
-import Modal from "@mui/material/Modal";
-import Typography from "@mui/material/Typography";
+
 import { FormikProps, useFormik } from "formik";
 import { useState } from "react";
 import "react-date-range/dist/styles.css";
@@ -20,20 +15,22 @@ import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import ImageUpload from "../Others/ImageUpload";
 import CategorySelect from "../shared/inputs/CategorySelect";
-import CountrySelect, { CountrySelectValue } from "../shared/inputs/CountrySelect";
+import CountrySelect, {
+  CountrySelectValue,
+} from "../shared/inputs/CountrySelect";
 import DateSelect from "../shared/inputs/DateSelect";
 import InfoSelect from "../shared/inputs/InfoSelect";
+import ModalContainer from "./Modal";
 
 type MainInfoSelectProps = {
   previousStep: () => void;
-  nextStep: () => void;
   onSubmit: () => void;
   formik: FormikProps<FormikValues>;
 };
 
 const MainInfoSelect = ({
   previousStep,
-  nextStep,
+
   onSubmit,
   formik,
 }: MainInfoSelectProps) => {
@@ -74,7 +71,6 @@ const MainInfoSelect = ({
         sx={{
           width: "100%",
           mt: 2,
-          
         }}
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -114,7 +110,6 @@ const MainInfoSelect = ({
   );
 };
 
-
 enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
@@ -125,19 +120,22 @@ enum STEPS {
 }
 
 const Schema = z.object({
-  location: z.object({
-    value: z.string(),
-    label: z.string(),
-    flag: z.string(),
-    latlng: z.array(z.number()),
-
-  }).optional(),
+  location: z
+    .object({
+      value: z.string(),
+      label: z.string(),
+      flag: z.string(),
+      latlng: z.array(z.number()),
+    })
+    .optional(),
   guestCount: z.number(),
   roomCount: z.number(),
   imageUrl: z.string(),
-  title: z.string({ required_error: "Title is required." }).min(3, "Title is too short."),
+  title: z
+    .string({ required_error: "Title is required." })
+    .min(3, "Title is too short."),
   description: z.string().optional(),
-  price: z.number({required_error: "Number is required."}),
+  price: z.number({ required_error: "Number is required." }),
 });
 
 export interface FormikValues {
@@ -157,16 +155,6 @@ export interface FormikValues {
 }
 
 const CreateHomeModal = () => {
-  const modalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 568,
-    bgcolor: "background.paper",
-    borderRadius: "1rem",
-    boxShadow: 24,
-  };
   const createHomeModal = useCreateHomeModal();
   const [step, setStep] = useState(0);
 
@@ -209,127 +197,108 @@ const CreateHomeModal = () => {
   const onSelectLocation = (location: CountrySelectValue) => {
     formik.setFieldValue("location", location);
   };
-  console.log(formik.errors);
-  
+
+  let body = (
+    <>
+      <Typography component="h2" variant="h5">
+        Which of these best describes your place?
+      </Typography>
+      <CategorySelect
+        nextStep={nextStep}
+        selectedCategory={formik.values.category}
+        onSelectCategory={onSelectCategory}
+        formik={formik}
+      />
+    </>
+  );
+  if (step === STEPS.LOCATION) {
+    body = (
+      <>
+        <Typography component="h2" variant="h5">
+          Where people can find your place?
+        </Typography>
+        <CountrySelect
+          nextStep={nextStep}
+          previousStep={previousStep}
+          value={formik.values.location}
+          onChange={onSelectLocation}
+          formik={formik}
+        />
+      </>
+    );
+  }
+  if (step === STEPS.DATE) {
+    body = (
+      <>
+        <Typography component="h2" variant="h5">
+          When is your place free?
+        </Typography>
+        <DateSelect
+          nextStep={nextStep}
+          previousStep={previousStep}
+          value={formik.values.date}
+          onChange={(value) => formik.setFieldValue("date", value.selection)}
+        />
+      </>
+    );
+  }
+  if (step === STEPS.INFO) {
+    body = (
+      <>
+        <Typography component="h2" variant="h5">
+          Share some information about your place
+        </Typography>
+        <InfoSelect
+          nextStep={nextStep}
+          previousStep={previousStep}
+          valueGuest={formik.values.guestCount}
+          onChangeGuest={(value) => formik.setFieldValue("guestCount", value)}
+          valueRoom={formik.values.roomCount}
+          onChangeRoom={(value) => formik.setFieldValue("roomCount", value)}
+        />
+      </>
+    );
+  }
+  if (step === STEPS.IMAGES) {
+    body = (
+      <>
+        <Typography component="h2" variant="h5">
+          Add a photo of your place
+        </Typography>
+        <ImageUpload
+          nextStep={nextStep}
+          previousStep={previousStep}
+          onSetImage={(value) => formik.setFieldValue("imageUrl", value)}
+        />
+      </>
+    );
+  }
+  if (step === STEPS.DESCRIPTION) {
+    body = (
+      <>
+        <Typography component="h2" variant="h5">
+          Describe your place
+        </Typography>
+        <MainInfoSelect
+          previousStep={previousStep}
+          onSubmit={formik.handleSubmit}
+          formik={formik}
+        />
+      </>
+    );
+  }
 
   if (!createHomeModal.isOpen) {
     return null;
   }
 
   return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={createHomeModal.isOpen}
+    <ModalContainer
+      isOpen={createHomeModal.isOpen}
       onClose={createHomeModal.onClose}
-      closeAfterTransition
-      slots={{ backdrop: Backdrop }}
-      slotProps={{
-        backdrop: {
-          timeout: 500,
-        },
-      }}
-      disableEnforceFocus
-    >
-      <Fade in={createHomeModal.isOpen}>
-        <Box sx={modalStyle}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              bgcolor: "#f4f4f4",
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-              paddingInline: 1,
-              paddingY: 2,
-            }}
-          >
-            <IconButton onClick={createHomeModal.onClose}>
-              <CloseIcon />
-            </IconButton>
-            <Typography
-              variant="h6"
-              component="h1"
-              fontWeight={700}
-              fontSize={16}
-            >
-              Filters
-            </Typography>
-            <div></div>
-          </Box>
-          <Box
-            sx={{
-              p: 4,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          >
-            <Typography variant="h5" component="h2" fontWeight={500}>
-              Create home for others
-            </Typography>
-            {step === STEPS.CATEGORY && (
-              <CategorySelect
-                nextStep={nextStep}
-                selectedCategory={formik.values.category}
-                onSelectCategory={onSelectCategory}
-                formik={formik} 
-              />
-            )}
-            {step === STEPS.LOCATION && (
-              <CountrySelect
-                nextStep={nextStep}
-                previousStep={previousStep}
-                value={formik.values.location}
-                onChange={onSelectLocation}
-                formik={formik}
-              />
-            )}
-            {step === STEPS.DATE && (
-              <DateSelect
-                nextStep={nextStep}
-                previousStep={previousStep}
-                value={formik.values.date}
-                onChange={(value) =>
-                  formik.setFieldValue("date", value.selection)
-                }
-              />
-            )}
-            {step === STEPS.INFO && (
-              <InfoSelect
-                nextStep={nextStep}
-                previousStep={previousStep}
-                valueGuest={formik.values.guestCount}
-                onChangeGuest={(value) =>
-                  formik.setFieldValue("guestCount", value)
-                }
-                valueRoom={formik.values.roomCount}
-                onChangeRoom={(value) =>
-                  formik.setFieldValue("roomCount", value)
-                }
-              />
-            )}
-            {step === STEPS.IMAGES && (
-              <ImageUpload
-                nextStep={nextStep}
-                previousStep={previousStep}
-                onSetImage={(value) => formik.setFieldValue("imageUrl", value)}
-              />
-            )}
-            {step === STEPS.DESCRIPTION && (
-              <MainInfoSelect
-                nextStep={nextStep}
-                previousStep={previousStep}
-                onSubmit={formik.handleSubmit}
-                formik={formik}
-              />
-            )}
-          </Box>
-          <pre>{JSON.stringify(formik.values, null, 2)}</pre>
-        </Box>
-      </Fade>
-    </Modal>
+      title="Airbnb your home"
+      body={body}
+    />
   );
 };
 

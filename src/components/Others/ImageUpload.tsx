@@ -53,7 +53,7 @@ const ImageUpload = ({
         {isDragActive && files.length === 0 ? (
           <Typography variant="h6">Drop files here...</Typography>
         ) : files.length === 0 ? (
-          <Typography variant="h6">Click or drag files to upload</Typography>
+          <Typography variant="h6">Drag files to upload</Typography>
         ) : (
           <Typography variant="h6">
             {`${files.length} file${

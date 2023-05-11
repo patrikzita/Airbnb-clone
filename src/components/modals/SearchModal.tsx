@@ -24,6 +24,8 @@ import "react-date-range/dist/theme/default.css";
 import Counter from "../Others/Counter";
 import { formatISO } from "date-fns";
 import qs from "query-string";
+import ModalContainer from "./Modal";
+import DateSelect from "../shared/inputs/DateSelect";
 
 type CountrySelectValue = {
   flag: string;
@@ -110,57 +112,6 @@ const CountrySelect = ({ nextStep, value, onChange }: CountrySelectProps) => {
   );
 };
 
-type DateSelectProps = {
-  nextStep: () => void;
-  previousStep: () => void;
-  value: Range;
-  onChange: (value: RangeKeyDict) => void;
-};
-const DateSelect = ({
-  nextStep,
-  previousStep,
-  value,
-  onChange,
-}: DateSelectProps) => {
-  return (
-    <>
-      <DateRange
-        rangeColors={["#262626"]}
-        date={new Date()}
-        ranges={[value]}
-        onChange={onChange}
-        direction="vertical"
-        showDateDisplay={false}
-        minDate={new Date()}
-      />
-      <Stack direction="row" gap={2}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={previousStep}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={nextStep}
-        >
-          Next
-        </Button>
-      </Stack>
-    </>
-  );
-};
 type InfoSelectProps = {
   previousStep: () => void;
   valueGuest: number;
@@ -299,94 +250,58 @@ const SearchModal = () => {
     roomCount,
     selectedCountry,
   ]);
+
+  let body = (
+    <>
+      <Typography component="h2" variant="h5">
+        Where do you wanna go?
+      </Typography>
+      <CountrySelect
+        nextStep={nextStep}
+        value={selectedCountry}
+        onChange={(value) => setSelectedCountry(value as CountrySelectValue)}
+      />
+    </>
+  );
+  if (step === STEPS.DATE) {
+    body = (
+      <>
+        <Typography component="h2" variant="h5">
+          When do you want to go?
+        </Typography>
+        <DateSelect
+          nextStep={nextStep}
+          previousStep={previousStep}
+          value={dateRange}
+          onChange={(value) => setDateRange(value.selection)}
+        />
+      </>
+    );
+  }
+  if (step === STEPS.INFO) {
+    body = (
+      <>
+        <Typography component="h2" variant="h5">
+          More details
+        </Typography>
+        <InfoSelect
+          previousStep={previousStep}
+          valueGuest={guestCount}
+          onChangeGuest={(value) => setGuestCount(value)}
+          valueRoom={roomCount}
+          onChangeRoom={(value) => setRoomCount(value)}
+          onSubmit={onSubmit}
+        />
+      </>
+    );
+  }
+
   if (!searchModal.isOpen) {
     return null;
   }
 
   return (
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={searchModal.isOpen}
-      onClose={searchModal.onClose}
-      closeAfterTransition
-      slots={{ backdrop: Backdrop }}
-      slotProps={{
-        backdrop: {
-          timeout: 500,
-        },
-      }}
-      disableEnforceFocus
-    >
-      <Fade in={searchModal.isOpen}>
-        <Box sx={modalStyle}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              bgcolor: "#f4f4f4",
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-              paddingInline: 1,
-              paddingY: 2,
-            }}
-          >
-            <IconButton onClick={searchModal.onClose}>
-              <CloseIcon />
-            </IconButton>
-            <Typography
-              variant="h6"
-              component="h1"
-              fontWeight={700}
-              fontSize={16}
-            >
-              Filters
-            </Typography>
-            <div></div>
-          </Box>
-          <Box
-            sx={{
-              p: 4,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          >
-            <Typography variant="h5" component="h2" fontWeight={500}>
-              Where do you wanna go?
-            </Typography>
-            {step === STEPS.LOCATION && (
-              <CountrySelect
-                nextStep={nextStep}
-                value={selectedCountry}
-                onChange={(value) =>
-                  setSelectedCountry(value as CountrySelectValue)
-                }
-              />
-            )}
-            {step === STEPS.DATE && (
-              <DateSelect
-                nextStep={nextStep}
-                previousStep={previousStep}
-                value={dateRange}
-                onChange={(value) => setDateRange(value.selection)}
-              />
-            )}
-            {step === STEPS.INFO && (
-              <InfoSelect
-                previousStep={previousStep}
-                valueGuest={guestCount}
-                onChangeGuest={(value) => setGuestCount(value)}
-                valueRoom={roomCount}
-                onChangeRoom={(value) => setRoomCount(value)}
-                onSubmit={onSubmit}
-              />
-            )}
-          </Box>
-        </Box>
-      </Fade>
-    </Modal>
+    <ModalContainer isOpen={searchModal.isOpen} onClose={searchModal.onClose} title="Filters" body={body} />
   );
 };
 

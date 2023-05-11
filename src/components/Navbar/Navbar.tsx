@@ -49,8 +49,6 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  console.log(session);
-
   return (
     <div>
       {!isXsorSM ? (
