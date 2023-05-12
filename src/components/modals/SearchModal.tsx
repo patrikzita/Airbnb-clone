@@ -1,31 +1,26 @@
 import useCountries from "@/hooks/useCountries";
 import useSearchModal from "@/hooks/useSearchModal";
-import CloseIcon from "@mui/icons-material/Close";
 import {
   Autocomplete,
   Button,
   Divider,
   FormGroup,
-  IconButton,
   Stack,
-  TextField,
+  TextField
 } from "@mui/material";
-import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
-import Fade from "@mui/material/Fade";
-import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import { useState, useMemo, useCallback } from "react";
+import { formatISO } from "date-fns";
 import dynamic from "next/dynamic";
-import { Range, DateRange, RangeKeyDict } from "react-date-range";
 import { useRouter, useSearchParams } from "next/navigation";
+import qs from "query-string";
+import { useCallback, useMemo, useState } from "react";
+import { Range } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Counter from "../Others/Counter";
-import { formatISO } from "date-fns";
-import qs from "query-string";
-import ModalContainer from "./Modal";
 import DateSelect from "../shared/inputs/DateSelect";
+import ModalContainer from "./Modal";
 
 type CountrySelectValue = {
   flag: string;
