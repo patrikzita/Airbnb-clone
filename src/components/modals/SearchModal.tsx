@@ -6,7 +6,8 @@ import {
   Divider,
   FormGroup,
   Stack,
-  TextField
+  TextField,
+  useMediaQuery,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -21,6 +22,7 @@ import "react-date-range/dist/theme/default.css";
 import Counter from "../Others/Counter";
 import DateSelect from "../shared/inputs/DateSelect";
 import ModalContainer from "./Modal";
+import { useTheme } from "@mui/material/styles";
 
 type CountrySelectValue = {
   flag: string;
@@ -95,6 +97,7 @@ const CountrySelect = ({ nextStep, value, onChange }: CountrySelectProps) => {
       <Button
         variant="contained"
         sx={{
+          display: { xs: "none", sm: "flex" },
           width: "100%",
           borderRadius: 2,
           paddingY: 1,
@@ -138,7 +141,12 @@ const InfoSelect = ({
         onChange={onChangeRoom}
         value={valueRoom}
       />
-      <Stack direction="row" gap={2} mt={2}>
+      <Stack
+        direction="row"
+        gap={2}
+        mt={2}
+        sx={{ display: { xs: "none", sm: "flex" } }}
+      >
         <Button
           variant="outlined"
           color="secondary"
@@ -157,6 +165,7 @@ const InfoSelect = ({
             width: "100%",
             borderRadius: 2,
             paddingY: 1,
+            display: { xs: "none", sm: "flex" },
           }}
           onClick={onSubmit}
         >
@@ -172,18 +181,7 @@ enum STEPS {
   DATE = 1,
   INFO = 2,
 }
-
 const SearchModal = () => {
-  const modalStyle = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 568,
-    bgcolor: "background.paper",
-    borderRadius: "1rem",
-    boxShadow: 24,
-  };
   const router = useRouter();
   const searchModal = useSearchModal();
   const params = useSearchParams();
@@ -246,6 +244,11 @@ const SearchModal = () => {
     selectedCountry,
   ]);
 
+  const handleClearQuery = () => {
+    router.push("/");
+    searchModal.onClose();
+  };
+
   let body = (
     <>
       <Typography component="h2" variant="h5">
@@ -291,12 +294,65 @@ const SearchModal = () => {
     );
   }
 
+  let mobileActionBar = (
+    <Box
+      sx={{
+        position: "absolute",
+        width: "100%",
+        bottom: 0,
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          bgcolor: "grey.100",
+          padding: 2,
+          placeSelf: "flex-end",
+        }}
+      >
+        <Button color="secondary" onClick={handleClearQuery}>
+          Clear all
+        </Button>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            sx={{
+              borderRadius: 2,
+              paddingY: 1,
+              display: step === STEPS.LOCATION ? "none" : "flex",
+            }}
+            onClick={previousStep}
+          >
+            Back
+          </Button>
+          {STEPS.INFO === step ? (
+            <Button variant="contained" size="large" onClick={onSubmit}>
+              Search
+            </Button>
+          ) : (
+            <Button variant="contained" size="large" onClick={nextStep}>
+              Next
+            </Button>
+          )}
+        </Box>
+      </Box>
+    </Box>
+  );
+
   if (!searchModal.isOpen) {
     return null;
   }
 
   return (
-    <ModalContainer isOpen={searchModal.isOpen} onClose={searchModal.onClose} title="Filters" body={body} />
+    <ModalContainer
+      isOpen={searchModal.isOpen}
+      onClose={searchModal.onClose}
+      title="Filters"
+      body={body}
+      mobileBar={mobileActionBar}
+    />
   );
 };
 

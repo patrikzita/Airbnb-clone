@@ -26,7 +26,11 @@ const DateSelect = ({
         showDateDisplay={false}
         minDate={new Date()}
       />
-      <Stack direction="row" gap={2}>
+      <Stack
+        direction="row"
+        gap={2}
+        sx={{ display: { xs: "none", sm: "flex" } }}
+      >
         <Button
           variant="outlined"
           color="secondary"

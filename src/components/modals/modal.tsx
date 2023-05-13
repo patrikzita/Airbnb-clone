@@ -17,9 +17,18 @@ type ModalProps = {
   onClose: () => void;
   title?: string;
   body?: React.ReactElement;
+  onSubmit?: () => void;
+  mobileBar?: React.ReactElement;
 };
 
-const ModalContainer = ({ isOpen, onClose, title, body }: ModalProps) => {
+const ModalContainer = ({
+  isOpen,
+  onClose,
+  title,
+  body,
+  onSubmit,
+  mobileBar,
+}: ModalProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const modalStyle = {
@@ -33,6 +42,7 @@ const ModalContainer = ({ isOpen, onClose, title, body }: ModalProps) => {
     boxShadow: 24,
     borderRadius: "1rem",
   };
+
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -73,7 +83,7 @@ const ModalContainer = ({ isOpen, onClose, title, body }: ModalProps) => {
             >
               {title}
             </Typography>
-            <div></div>
+            <Box></Box>
           </Box>
           <Box
             sx={{
@@ -85,33 +95,7 @@ const ModalContainer = ({ isOpen, onClose, title, body }: ModalProps) => {
           >
             {body}
           </Box>
-          {
-          // TODO: je potřeba toto změnit, protože u Airbnb Home, nepotřebuji tutu možnost, takže to nějak udělat jinak 
-          }
-          {isMobile && (
-            <Box
-              sx={{
-                position: "absolute",
-                width: "100%",
-                bottom: 0
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  bgcolor: "grey.100",
-                  padding: 2,
-                  placeSelf: "flex-end",
-                }}
-              >
-                <Button color="secondary">Clear all</Button>
-                <Button variant="contained" size="large">
-                  Search
-                </Button>
-              </Box>
-            </Box>
-          )}
+          {isMobile && (mobileBar)}
         </Box>
       </Fade>
     </Modal>

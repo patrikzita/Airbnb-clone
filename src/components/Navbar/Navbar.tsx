@@ -141,7 +141,7 @@ const BottomBar = () => {
           },
           "& .MuiTab-root": {
             "@media (max-width: 450px)": {
-              minWidth: 0, // Zmenšení paddingu vlevo a vpravo pro menší obrazovky
+              minWidth: 0, 
             },
           },
         }}
