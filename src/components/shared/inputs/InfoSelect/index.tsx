@@ -1,7 +1,13 @@
-import { Button, Divider, Stack,Box, Typography, IconButton } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Stack,
+  Typography
+} from "@mui/material";
 
-import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import { useCallback } from "react";
 
 type CounterProps = {
@@ -54,19 +60,13 @@ const Counter = ({ title, subtitle, value, onChange }: CounterProps) => {
   );
 };
 
-
-
 type InfoSelectProps = {
-  nextStep: () => void;
-  previousStep: () => void;
   valueGuest: number;
   onChangeGuest: (value: number) => void;
   valueRoom: number;
   onChangeRoom: (value: number) => void;
 };
 const InfoSelect = ({
-  nextStep,
-  previousStep,
   valueGuest,
   onChangeGuest,
   valueRoom,
@@ -87,31 +87,6 @@ const InfoSelect = ({
         onChange={onChangeRoom}
         value={valueRoom}
       />
-      <Stack direction="row" gap={2}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={previousStep}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={nextStep}
-        >
-          Next
-        </Button>
-      </Stack>
     </>
   );
 };

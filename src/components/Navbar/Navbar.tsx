@@ -1,45 +1,39 @@
+import useCountries from "@/hooks/useCountries";
 import useCreateHomeModal from "@/hooks/useCreateHomeModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
+import useSearchModal from "@/hooks/useSearchModal";
+import AirbnbIcon from "@/icons/AirbnbIcon";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import LanguageIcon from "@mui/icons-material/Language";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import TuneIcon from "@mui/icons-material/Tune";
 import {
   AppBar,
   Avatar,
   Button,
   Divider,
   IconButton,
-  InputBase,
   Menu,
   MenuItem,
   Paper,
   Stack,
+  Tab,
   Tabs,
   Toolbar,
-  Tab,
   Typography,
-  styled,
   useMediaQuery,
-  useTheme,
+  useTheme
 } from "@mui/material";
-import Box from "@mui/material/Box";
-import Fab from "@mui/material/Fab";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import React, { useMemo, useState } from "react";
 import Categories from "./Categories";
 import SearchBar from "./SearchBar";
-import TuneIcon from "@mui/icons-material/Tune";
-import useSearchModal from "@/hooks/useSearchModal";
-import useCountries from "@/hooks/useCountries";
-import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import { createSvgIcon } from "@mui/material/utils";
-import AirbnbIcon from "@/icons/AirbnbIcon";
 
 const MobileSearch = () => {
   const searchModal = useSearchModal();
@@ -141,7 +135,8 @@ const BottomBar = () => {
           },
           "& .MuiTab-root": {
             "@media (max-width: 450px)": {
-              minWidth: 0, 
+              minWidth: 0,
+              fontSize: "12px",
             },
           },
         }}
@@ -183,6 +178,7 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
   return (
     <div>
       <AppBar
@@ -218,7 +214,11 @@ const Navbar = () => {
                 letterSpacing: "1px",
               }}
               onClick={() => {
-                createHomeModal.onOpen();
+                if (!session) {
+                  registerModal.onOpen();
+                } else {
+                  createHomeModal.onOpen();
+                }
                 handleCloseUserMenu();
               }}
             >
@@ -278,7 +278,11 @@ const Navbar = () => {
                     </MenuItem>,
                     <MenuItem
                       onClick={() => {
-                        createHomeModal.onOpen();
+                        if (!session) {
+                          registerModal.onOpen();
+                        } else {
+                          createHomeModal.onOpen();
+                        }
                         handleCloseUserMenu();
                       }}
                     >
@@ -297,7 +301,16 @@ const Navbar = () => {
                       <Typography textAlign="center">Log In</Typography>
                     </MenuItem>,
                     <Divider light />,
-                    <MenuItem onClick={handleCloseUserMenu}>
+                    <MenuItem
+                      onClick={() => {
+                        if (!session) {
+                          registerModal.onOpen();
+                        } else {
+                          createHomeModal.onOpen();
+                        }
+                        handleCloseUserMenu();
+                      }}
+                    >
                       <Typography textAlign="center">Airbnb my home</Typography>
                     </MenuItem>,
                     <MenuItem onClick={handleCloseUserMenu}>
@@ -319,7 +332,7 @@ const Navbar = () => {
       </AppBar>
 
       <Categories />
-      {isMobile && (<BottomBar />)}
+      {isMobile && <BottomBar />}
     </div>
   );
 };

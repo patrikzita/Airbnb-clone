@@ -1,6 +1,4 @@
-import { createTheme } from "@mui/material/styles";
-import { Palette, PaletteOptions } from "@mui/material/styles";
-import { Theme, ThemeOptions } from "@mui/material/styles";
+import { PaletteOptions, ThemeOptions, createTheme } from "@mui/material/styles";
 
 
 interface CustomPaletteOptions extends PaletteOptions {

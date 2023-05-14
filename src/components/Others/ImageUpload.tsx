@@ -1,19 +1,15 @@
 import { OurFileRouter } from "@/libs/uploadthing";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Button, IconButton, Paper, Stack, Typography } from "@mui/material";
+import { Button, IconButton, Paper, Typography } from "@mui/material";
 import { generateReactHelpers } from "@uploadthing/react";
 
 type ImageUploadProps = {
-  nextStep: () => void;
-  previousStep: () => void;
   onSetImage: (value: string) => void;
 };
 
 const { useUploadThing } = generateReactHelpers<OurFileRouter>();
 
 const ImageUpload = ({
-  nextStep,
-  previousStep,
   onSetImage,
 }: ImageUploadProps) => {
   const {
@@ -90,31 +86,6 @@ const ImageUpload = ({
           Upload {files.length} files
         </Button>
       )}
-      <Stack direction="row" gap={2} marginTop={2}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={previousStep}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={nextStep}
-        >
-          Next
-        </Button>
-      </Stack>
     </>
   );
 };

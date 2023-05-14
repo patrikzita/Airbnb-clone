@@ -7,6 +7,7 @@ import {
   IconButton,
   Backdrop,
   Button,
+  Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTheme } from "@mui/material/styles";
@@ -18,7 +19,12 @@ type ModalProps = {
   title?: string;
   body?: React.ReactElement;
   onSubmit?: () => void;
-  mobileBar?: React.ReactElement;
+  onBack: () => void;
+  onNext: () => void;
+  step: number;
+  totalSteps: number;
+  mobileBar?: boolean;
+  submitLabel?: string;
 };
 
 const ModalContainer = ({
@@ -27,7 +33,12 @@ const ModalContainer = ({
   title,
   body,
   onSubmit,
-  mobileBar,
+  onBack,
+  onNext,
+  step,
+  totalSteps,
+  mobileBar = false,
+  submitLabel = "Search",
 }: ModalProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -40,9 +51,50 @@ const ModalContainer = ({
     height: isMobile ? "100vh" : "auto",
     bgcolor: "background.paper",
     boxShadow: 24,
-    borderRadius: "1rem",
+    borderRadius: isMobile ? 0 : "1rem",
   };
-
+  const mobileActionBar = (
+    <Box
+      sx={{
+        position: "absolute",
+        width: "100%",
+        bottom: 0,
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          bgcolor: "grey.100",
+          padding: 2,
+          placeSelf: "flex-end",
+        }}
+      >
+        <Button color="secondary">Clear all</Button>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          {step > 0 && (
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={onBack}
+              sx={{ width: "100%" }}
+            >
+              Back
+            </Button>
+          )}
+          {step < totalSteps - 1 ? (
+            <Button variant="contained" onClick={onNext} sx={{ width: "100%" }}>
+              Next
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={onSubmit} sx={{ width: "100%" }}>
+              {submitLabel}
+            </Button>
+          )}
+        </Box>
+      </Box>
+    </Box>
+  );
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -94,8 +146,44 @@ const ModalContainer = ({
             }}
           >
             {body}
+            <Stack
+              direction="row"
+              gap={2}
+              mt={2}
+              sx={{
+                display: mobileBar ? { xs: "none", sm: "flex" } : {xs: "flex", sm: "flex"},
+              }}
+            >
+              {step > 0 && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={onBack}
+                  sx={{ width: "100%" }}
+                >
+                  Back
+                </Button>
+              )}
+              {step < totalSteps - 1 ? (
+                <Button
+                  variant="contained"
+                  onClick={onNext}
+                  sx={{ width: "100%" }}
+                >
+                  Next
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={onSubmit}
+                  sx={{ width: "100%" }}
+                >
+                  {submitLabel}
+                </Button>
+              )}
+            </Stack>
           </Box>
-          {isMobile && (mobileBar)}
+          {isMobile && mobileBar && mobileActionBar}
         </Box>
       </Fade>
     </Modal>

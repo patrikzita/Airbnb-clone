@@ -1,12 +1,5 @@
 import useCreateHomeModal from "@/hooks/useCreateHomeModal";
-import {
-  Button,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-
+import { Box, InputAdornment, TextField, Typography } from "@mui/material";
 import { FormikProps, useFormik } from "formik";
 import { useState } from "react";
 import "react-date-range/dist/styles.css";
@@ -22,18 +15,12 @@ import DateSelect from "../shared/inputs/DateSelect";
 import InfoSelect from "../shared/inputs/InfoSelect";
 import ModalContainer from "./Modal";
 
+
 type MainInfoSelectProps = {
-  previousStep: () => void;
-  onSubmit: () => void;
   formik: FormikProps<FormikValues>;
 };
 
-const MainInfoSelect = ({
-  previousStep,
-
-  onSubmit,
-  formik,
-}: MainInfoSelectProps) => {
+const MainInfoSelect = ({ formik }: MainInfoSelectProps) => {
   return (
     <>
       <TextField
@@ -79,33 +66,6 @@ const MainInfoSelect = ({
         error={formik.touched.price && Boolean(formik.errors.price)}
         helperText={formik.touched.price && formik.errors.price}
       />
-
-      <Stack direction="row" gap={2}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={previousStep}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={onSubmit}
-          disabled={!formik.isValid || formik.isSubmitting}
-        >
-          Create
-        </Button>
-      </Stack>
     </>
   );
 };
@@ -138,7 +98,7 @@ const Schema = z.object({
   price: z.number({ required_error: "Number is required." }),
 });
 
-export interface FormikValues {
+export type FormikValues = {
   category: string;
   location: null | CountrySelectValue;
   guestCount: number;
@@ -152,7 +112,7 @@ export interface FormikValues {
   title: string;
   description: string;
   price: number;
-}
+};
 
 const CreateHomeModal = () => {
   const createHomeModal = useCreateHomeModal();
@@ -203,12 +163,18 @@ const CreateHomeModal = () => {
       <Typography component="h2" variant="h5">
         Which of these best describes your place?
       </Typography>
-      <CategorySelect
-        nextStep={nextStep}
-        selectedCategory={formik.values.category}
-        onSelectCategory={onSelectCategory}
-        formik={formik}
-      />
+      <Box
+        sx={{
+          overflow: "auto",
+          maxHeight: "calc(100vh - 270px)", // Nastavte maximální výšku podle potřeby
+        }}
+      >
+        <CategorySelect
+          selectedCategory={formik.values.category}
+          onSelectCategory={onSelectCategory}
+          formik={formik}
+        />
+      </Box>
     </>
   );
   if (step === STEPS.LOCATION) {
@@ -218,8 +184,6 @@ const CreateHomeModal = () => {
           Where people can find your place?
         </Typography>
         <CountrySelect
-          nextStep={nextStep}
-          previousStep={previousStep}
           value={formik.values.location}
           onChange={onSelectLocation}
           formik={formik}
@@ -234,8 +198,6 @@ const CreateHomeModal = () => {
           When is your place free?
         </Typography>
         <DateSelect
-          nextStep={nextStep}
-          previousStep={previousStep}
           value={formik.values.date}
           onChange={(value) => formik.setFieldValue("date", value.selection)}
         />
@@ -249,8 +211,6 @@ const CreateHomeModal = () => {
           Share some information about your place
         </Typography>
         <InfoSelect
-          nextStep={nextStep}
-          previousStep={previousStep}
           valueGuest={formik.values.guestCount}
           onChangeGuest={(value) => formik.setFieldValue("guestCount", value)}
           valueRoom={formik.values.roomCount}
@@ -266,8 +226,6 @@ const CreateHomeModal = () => {
           Add a photo of your place
         </Typography>
         <ImageUpload
-          nextStep={nextStep}
-          previousStep={previousStep}
           onSetImage={(value) => formik.setFieldValue("imageUrl", value)}
         />
       </>
@@ -279,11 +237,7 @@ const CreateHomeModal = () => {
         <Typography component="h2" variant="h5">
           Describe your place
         </Typography>
-        <MainInfoSelect
-          previousStep={previousStep}
-          onSubmit={formik.handleSubmit}
-          formik={formik}
-        />
+        <MainInfoSelect formik={formik} />
       </>
     );
   }
@@ -298,6 +252,13 @@ const CreateHomeModal = () => {
       onClose={createHomeModal.onClose}
       title="Airbnb your home"
       body={body}
+      onSubmit={formik.handleSubmit}
+      onBack={previousStep}
+      onNext={nextStep}
+      step={step}
+      mobileBar
+      totalSteps={Object.keys(STEPS).length / 2}
+      submitLabel="Create"
     />
   );
 };

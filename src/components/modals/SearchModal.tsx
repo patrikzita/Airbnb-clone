@@ -2,12 +2,10 @@ import useCountries from "@/hooks/useCountries";
 import useSearchModal from "@/hooks/useSearchModal";
 import {
   Autocomplete,
-  Button,
   Divider,
   FormGroup,
   Stack,
-  TextField,
-  useMediaQuery,
+  TextField
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -22,7 +20,6 @@ import "react-date-range/dist/theme/default.css";
 import Counter from "../Others/Counter";
 import DateSelect from "../shared/inputs/DateSelect";
 import ModalContainer from "./Modal";
-import { useTheme } from "@mui/material/styles";
 
 type CountrySelectValue = {
   flag: string;
@@ -33,11 +30,10 @@ type CountrySelectValue = {
 };
 
 type CountrySelectProps = {
-  nextStep: () => void;
   value?: CountrySelectValue;
   onChange: (value: CountrySelectValue) => void;
 };
-const CountrySelect = ({ nextStep, value, onChange }: CountrySelectProps) => {
+const CountrySelect = ({ value, onChange }: CountrySelectProps) => {
   const { getAll } = useCountries();
   const Map = useMemo(
     () =>
@@ -94,37 +90,21 @@ const CountrySelect = ({ nextStep, value, onChange }: CountrySelectProps) => {
       </FormGroup>
       <Divider light />
       <Map center={value?.latlng} />
-      <Button
-        variant="contained"
-        sx={{
-          display: { xs: "none", sm: "flex" },
-          width: "100%",
-          borderRadius: 2,
-          paddingY: 1,
-        }}
-        onClick={nextStep}
-      >
-        Next
-      </Button>
     </Box>
   );
 };
 
 type InfoSelectProps = {
-  previousStep: () => void;
   valueGuest: number;
   onChangeGuest: (value: number) => void;
   valueRoom: number;
   onChangeRoom: (value: number) => void;
-  onSubmit: () => void;
 };
 const InfoSelect = ({
-  previousStep,
   valueGuest,
   onChangeGuest,
   valueRoom,
   onChangeRoom,
-  onSubmit,
 }: InfoSelectProps) => {
   return (
     <>
@@ -141,37 +121,6 @@ const InfoSelect = ({
         onChange={onChangeRoom}
         value={valueRoom}
       />
-      <Stack
-        direction="row"
-        gap={2}
-        mt={2}
-        sx={{ display: { xs: "none", sm: "flex" } }}
-      >
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={previousStep}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-            display: { xs: "none", sm: "flex" },
-          }}
-          onClick={onSubmit}
-        >
-          Search
-        </Button>
-      </Stack>
     </>
   );
 };
@@ -255,7 +204,6 @@ const SearchModal = () => {
         Where do you wanna go?
       </Typography>
       <CountrySelect
-        nextStep={nextStep}
         value={selectedCountry}
         onChange={(value) => setSelectedCountry(value as CountrySelectValue)}
       />
@@ -268,8 +216,6 @@ const SearchModal = () => {
           When do you want to go?
         </Typography>
         <DateSelect
-          nextStep={nextStep}
-          previousStep={previousStep}
           value={dateRange}
           onChange={(value) => setDateRange(value.selection)}
         />
@@ -283,63 +229,14 @@ const SearchModal = () => {
           More details
         </Typography>
         <InfoSelect
-          previousStep={previousStep}
           valueGuest={guestCount}
           onChangeGuest={(value) => setGuestCount(value)}
           valueRoom={roomCount}
           onChangeRoom={(value) => setRoomCount(value)}
-          onSubmit={onSubmit}
         />
       </>
     );
   }
-
-  let mobileActionBar = (
-    <Box
-      sx={{
-        position: "absolute",
-        width: "100%",
-        bottom: 0,
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          bgcolor: "grey.100",
-          padding: 2,
-          placeSelf: "flex-end",
-        }}
-      >
-        <Button color="secondary" onClick={handleClearQuery}>
-          Clear all
-        </Button>
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <Button
-            variant="outlined"
-            color="secondary"
-            sx={{
-              borderRadius: 2,
-              paddingY: 1,
-              display: step === STEPS.LOCATION ? "none" : "flex",
-            }}
-            onClick={previousStep}
-          >
-            Back
-          </Button>
-          {STEPS.INFO === step ? (
-            <Button variant="contained" size="large" onClick={onSubmit}>
-              Search
-            </Button>
-          ) : (
-            <Button variant="contained" size="large" onClick={nextStep}>
-              Next
-            </Button>
-          )}
-        </Box>
-      </Box>
-    </Box>
-  );
 
   if (!searchModal.isOpen) {
     return null;
@@ -351,7 +248,12 @@ const SearchModal = () => {
       onClose={searchModal.onClose}
       title="Filters"
       body={body}
-      mobileBar={mobileActionBar}
+      mobileBar
+      step={step}
+      totalSteps={Object.keys(STEPS).length / 2}
+      onBack={previousStep}
+      onNext={nextStep}
+      onSubmit={onSubmit}
     />
   );
 };

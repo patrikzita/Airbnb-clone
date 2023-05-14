@@ -1,11 +1,10 @@
 import useCountries from "@/hooks/useCountries";
 import {
   Autocomplete,
-  Button,
   Divider,
   FormGroup,
   Stack,
-  TextField,
+  TextField
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -25,17 +24,13 @@ export type CountrySelectValue = {
 };
 
 type CountrySelectProps = {
-  nextStep: () => void;
-  previousStep: () => void;
   value?: CountrySelectValue | null;
   onChange: (location: CountrySelectValue) => void;
   formik: FormikProps<FormikValues>;
 };
 const CountrySelect = ({
-  nextStep,
   value,
   onChange,
-  previousStep,
   formik,
 }: CountrySelectProps) => {
   const { getAll } = useCountries();
@@ -94,32 +89,6 @@ const CountrySelect = ({
       </FormGroup>
       <Divider light />
       <Map center={value?.latlng} />
-      <Stack direction="row" gap={2}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={previousStep}
-        >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          sx={{
-            width: "100%",
-            borderRadius: 2,
-            paddingY: 1,
-          }}
-          onClick={nextStep}
-          disabled={!formik.values.location}
-        >
-          Next
-        </Button>
-      </Stack>
     </Box>
   );
 };
