@@ -2,15 +2,10 @@ import Navbar from "@/components/Navbar/Navbar";
 import CreateHomeModal from "@/components/modals/CreateHomeModal";
 import LoginModal from "@/components/modals/LoginModal";
 import SearchModal from "@/components/modals/SearchModal";
-
-import { Inter } from "next/font/google";
 import Head from "next/head";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  
-
   return (
     <>
       <Head>

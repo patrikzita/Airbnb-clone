@@ -25,15 +25,16 @@ import {
   Toolbar,
   Typography,
   useMediaQuery,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useMemo, useState } from "react";
 import Categories from "./Categories";
 import SearchBar from "./SearchBar";
+import { Session } from "next-auth";
 
 const MobileSearch = () => {
   const searchModal = useSearchModal();
@@ -114,8 +115,12 @@ const MobileSearch = () => {
   );
 };
 
-const BottomBar = () => {
+type BottomBarProps = {
+  session: Session | null;
+};
+const BottomBar = ({ session }: BottomBarProps) => {
   const [value, setValue] = React.useState(0);
+  const router = useRouter();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -147,16 +152,23 @@ const BottomBar = () => {
           label="Wishlist"
           disableRipple
         />
-        <Tab icon={<AirbnbIcon />} label="Trips" disableRipple />
-        <Tab
-          icon={<ChatBubbleOutlineOutlinedIcon />}
-          label="Inbox"
-          disableRipple
-        />
+
+        {session && <Tab icon={<AirbnbIcon />} label="Trips" disableRipple />}
+        {session && (
+          <Tab
+            icon={<ChatBubbleOutlineOutlinedIcon />}
+            label="Inbox"
+            disableRipple
+          />
+        )}
+
         <Tab
           icon={<AccountCircleOutlinedIcon />}
-          label="Profile"
+          label={session ? "Profile" : "Log in"}
           disableRipple
+          onClick={() =>
+            router.push(`${session ? "/account-settings" : "/login"}`)
+          }
         />
       </Tabs>
     </AppBar>
@@ -177,6 +189,11 @@ const Navbar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleOpenRegisterModal = () => {
+    handleCloseUserMenu();
+    registerModal.onOpen();
   };
 
   return (
@@ -294,10 +311,10 @@ const Navbar = () => {
                     </MenuItem>,
                   ])
                 : React.Children.toArray([
-                    <MenuItem onClick={registerModal.onOpen}>
+                    <MenuItem onClick={handleOpenRegisterModal}>
                       <Typography textAlign="center">Sign Up</Typography>
                     </MenuItem>,
-                    <MenuItem onClick={handleCloseUserMenu}>
+                    <MenuItem onClick={handleOpenRegisterModal}>
                       <Typography textAlign="center">Log In</Typography>
                     </MenuItem>,
                     <Divider light />,
@@ -332,7 +349,7 @@ const Navbar = () => {
       </AppBar>
 
       <Categories />
-      {isMobile && <BottomBar />}
+      {isMobile && <BottomBar session={session} />}
     </div>
   );
 };
