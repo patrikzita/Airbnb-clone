@@ -1,7 +1,18 @@
+import CountryPhoneNumberSelect from "@/components/shared/inputs/CountryNumberSelect";
+import SocialButtons from "@/components/shared/inputs/SocialButtons";
+import {
+  Box,
+  Divider,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Head from "next/head";
-import Navbar from "@/components/Navbar/Navbar";
 
 const Login = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <>
       <Head>
@@ -10,9 +21,63 @@ const Login = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/airbnb-icon.svg" />
       </Head>
-      <div>
-        <h1>I´m on route /login</h1>
-      </div>
+      <main>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: isMobile ? 0 : "3rem"
+           }}
+        >
+          <Box
+            sx={{
+              width: isMobile ? "100%" : 650,
+              border: isMobile ? "none" : "1px solid grey",
+              borderRadius: isMobile ? 0 : "1rem",
+              bgcolor: "background.paper",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                paddingInline: 1,
+                paddingY: 2,
+                borderBottom: "1px solid",
+                borderColor: "grey.300",
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="h1"
+                fontWeight={500}
+                fontSize={16}
+              >
+                Log in or sign up
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                p: 4,
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+              }}
+            >
+              <Typography variant="h5" component="h2" fontWeight={500}>
+                Welcome to Airbnb
+              </Typography>
+              <CountryPhoneNumberSelect />
+              <Divider orientation="horizontal">
+                <Typography>or</Typography>
+              </Divider>
+              <SocialButtons />
+            </Box>
+          </Box>
+        </Box>
+      </main>
     </>
   );
 };

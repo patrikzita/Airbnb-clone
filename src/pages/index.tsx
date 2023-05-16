@@ -1,9 +1,5 @@
-import Navbar from "@/components/Navbar/Navbar";
-import CreateHomeModal from "@/components/modals/CreateHomeModal";
-import LoginModal from "@/components/modals/LoginModal";
-import SearchModal from "@/components/modals/SearchModal";
+import Categories from "@/components/Navbar/Categories";
 import Head from "next/head";
-
 
 export default function Home() {
   return (
@@ -14,12 +10,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/airbnb-icon.svg" />
       </Head>
-      <main>
-        <Navbar />
-        <LoginModal />
-        <SearchModal />
-        <CreateHomeModal />
-      </main>
+      <Categories />
+      <main></main>
     </>
   );
 }

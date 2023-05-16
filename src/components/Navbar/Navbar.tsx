@@ -31,6 +31,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter as useRouterFromRouter } from "next/router";
 import React, { useMemo, useState } from "react";
 import Categories from "./Categories";
 import SearchBar from "./SearchBar";
@@ -146,7 +147,12 @@ const BottomBar = ({ session }: BottomBarProps) => {
           },
         }}
       >
-        <Tab icon={<SearchIcon />} label="Explore" disableRipple />
+        <Tab
+          icon={<SearchIcon />}
+          label="Explore"
+          disableRipple
+          onClick={() => router.push("/")}
+        />
         <Tab
           icon={<FavoriteBorderOutlinedIcon />}
           label="Wishlist"
@@ -175,12 +181,16 @@ const BottomBar = ({ session }: BottomBarProps) => {
   );
 };
 
-const Navbar = () => {
+type NavbarProps = {
+  session: Session | null;
+};
+const Navbar = ({ session }: NavbarProps) => {
   const registerModal = useRegisterModal();
   const createHomeModal = useCreateHomeModal();
-  const { data: session } = useSession();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const theme = useTheme();
+  const router = useRouterFromRouter();
+
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -220,7 +230,7 @@ const Navbar = () => {
               width="40"
             />
           </Link>
-          <SearchBar />
+          {router.pathname === "/" ? <SearchBar /> : <div></div>}
           <Stack direction="row" gap={2} justifyContent="end">
             <Button
               color="secondary"
@@ -337,18 +347,17 @@ const Navbar = () => {
             </Menu>
           </Stack>
         </Toolbar>
-        <Toolbar
-          sx={{
-            display: { xs: "flex", md: "none" },
-            justifyContent: "center",
-            p: 2,
-          }}
-        >
-          <MobileSearch />
-        </Toolbar>
+        {isMobile && router.pathname === "/" && (
+          <Toolbar
+            sx={{
+              justifyContent: "center",
+              p: 2,
+            }}
+          >
+            <MobileSearch />
+          </Toolbar>
+        )}
       </AppBar>
-
-      <Categories />
       {isMobile && <BottomBar session={session} />}
     </div>
   );
