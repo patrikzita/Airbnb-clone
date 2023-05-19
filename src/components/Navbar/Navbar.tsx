@@ -13,12 +13,14 @@ import TuneIcon from "@mui/icons-material/Tune";
 import {
   AppBar,
   Avatar,
+  Box,
   Button,
   Divider,
   IconButton,
   Menu,
   MenuItem,
   Paper,
+  Skeleton,
   Stack,
   Tab,
   Tabs,
@@ -36,6 +38,8 @@ import React, { useMemo, useState } from "react";
 import Categories from "./Categories";
 import SearchBar from "./SearchBar";
 import { Session } from "next-auth";
+import { useActiveTabIndex } from "@/hooks/useActiveTabIndex";
+import { routes } from "@/config/siteConfig";
 
 const MobileSearch = () => {
   const searchModal = useSearchModal();
@@ -118,21 +122,43 @@ const MobileSearch = () => {
 
 type BottomBarProps = {
   session: Session | null;
+  status: "authenticated" | "loading" | "unauthenticated";
 };
-const BottomBar = ({ session }: BottomBarProps) => {
-  const [value, setValue] = React.useState(0);
+const BottomBar = ({ session, status }: BottomBarProps) => {
   const router = useRouter();
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+  const activeTabIndex = useActiveTabIndex();
+
+  if (status === "loading") {
+    const circleSize = 40;
+    return (
+      <AppBar
+        position="fixed"
+        sx={{ top: "auto", bottom: 0, backgroundColor: "common.white" }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "space-around", p: 1 }}>
+          <Box>
+            <Skeleton variant="circular" width={circleSize} height={circleSize} />
+            <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+          </Box>
+          <Box>
+            <Skeleton variant="circular" width={circleSize} height={circleSize} />
+            <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+          </Box>
+          <Box>
+            <Skeleton variant="circular" width={circleSize} height={circleSize} />
+            <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+          </Box>
+        </Box>
+      </AppBar>
+    );
+  }
   return (
     <AppBar
       position="fixed"
       sx={{ top: "auto", bottom: 0, backgroundColor: "common.white" }}
     >
       <Tabs
-        value={value}
-        onChange={handleChange}
+        value={activeTabIndex}
         aria-label="Mobile Menu Tabs"
         variant="fullWidth"
         sx={{
@@ -151,12 +177,13 @@ const BottomBar = ({ session }: BottomBarProps) => {
           icon={<SearchIcon />}
           label="Explore"
           disableRipple
-          onClick={() => router.push("/")}
+          onClick={() => router.push(routes.home)}
         />
         <Tab
           icon={<FavoriteBorderOutlinedIcon />}
           label="Wishlist"
           disableRipple
+          onClick={() => router.push(routes.wishlists)}
         />
 
         {session && <Tab icon={<AirbnbIcon />} label="Trips" disableRipple />}
@@ -173,7 +200,7 @@ const BottomBar = ({ session }: BottomBarProps) => {
           label={session ? "Profile" : "Log in"}
           disableRipple
           onClick={() =>
-            router.push(`${session ? "/account-settings" : "/login"}`)
+            router.push(`${session ? routes.accountSettings : routes.login}`)
           }
         />
       </Tabs>
@@ -181,10 +208,8 @@ const BottomBar = ({ session }: BottomBarProps) => {
   );
 };
 
-type NavbarProps = {
-  session: Session | null;
-};
-const Navbar = ({ session }: NavbarProps) => {
+const Navbar = () => {
+  const { data: session, status } = useSession();
   const registerModal = useRegisterModal();
   const createHomeModal = useCreateHomeModal();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -222,7 +247,7 @@ const Navbar = ({ session }: NavbarProps) => {
             justifyContent: "space-around",
           }}
         >
-          <Link href="/">
+          <Link href={routes.home}>
             <Image
               src="/images/airbnb-icon.svg"
               alt="Airbnb logo"
@@ -230,7 +255,7 @@ const Navbar = ({ session }: NavbarProps) => {
               width="40"
             />
           </Link>
-          {router.pathname === "/" ? <SearchBar /> : <div></div>}
+          {router.pathname === routes.home ? <SearchBar /> : <div></div>}
           <Stack direction="row" gap={2} justifyContent="end">
             <Button
               color="secondary"
@@ -347,7 +372,7 @@ const Navbar = ({ session }: NavbarProps) => {
             </Menu>
           </Stack>
         </Toolbar>
-        {isMobile && router.pathname === "/" && (
+        {isMobile && router.pathname === routes.home && (
           <Toolbar
             sx={{
               justifyContent: "center",
@@ -358,7 +383,7 @@ const Navbar = ({ session }: NavbarProps) => {
           </Toolbar>
         )}
       </AppBar>
-      {isMobile && <BottomBar session={session} />}
+      {isMobile && <BottomBar session={session} status={status} />}
     </div>
   );
 };

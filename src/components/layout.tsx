@@ -9,10 +9,9 @@ type LayoutProps = {
   children: ReactNode;
 };
 const Layout = ({ children }: LayoutProps) => {
-  const { data: session } = useSession();
   return (
     <>
-      <Navbar session={session} />
+      <Navbar  />
       <LoginModal />
       <SearchModal />
       <CreateHomeModal />
