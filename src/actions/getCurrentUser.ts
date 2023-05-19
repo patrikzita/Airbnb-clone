@@ -8,9 +8,7 @@ export default async function getCurrentUser(
   res: NextApiResponse
 ) {
   try {
-    console.log("První řádek getCurrentUser()");
     const session = await getServerSession(req, res, authOptions);
-    console.log("Session:", session);
 
     if (!session?.user?.email) {
       return null;
@@ -22,7 +20,6 @@ export default async function getCurrentUser(
       },
     });
 
-    console.log("currentUser - ", currentUser)
     if (!currentUser) {
       return null;
     }

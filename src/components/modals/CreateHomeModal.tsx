@@ -15,6 +15,7 @@ import DateSelect from "../shared/inputs/DateSelect";
 import InfoSelect from "../shared/inputs/InfoSelect";
 import ModalContainer from "./Modal";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 type MainInfoSelectProps = {
   formik: FormikProps<FormikValues>;
@@ -146,16 +147,16 @@ const CreateHomeModal = () => {
       axios
         .post("/api/create-listing", values)
         .then(() => {
-          console.log("ok")
+          toast.success("New home was created!");
+          setStep(0);
+          createHomeModal.onClose();
+          formik.resetForm();
         })
         .catch(() => {
-          console.error("Something went wrong.");
+          toast.error("Something get wrong!");
         });
 
       console.log(values);
-      setStep(0);
-      createHomeModal.onClose();
-      formik.resetForm();
     },
     validationSchema: toFormikValidationSchema(Schema),
   });

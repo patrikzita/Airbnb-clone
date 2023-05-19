@@ -1,9 +1,9 @@
-import { useSession } from "next-auth/react";
 import { ReactNode } from "react";
 import Navbar from "./Navbar/Navbar";
 import CreateHomeModal from "./modals/CreateHomeModal";
 import LoginModal from "./modals/LoginModal";
 import SearchModal from "./modals/SearchModal";
+import { Toaster } from "react-hot-toast";
 
 type LayoutProps = {
   children: ReactNode;
@@ -11,7 +11,14 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
-      <Navbar  />
+      <Toaster
+        toastOptions={{
+          style: {
+            fontFamily: "Poppins, sans-serif",
+          },
+        }}
+      />
+      <Navbar />
       <LoginModal />
       <SearchModal />
       <CreateHomeModal />

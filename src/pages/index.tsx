@@ -11,7 +11,8 @@ export default function Home() {
         <link rel="icon" href="/airbnb-icon.svg" />
       </Head>
       <Categories />
-      <main></main>
+      <main>
+      </main>
     </>
   );
 }

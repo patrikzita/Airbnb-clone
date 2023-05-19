@@ -9,15 +9,11 @@ export default async function handler(
     res.status(405).json({ error: "Method not allowed" });
     return;
   }
-  console.log("Jsem tu ");
   try {
     const currentUser = await getCurrentUser(req, res);
     if (!currentUser) {
-      console.log("Zavolal jsem !currentUser");
       return res.status(500).send({ error: "Fatal error" });
     }
-    console.log("currentUser(listing)", currentUser);
-
     const body = req.body;
     console.log("body", body);
     const {
@@ -31,10 +27,6 @@ export default async function handler(
       description,
       price,
     } = body;
-
-    console.log(`category: ${category}, imageURL: ${imageUrl}`);
-    
-
     const listing = await client.listing.create({
       data: {
         category,
