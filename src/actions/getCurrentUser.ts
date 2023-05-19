@@ -1,10 +1,16 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import client from "@/libs/prisma";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-export default async function getCurrentUser(req: any, res: any) {
+export default async function getCurrentUser(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
-    const session = await getServerSession(authOptions);
+    console.log("První řádek getCurrentUser()");
+    const session = await getServerSession(req, res, authOptions);
+    console.log("Session:", session);
 
     if (!session?.user?.email) {
       return null;
@@ -16,6 +22,7 @@ export default async function getCurrentUser(req: any, res: any) {
       },
     });
 
+    console.log("currentUser - ", currentUser)
     if (!currentUser) {
       return null;
     }
@@ -24,10 +31,8 @@ export default async function getCurrentUser(req: any, res: any) {
       ...currentUser,
       createdAt: currentUser.createdAt.toISOString(),
       updatedAt: currentUser.updatedAt.toISOString(),
-      emailVerified: currentUser.emailVerified?.toISOString() || null,
     };
   } catch (error: any) {
     return null;
   }
 }
-

@@ -14,7 +14,7 @@ import CountrySelect, {
 import DateSelect from "../shared/inputs/DateSelect";
 import InfoSelect from "../shared/inputs/InfoSelect";
 import ModalContainer from "./Modal";
-
+import axios from "axios";
 
 type MainInfoSelectProps = {
   formik: FormikProps<FormikValues>;
@@ -143,6 +143,15 @@ const CreateHomeModal = () => {
       price: 1,
     },
     onSubmit: (values) => {
+      axios
+        .post("/api/create-listing", values)
+        .then(() => {
+          console.log("ok")
+        })
+        .catch(() => {
+          console.error("Something went wrong.");
+        });
+
       console.log(values);
       setStep(0);
       createHomeModal.onClose();
