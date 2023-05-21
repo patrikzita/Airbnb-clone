@@ -1,7 +1,13 @@
+import getCurrentUser from "@/actions/getCurrentUser";
+import getListingsData from "@/actions/getListingsData";
 import Categories from "@/components/Navbar/Categories";
+import CarouselListingCard from "@/components/shared/listings/ListingCard";
+import { Container, Grid } from "@mui/material";
 import Head from "next/head";
 
-export default function Home() {
+export default function Home({ listings, currentUser }: any) {
+  console.log(listings);
+  console.log("Home currentUser", currentUser)
   return (
     <>
       <Head>
@@ -12,7 +18,32 @@ export default function Home() {
       </Head>
       <Categories />
       <main>
+        <Container sx={{ mt: "3rem" }}>
+          <Grid
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 4, sm: 8, md: 12 }}
+          >
+            {listings.map((listing: any) => (
+              <Grid key={listing.id}>
+                <CarouselListingCard data={listing} currentUser={currentUser} />
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
       </main>
     </>
   );
+}
+
+export async function getServerSideProps({ req, res }: any) {
+  const listings = await getListingsData();
+  const currentUser = await getCurrentUser(req, res);
+
+  return {
+    props: {
+      listings,
+      currentUser,
+    },
+  };
 }

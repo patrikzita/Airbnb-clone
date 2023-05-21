@@ -30,7 +30,7 @@ export default async function handler(
     const listing = await client.listing.create({
       data: {
         category,
-        locationValue: location.value,
+        locationValue: location.label,
         guestCount,
         roomCount,
         startDate: date.startDate,
