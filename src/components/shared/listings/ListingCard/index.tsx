@@ -1,19 +1,16 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import MobileStepper from "@mui/material/MobileStepper";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
-import StarRateIcon from "@mui/icons-material/StarRate";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import StarRateIcon from "@mui/icons-material/StarRate";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import React from "react";
 
-import { Listing, User } from "@prisma/client";
-import { formatDate } from "@/utils/formatDate";
-import { formatCurrency } from "@/utils/formatCurrency";
 import useFavorite from "@/hooks/useFavorite";
+import { formatCurrency } from "@/utils/formatCurrency";
+import { formatDate } from "@/utils/formatDate";
+import { Listing, User } from "@prisma/client";
+import Image from "next/image";
 
 type FavoriteButtonProps = {
   listingId: string;
@@ -76,20 +73,22 @@ const CarouselListingCard = ({
       sx={{
         flexGrow: 1,
         position: "relative",
+        width: "100%",
       }}
     >
       <Box
-        component="img"
         sx={{
-          height: 275,
-          display: "block",
-          overflow: "hidden",
-          width: "100%",
-          borderRadius: 5,
+          position: "relative",
+          height: { xs: "400px", sm: "280px", md: "280px" },
         }}
-        src={data.imageUrl}
-        alt={""}
-      />
+      >
+        <Image
+          fill
+          src={data.imageUrl}
+          alt={data.title}
+          
+        />
+      </Box>
       <FavoriteButton currentUser={currentUser} listingId={data.id} />
       <Box sx={{ mt: 2 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -97,7 +96,6 @@ const CarouselListingCard = ({
             component="h3"
             sx={{ fontSize: "1.2rem", fontWeight: "500" }}
           >
-            {" "}
             {data.locationValue}
           </Typography>
           <Box
@@ -105,7 +103,7 @@ const CarouselListingCard = ({
               display: "flex",
               flexDirection: "row",
               justifyContent: "center",
-              alignItems: "center",
+              alignContent: "center",
             }}
           >
             <Typography component="h5">5</Typography>

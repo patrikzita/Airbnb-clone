@@ -1,5 +1,12 @@
 import { categories } from "@/utils/categories";
-import { Box, Button, Container, Tabs, tabsClasses } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Button,
+  Container,
+  Tabs,
+  tabsClasses,
+} from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import CategoryItem from "../Others/CategoryItem";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
@@ -11,7 +18,7 @@ const Categories = () => {
     (categoryItem) => categoryItem.label === category
   );
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" sx={{ backgroundColor: "#fff" }}>
       <Box
         sx={{
           display: "flex",
@@ -19,6 +26,7 @@ const Categories = () => {
           px: { xs: 0, md: 2 },
           alignItems: "center",
           justifyContent: "center",
+
           mt: 2,
           mb: 2,
         }}

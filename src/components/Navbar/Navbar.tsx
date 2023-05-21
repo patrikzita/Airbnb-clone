@@ -15,18 +15,21 @@ import {
   Avatar,
   Box,
   Button,
+  CssBaseline,
   Divider,
   IconButton,
   Menu,
   MenuItem,
   Paper,
   Skeleton,
+  Slide,
   Stack,
   Tab,
   Tabs,
   Toolbar,
   Typography,
   useMediaQuery,
+  useScrollTrigger,
   useTheme,
 } from "@mui/material";
 import { signOut, useSession } from "next-auth/react";
@@ -119,6 +122,18 @@ const MobileSearch = () => {
     </Paper>
   );
 };
+type HideOnScrollProps = {
+  children: React.ReactElement;
+};
+function HideOnScroll({ children }: HideOnScrollProps) {
+  const trigger = useScrollTrigger();
+
+  return (
+    <Slide appear={false} direction="up" in={!trigger} timeout={200}>
+      {children}
+    </Slide>
+  );
+}
 
 type BottomBarProps = {
   session: Session | null;
@@ -131,80 +146,96 @@ const BottomBar = ({ session, status }: BottomBarProps) => {
   if (status === "loading") {
     const circleSize = 40;
     return (
+      <HideOnScroll>
+        <AppBar
+          position="fixed"
+          sx={{ top: "auto", bottom: 0, backgroundColor: "common.white" }}
+        >
+          <Box sx={{ display: "flex", justifyContent: "space-around", p: 1 }}>
+            <Box>
+              <Skeleton
+                variant="circular"
+                width={circleSize}
+                height={circleSize}
+              />
+              <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+            </Box>
+            <Box>
+              <Skeleton
+                variant="circular"
+                width={circleSize}
+                height={circleSize}
+              />
+              <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+            </Box>
+            <Box>
+              <Skeleton
+                variant="circular"
+                width={circleSize}
+                height={circleSize}
+              />
+              <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+            </Box>
+          </Box>
+        </AppBar>
+      </HideOnScroll>
+    );
+  }
+  return (
+    <HideOnScroll>
       <AppBar
         position="fixed"
         sx={{ top: "auto", bottom: 0, backgroundColor: "common.white" }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-around", p: 1 }}>
-          <Box>
-            <Skeleton variant="circular" width={circleSize} height={circleSize} />
-            <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
-          </Box>
-          <Box>
-            <Skeleton variant="circular" width={circleSize} height={circleSize} />
-            <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
-          </Box>
-          <Box>
-            <Skeleton variant="circular" width={circleSize} height={circleSize} />
-            <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
-          </Box>
-        </Box>
-      </AppBar>
-    );
-  }
-  return (
-    <AppBar
-      position="fixed"
-      sx={{ top: "auto", bottom: 0, backgroundColor: "common.white" }}
-    >
-      <Tabs
-        value={activeTabIndex}
-        aria-label="Mobile Menu Tabs"
-        variant="fullWidth"
-        sx={{
-          "& .MuiTabs-indicator": {
-            display: "none",
-          },
-          "& .MuiTab-root": {
-            "@media (max-width: 450px)": {
-              minWidth: 0,
-              fontSize: "12px",
+        <Tabs
+          value={activeTabIndex}
+          aria-label="Mobile Menu Tabs"
+          variant="fullWidth"
+          sx={{
+            "& .MuiTabs-indicator": {
+              display: "none",
             },
-          },
-        }}
-      >
-        <Tab
-          icon={<SearchIcon />}
-          label="Explore"
-          disableRipple
-          onClick={() => router.push(routes.home)}
-        />
-        <Tab
-          icon={<FavoriteBorderOutlinedIcon />}
-          label="Wishlist"
-          disableRipple
-          onClick={() => router.push(routes.wishlists)}
-        />
-
-        {session && <Tab icon={<AirbnbIcon />} label="Trips" disableRipple />}
-        {session && (
+            "& .MuiTab-root": {
+              "@media (max-width: 450px)": {
+                minWidth: 0,
+                fontSize: "12px",
+              },
+            },
+          }}
+        >
           <Tab
-            icon={<ChatBubbleOutlineOutlinedIcon />}
-            label="Inbox"
+            icon={<SearchIcon />}
+            label="Explore"
             disableRipple
+            onClick={() => router.push(routes.home)}
           />
-        )}
+          <Tab
+            icon={<FavoriteBorderOutlinedIcon />}
+            label="Wishlist"
+            disableRipple
+            onClick={() => router.push(routes.wishlists)}
+          />
 
-        <Tab
-          icon={<AccountCircleOutlinedIcon />}
-          label={session ? "Profile" : "Log in"}
-          disableRipple
-          onClick={() =>
-            router.push(`${session ? routes.accountSettings : routes.login}`)
-          }
-        />
-      </Tabs>
-    </AppBar>
+          {session && <Tab icon={<AirbnbIcon />} label="Trips" disableRipple />}
+          {session && (
+            <Tab
+              icon={<ChatBubbleOutlineOutlinedIcon />}
+              label="Inbox"
+              disableRipple
+            />
+          )}
+
+          <Tab
+            icon={<AccountCircleOutlinedIcon />}
+            label={session ? "Profile" : "Log in"}
+            disableRipple
+            onClick={() =>
+              router.push(`${session ? routes.accountSettings : routes.login}`)
+            }
+          />
+        </Tabs>
+      </AppBar>
+    </HideOnScroll>
   );
 };
 
@@ -232,13 +263,14 @@ const Navbar = () => {
   };
 
   return (
-    <div>
+    <>
       <AppBar
-        position="sticky"
-        color="transparent"
+        position="static"
         elevation={0}
         sx={{
           borderBottom: "1px solid rgba(209, 209, 209, 0.26)",
+          backgroundColor: "white",
+          zIndex: 1000,
         }}
       >
         <Toolbar
@@ -383,8 +415,9 @@ const Navbar = () => {
           </Toolbar>
         )}
       </AppBar>
+
       {isMobile && <BottomBar session={session} status={status} />}
-    </div>
+    </>
   );
 };
 

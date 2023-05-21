@@ -2,7 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    esmExternals: false, 
+    esmExternals: false,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "uploadthing.com",
+        pathname: "/f/**",
+      },
+    ],
   },
 };
 

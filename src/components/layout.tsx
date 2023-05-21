@@ -4,6 +4,7 @@ import CreateHomeModal from "./modals/CreateHomeModal";
 import LoginModal from "./modals/LoginModal";
 import SearchModal from "./modals/SearchModal";
 import { Toaster } from "react-hot-toast";
+import StickyHeader from "./Navbar/StickyHeader";
 
 type LayoutProps = {
   children: ReactNode;
@@ -11,6 +12,7 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
+      <StickyHeader />
       <Toaster
         toastOptions={{
           style: {
@@ -18,7 +20,7 @@ const Layout = ({ children }: LayoutProps) => {
           },
         }}
       />
-      <Navbar />
+
       <LoginModal />
       <SearchModal />
       <CreateHomeModal />

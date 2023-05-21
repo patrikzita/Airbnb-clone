@@ -1,10 +1,6 @@
 import Loading from "@/components/shared/feedback/Loading";
 import useRegisterModal from "@/hooks/useRegisterModal";
-import {
-  Box,
-  Button,
-  Typography
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 
@@ -12,8 +8,8 @@ const Wishlists = () => {
   const registerModal = useRegisterModal();
   const { data: session, status } = useSession();
 
-  if(status === "loading"){
-    return <Loading />
+  if (status === "loading") {
+    return <Loading />;
   }
   return (
     <>

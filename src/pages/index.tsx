@@ -2,12 +2,13 @@ import getCurrentUser from "@/actions/getCurrentUser";
 import getListingsData from "@/actions/getListingsData";
 import Categories from "@/components/Navbar/Categories";
 import CarouselListingCard from "@/components/shared/listings/ListingCard";
-import { Container, Grid } from "@mui/material";
+import { Container, Grid, Box, AppBar, Typography } from "@mui/material";
 import Head from "next/head";
 
+/* 
+ TODO: Zvolit správné typování místo any
+*/
 export default function Home({ listings, currentUser }: any) {
-  console.log(listings);
-  console.log("Home currentUser", currentUser)
   return (
     <>
       <Head>
@@ -16,20 +17,33 @@ export default function Home({ listings, currentUser }: any) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/airbnb-icon.svg" />
       </Head>
-      <Categories />
       <main>
-        <Container sx={{ mt: "3rem" }}>
+        <Container sx={{ my: "3rem", paddingBottom: "5rem" }}>
           <Grid
             container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
+            rowSpacing={1}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+            px={"2rem"}
+            sx={{
+              justifyContent: { xs: "center", md: "flex-start" },
+            }}
           >
             {listings.map((listing: any) => (
-              <Grid key={listing.id}>
+              <Grid item xs={12} sm={6} md={4} key={listing.id}>
                 <CarouselListingCard data={listing} currentUser={currentUser} />
               </Grid>
             ))}
           </Grid>
+          <Box sx={{ my: 2 }}>
+            {[...new Array(12)]
+              .map(
+                () => `Cras mattis consectetur purus sit amet fermentum.
+Cras justo odio, dapibus ac facilisis in, egestas eget quam.
+Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
+              )
+              .join("\n")}
+          </Box>
         </Container>
       </main>
     </>
