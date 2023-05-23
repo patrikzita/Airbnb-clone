@@ -1,4 +1,4 @@
-import getListingsData from "@/actions/getListingsData";
+import getRoomsData from "@/actions/getRoomsData";
 import type { NextApiRequest, NextApiResponse } from "next";
 export default async function handler(
   req: NextApiRequest,
@@ -9,9 +9,9 @@ export default async function handler(
     return;
   }
   try {
-    const listing = getListingsData();
+    const room = getRoomsData();
 
-    return listing;
+    return room;
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: "failed to fetch data" });

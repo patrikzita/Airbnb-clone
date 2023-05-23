@@ -1,14 +1,14 @@
 import getCurrentUser from "@/actions/getCurrentUser";
-import getListingsData from "@/actions/getListingsData";
+import getRoomsData from "@/actions/getRoomsData";
 import Categories from "@/components/Navbar/Categories";
-import CarouselListingCard from "@/components/shared/listings/ListingCard";
+import CarouselRoomCard from "@/components/shared/rooms/RoomCard";
 import { Container, Grid, Box, AppBar, Typography } from "@mui/material";
 import Head from "next/head";
 
 /* 
  TODO: Zvolit správné typování místo any
 */
-export default function Home({ listings, currentUser }: any) {
+export default function Home({ rooms, currentUser }: any) {
   return (
     <>
       <Head>
@@ -28,9 +28,9 @@ export default function Home({ listings, currentUser }: any) {
               justifyContent: { xs: "center", md: "flex-start" },
             }}
           >
-            {listings.map((listing: any) => (
-              <Grid item xs={12} sm={6} md={4} key={listing.id}>
-                <CarouselListingCard data={listing} currentUser={currentUser} />
+            {rooms.map((room: any) => (
+              <Grid item xs={12} sm={6} md={4} key={room.id}>
+                <CarouselRoomCard data={room} currentUser={currentUser} />
               </Grid>
             ))}
           </Grid>
@@ -51,12 +51,12 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
 }
 
 export async function getServerSideProps({ req, res }: any) {
-  const listings = await getListingsData();
+  const rooms = await getRoomsData();
   const currentUser = await getCurrentUser(req, res);
 
   return {
     props: {
-      listings,
+      rooms,
       currentUser,
     },
   };

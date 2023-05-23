@@ -27,7 +27,7 @@ export default async function handler(
       description,
       price,
     } = body;
-    const listing = await client.listing.create({
+    const room = await client.listing.create({
       data: {
         category,
         locationValue: location.label,
@@ -42,7 +42,7 @@ export default async function handler(
         userId: currentUser.id,
       },
     });
-    return res.json(listing);
+    return res.json(room);
   } catch (err) {
     console.error(err);
     res.status(500).send({ error: "failed to fetch data" });

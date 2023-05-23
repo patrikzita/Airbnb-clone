@@ -1,6 +1,6 @@
 import client from "@/libs/prisma";
 
-const getListingsData = async () => {
+const getRoomsData = async () => {
   try {
     const listings = await client.listing.findMany();
 
@@ -16,4 +16,4 @@ const getListingsData = async () => {
   }
 };
 
-export default getListingsData;
+export default getRoomsData;

@@ -13,14 +13,14 @@ import { Listing, User } from "@prisma/client";
 import Image from "next/image";
 
 type FavoriteButtonProps = {
-  listingId: string;
+  roomId: string;
   currentUser?: User | null;
 };
-const FavoriteButton = ({ listingId, currentUser }: FavoriteButtonProps) => {
+const FavoriteButton = ({ roomId, currentUser }: FavoriteButtonProps) => {
   console.log("CurrentUser in FavoriteButton:", currentUser);
 
   const { hasFavorited, toggleFavorite } = useFavorite({
-    listingId,
+    roomId,
     currentUser,
   });
 
@@ -49,10 +49,7 @@ type CarouselListingCardProps = {
   data: SafeDataListing;
 };
 
-const CarouselListingCard = ({
-  currentUser,
-  data,
-}: CarouselListingCardProps) => {
+const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const maxSteps = data.imageUrl.length;
@@ -82,14 +79,9 @@ const CarouselListingCard = ({
           height: { xs: "400px", sm: "280px", md: "280px" },
         }}
       >
-        <Image
-          fill
-          src={data.imageUrl}
-          alt={data.title}
-          
-        />
+        <Image fill src={data.imageUrl} alt={data.title} />
       </Box>
-      <FavoriteButton currentUser={currentUser} listingId={data.id} />
+      <FavoriteButton currentUser={currentUser} roomId={data.id} />
       <Box sx={{ mt: 2 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography
@@ -126,4 +118,4 @@ const CarouselListingCard = ({
   );
 };
 
-export default CarouselListingCard;
+export default CarouselRoomCard;

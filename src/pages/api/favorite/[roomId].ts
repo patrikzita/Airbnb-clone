@@ -5,7 +5,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { listingId } = req.query;
+  const { roomId } = req.query;
   if (req.method === "POST") {
     const currentUser = await getCurrentUser(req, res);
 
@@ -13,13 +13,13 @@ export default async function handler(
       return res.status(500).send({ error: "User is not authorized." });
     }
 
-    if (!listingId || typeof listingId !== "string") {
+    if (!roomId || typeof roomId !== "string") {
       throw new Error("Invalid ID");
     }
 
     let favoriteIds = [...(currentUser.favoriteIds || [])];
 
-    favoriteIds.push(listingId);
+    favoriteIds.push(roomId);
 
     const user = await client.user.update({
       where: {
@@ -38,12 +38,12 @@ export default async function handler(
       return res.status(500).send({ error: "User is not authorized." });
     }
 
-    if (!listingId || typeof listingId !== "string") {
+    if (!roomId || typeof roomId !== "string") {
       throw new Error("Invalid ID");
     }
     let favoriteIds = [...(currentUser.favoriteIds || [])];
 
-    favoriteIds = favoriteIds.filter((id) => id !== listingId);
+    favoriteIds = favoriteIds.filter((id) => id !== roomId);
 
     const user = await client.user.update({
       where: {

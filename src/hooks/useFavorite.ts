@@ -6,19 +6,19 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 
 type useFavoriteProps = {
-  listingId: string;
+  roomId: string;
   currentUser?: User | null;
 };
 
-const useFavorite = ({ listingId, currentUser }: useFavoriteProps) => {
+const useFavorite = ({ roomId, currentUser }: useFavoriteProps) => {
   const router = useRouter();
   const registerModal = useRegisterModal();
 
   const hasFavorited = useMemo(() => {
     const list = currentUser?.favoriteIds || [];
 
-    return list.includes(listingId);
-  }, [listingId, currentUser]);
+    return list.includes(roomId);
+  }, [roomId, currentUser]);
 
   const toggleFavorite = useCallback(
     async (e: React.MouseEvent<HTMLDivElement>) => {
@@ -31,9 +31,9 @@ const useFavorite = ({ listingId, currentUser }: useFavoriteProps) => {
       try {
         let request;
         if (!hasFavorited) {
-          request = () => axios.post(`/api/favorite/${listingId}`);
+          request = () => axios.post(`/api/favorite/${roomId}`);
         } else {
-          request = () => axios.delete(`/api/favorite/${listingId}`);
+          request = () => axios.delete(`/api/favorite/${roomId}`);
         }
         await request();
         router.refresh();
@@ -42,7 +42,7 @@ const useFavorite = ({ listingId, currentUser }: useFavoriteProps) => {
         toast.error("Something went wrong");
       }
     },
-    [listingId, registerModal, router, currentUser, hasFavorited]
+    [roomId, registerModal, router, currentUser, hasFavorited]
   );
   return {
     hasFavorited,
