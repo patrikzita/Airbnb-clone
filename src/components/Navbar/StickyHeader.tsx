@@ -35,4 +35,3 @@ const StickyHeader = () => {
 };
 
 export default StickyHeader;
-    

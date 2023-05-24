@@ -287,7 +287,13 @@ const Navbar = () => {
               width="40"
             />
           </Link>
-          {router.pathname === routes.home ? <SearchBar /> : <div></div>}
+          {router.pathname === routes.home ||
+          router.pathname.startsWith(`${routes.rooms}/`) ? (
+            <SearchBar />
+          ) : (
+            <div></div>
+          )}
+
           <Stack direction="row" gap={2} justifyContent="end">
             <Button
               color="secondary"

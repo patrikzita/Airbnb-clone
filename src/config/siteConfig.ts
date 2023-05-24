@@ -5,5 +5,6 @@ export const routes = {
     inbox: "/inbox",
     accountSettings: "/account-settings",
     login: "/login",
+    rooms: "/rooms"
   };
   

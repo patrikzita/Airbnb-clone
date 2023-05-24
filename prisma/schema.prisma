@@ -21,7 +21,7 @@ model User {
   favoriteIds    String[] @db.ObjectId
 
   accounts     Account[]
-  listings     Listing[]
+  room     Room[]
   reservations Reservation[]
 }
 
@@ -44,7 +44,7 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-model Listing {
+model Room {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   description   String
@@ -66,12 +66,12 @@ model Listing {
 model Reservation {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   userId     String   @db.ObjectId
-  listingId  String   @db.ObjectId
+  roomId  String   @db.ObjectId
   startDate  DateTime
   endDate    DateTime
   totalPrice Int
   createdAt  DateTime @default(now())
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
 }

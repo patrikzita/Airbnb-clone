@@ -145,7 +145,7 @@ const CreateHomeModal = () => {
     },
     onSubmit: (values) => {
       axios
-        .post("/api/create-listing", values)
+        .post("/api/create-room", values)
         .then(() => {
           toast.success("New home was created!");
           setStep(0);

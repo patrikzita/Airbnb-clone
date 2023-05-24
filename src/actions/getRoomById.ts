@@ -6,7 +6,7 @@ type Params = {
 export default async function getRoomById(params: Params) {
   const { roomId } = params;
 
-  const room = await client.listing.findUnique({
+  const room = await client.room.findUnique({
     where: {
       id: roomId,
     },
@@ -22,6 +22,8 @@ export default async function getRoomById(params: Params) {
   return {
     ...room,
     createdAt: room.createdAt.toString(),
+    startDate: room.startDate.toString(),
+    endDate: room.endDate.toString(),
     user: {
       ...room.user,
       createdAt: room.user.createdAt.toString(),

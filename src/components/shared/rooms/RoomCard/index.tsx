@@ -1,16 +1,17 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import React from "react";
-
 import useFavorite from "@/hooks/useFavorite";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatDate } from "@/utils/formatDate";
-import { Listing, User } from "@prisma/client";
+import { Room, User } from "@prisma/client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { routes } from "@/config/siteConfig";
 
 type FavoriteButtonProps = {
   roomId: string;
@@ -33,14 +34,14 @@ const FavoriteButton = ({ roomId, currentUser }: FavoriteButtonProps) => {
         {hasFavorited ? (
           <FavoriteIcon sx={{ color: "primary.main" }} />
         ) : (
-          <FavoriteBorderIcon />
+          <FavoriteTwoToneIcon sx={{ color: "common.white" }} />
         )}
       </IconButton>
     </Box>
   );
 };
 
-type SafeDataListing = Omit<Listing, "createdAt"> & {
+type SafeDataListing = Omit<Room, "createdAt"> & {
   createdAt: string;
 };
 
@@ -53,6 +54,8 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
   const [activeStep, setActiveStep] = React.useState(0);
 
   const maxSteps = data.imageUrl.length;
+  const router = useRouter();
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1); // jumps when we click the next arrow
   };
@@ -67,10 +70,12 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
   return (
     <Box
       className="carouselCard"
+      onClick={() => router.push(`${routes.rooms}/${data.id}`)}
       sx={{
         flexGrow: 1,
         position: "relative",
         width: "100%",
+        cursor: "pointer",
       }}
     >
       <Box
@@ -79,6 +84,9 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
           height: { xs: "400px", sm: "280px", md: "280px" },
         }}
       >
+        {/* 
+        TODO: Opravit když obrázek nemá image + přidat sizes props
+        */}
         <Image fill src={data.imageUrl} alt={data.title} />
       </Box>
       <FavoriteButton currentUser={currentUser} roomId={data.id} />

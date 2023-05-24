@@ -1,6 +1,7 @@
 import getCurrentUser from "@/actions/getCurrentUser";
 import type { NextApiRequest, NextApiResponse } from "next";
 import client from "@/libs/prisma";
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -27,7 +28,7 @@ export default async function handler(
       description,
       price,
     } = body;
-    const room = await client.listing.create({
+    const room = await client.room.create({
       data: {
         category,
         locationValue: location.label,
