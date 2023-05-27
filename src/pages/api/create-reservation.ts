@@ -1,6 +1,7 @@
 import getCurrentUser from "@/actions/getCurrentUser";
 import type { NextApiRequest, NextApiResponse } from "next";
 import client from "@/libs/prisma";
+import { getNightsBetween } from "@/utils/dateUtils";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,12 +19,11 @@ export default async function handler(
 
     const body = req.body;
 
-    const { roomId, startDate, endDate, totalPrice } = body;
+    const { roomId, startDate, endDate } = body;
 
-    if (!roomId || !startDate || !endDate || !totalPrice) {
+    if (!roomId || !startDate || !endDate) {
       return res.status(400).send({ error: "Incomplete request data." });
     }
-
     const room = await client.room.findUnique({
       where: {
         id: roomId,
@@ -32,6 +32,11 @@ export default async function handler(
     if (!room) {
       return res.status(404).send({ error: "Room not found." }); // Room not found
     }
+    const numberOfNights = getNightsBetween(
+      new Date(startDate),
+      new Date(endDate)
+    );
+    const totalPrice = numberOfNights * room.price;
 
     /* 
     TODO: Zkontrolovat jestli room je available na request date

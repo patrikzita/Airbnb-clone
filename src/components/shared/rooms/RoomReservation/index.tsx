@@ -1,5 +1,6 @@
 import DateSelect from "@/components/shared/inputs/DateSelect";
 import useCountries from "@/hooks/useCountries";
+import { SafeReservation } from "@/types";
 import { checkIfDatesAreEqual, getNightsBetween } from "@/utils/dateUtils";
 import { formatDate } from "@/utils/formatDate";
 import { Box, Typography } from "@mui/material";
@@ -9,6 +10,7 @@ import {
   endOfDay,
   isAfter,
   isBefore,
+  parseISO,
   startOfDay,
 } from "date-fns";
 import { Dispatch, SetStateAction, useMemo } from "react";
@@ -21,6 +23,7 @@ type RoomReservationProps = {
   dateRange: Range;
   setDateRange: Dispatch<SetStateAction<Range>>;
   onSubmit: () => void;
+  reservations?: SafeReservation[];
 };
 const RoomReservation = ({
   locationValue,
@@ -29,6 +32,7 @@ const RoomReservation = ({
   dateRange,
   setDateRange,
   onSubmit,
+  reservations = [],
 }: RoomReservationProps) => {
   const { getByValue } = useCountries();
 
@@ -41,10 +45,18 @@ const RoomReservation = ({
       start: startOfDay(addDays(new Date(), -1)),
       end: endOfDay(addDays(new Date(), 365)),
     });
+
     const disabledDates = allDays.filter((day) => {
       return (
         isBefore(day, availableStartDate) || isAfter(day, availableEndDate)
       );
+    });
+    reservations.forEach((reservation) => {
+      const start = parseISO(reservation.startDate);
+      const end = parseISO(reservation.endDate);
+
+      const reservedDays = eachDayOfInterval({ start, end });
+      disabledDates.push(...reservedDays);
     });
 
     return disabledDates;

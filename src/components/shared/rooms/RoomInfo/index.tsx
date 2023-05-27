@@ -3,15 +3,15 @@ import StarRateIcon from "@mui/icons-material/StarRate";
 import { Avatar, Box, Divider, Typography } from "@mui/material";
 
 type RoomInfoProps = {
-  username: string;
-  userImg: string;
+  userName: string | null;
+  userImg: string | null;
   guestCount: number;
   roomsCount: number;
   category: string;
   title: string;
 };
 const RoomInfo = ({
-  username,
+  userName,
   userImg,
   guestCount,
   roomsCount,
@@ -50,8 +50,8 @@ const RoomInfo = ({
           alignItems: "center",
         }}
       >
-        <Typography variant="h6">{`Room in a rental unit hosted by ${username}`}</Typography>
-        <Avatar alt={username} src={userImg} />
+        <Typography variant="h6">{`Room in a rental unit hosted by ${userName}`}</Typography>
+        <Avatar alt={userName ? userName : ""} src={userImg ? userImg : ""} />
       </Box>
       <Typography>{formatGuestAndRoomCount(guestCount, roomsCount)}</Typography>
       <Divider sx={{ mt: 2 }} />

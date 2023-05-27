@@ -83,7 +83,7 @@ const MobileRoomBar = ({ price, dateRange, onSubmit }: MobileBarProps) => {
             areDatesEqual={areDatesEqual}
           />
         </Box>
-        <Button variant="contained" onClick={onSubmit}>
+        <Button variant="contained" disabled={nights < 1} onClick={onSubmit}>
           Reserve
         </Button>
       </Box>
