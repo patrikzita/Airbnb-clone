@@ -5,11 +5,9 @@ import "react-date-range/dist/theme/default.css";
 type DateSelectProps = {
   value: Range;
   onChange: (value: RangeKeyDict) => void;
+  disabledDates?: Date[];
 };
-const DateSelect = ({
-  value,
-  onChange,
-}: DateSelectProps) => {
+const DateSelect = ({ value, onChange, disabledDates }: DateSelectProps) => {
   return (
     <>
       <DateRange
@@ -19,6 +17,7 @@ const DateSelect = ({
         onChange={onChange}
         direction="vertical"
         showDateDisplay={false}
+        disabledDates={disabledDates}
         minDate={new Date()}
       />
     </>

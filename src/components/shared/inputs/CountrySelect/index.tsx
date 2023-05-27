@@ -26,12 +26,10 @@ export type CountrySelectValue = {
 type CountrySelectProps = {
   value?: CountrySelectValue | null;
   onChange: (location: CountrySelectValue) => void;
-  formik: FormikProps<FormikValues>;
 };
 const CountrySelect = ({
   value,
   onChange,
-  formik,
 }: CountrySelectProps) => {
   const { getAll } = useCountries();
   const Map = useMemo(

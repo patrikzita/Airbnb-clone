@@ -1,17 +1,17 @@
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
-import StarRateIcon from "@mui/icons-material/StarRate";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import React from "react";
+import { routes } from "@/config/siteConfig";
+import useCountries from "@/hooks/useCountries";
 import useFavorite from "@/hooks/useFavorite";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatDate } from "@/utils/formatDate";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
+import StarRateIcon from "@mui/icons-material/StarRate";
+import { Box, Typography } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
 import { Room, User } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { routes } from "@/config/siteConfig";
+import React from "react";
 
 type FavoriteButtonProps = {
   roomId: string;
@@ -51,6 +51,11 @@ type CarouselListingCardProps = {
 };
 
 const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
+  const { getByValue } = useCountries();
+
+  const locationLabel = getByValue(data.locationValue)?.label;
+
+  
   const [activeStep, setActiveStep] = React.useState(0);
 
   const maxSteps = data.imageUrl.length;
@@ -81,13 +86,11 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
       <Box
         sx={{
           position: "relative",
-          height: { xs: "400px", sm: "280px", md: "280px" },
+          width: "100%",
+          paddingTop: "56.25%",
         }}
       >
-        {/* 
-        TODO: Opravit když obrázek nemá image + přidat sizes props
-        */}
-        <Image fill src={data.imageUrl} alt={data.title} />
+        <Image src={data.imageUrl} alt={data.title} fill />
       </Box>
       <FavoriteButton currentUser={currentUser} roomId={data.id} />
       <Box sx={{ mt: 2 }}>
@@ -96,7 +99,7 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
             component="h3"
             sx={{ fontSize: "1.2rem", fontWeight: "500" }}
           >
-            {data.locationValue}
+            {locationLabel}
           </Typography>
           <Box
             sx={{

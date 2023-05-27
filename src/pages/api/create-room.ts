@@ -31,7 +31,7 @@ export default async function handler(
     const room = await client.room.create({
       data: {
         category,
-        locationValue: location.label,
+        locationValue: location.value,
         guestCount,
         roomCount,
         startDate: date.startDate,

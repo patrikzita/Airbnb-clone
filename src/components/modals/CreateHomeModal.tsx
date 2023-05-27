@@ -196,7 +196,6 @@ const CreateHomeModal = () => {
         <CountrySelect
           value={formik.values.location}
           onChange={onSelectLocation}
-          formik={formik}
         />
       </>
     );

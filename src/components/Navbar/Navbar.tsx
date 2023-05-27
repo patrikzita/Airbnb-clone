@@ -422,7 +422,9 @@ const Navbar = () => {
         )}
       </AppBar>
 
-      {isMobile && <BottomBar session={session} status={status} />}
+      {isMobile && !router.pathname.startsWith(`${routes.rooms}/`) && (
+        <BottomBar session={session} status={status} />
+      )}
     </>
   );
 };
