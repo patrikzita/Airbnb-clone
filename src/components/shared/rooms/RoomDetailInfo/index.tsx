@@ -8,15 +8,13 @@ type RoomInfoProps = {
   guestCount: number;
   roomsCount: number;
   category: string;
-  title: string;
 };
-const RoomInfo = ({
+const RoomDetailInfo = ({
   userName,
   userImg,
   guestCount,
   roomsCount,
   category,
-  title,
 }: RoomInfoProps) => {
   const categoryItem = categories.find(
     (categoryItem) => categoryItem.label === category
@@ -29,19 +27,7 @@ const RoomInfo = ({
     return `${guestCount} ${guests} · ${roomsCount} ${rooms}`;
   };
   return (
-    <Box>
-      <Typography variant="h6" component="h1">
-        {title}
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-        }}
-      >
-        <Typography component="h5">5</Typography>
-        <StarRateIcon sx={{ fontSize: "1.3rem" }} />
-      </Box>
+    <Box my={2}>
       <Box
         sx={{
           display: "flex",
@@ -66,4 +52,4 @@ const RoomInfo = ({
   );
 };
 
-export default RoomInfo;
+export default RoomDetailInfo;

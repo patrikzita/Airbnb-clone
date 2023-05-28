@@ -2,7 +2,7 @@ import { routes } from "@/config/siteConfig";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import IosShareIcon from "@mui/icons-material/IosShare";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, styled } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -10,6 +10,14 @@ type RoomHeader = {
   imageUrl: string;
   title: string;
 };
+
+const StyledImage = styled(Image)(({ theme }) => ({
+  borderRadius: "2rem",
+  [theme.breakpoints.down("md")]: {
+    borderRadius: 0,
+  },
+}));
+
 const RoomHeader = ({ imageUrl, title }: RoomHeader) => {
   const router = useRouter();
   return (
@@ -74,7 +82,7 @@ const RoomHeader = ({ imageUrl, title }: RoomHeader) => {
             </IconButton>
           </Box>
         </Box>
-        <Image fill src={imageUrl} alt={`${title}'s image`} />
+        <StyledImage fill src={imageUrl} alt={`${title}'s image`} />
       </Box>
     </>
   );
