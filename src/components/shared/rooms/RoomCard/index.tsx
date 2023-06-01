@@ -6,37 +6,45 @@ import { formatDate } from "@/utils/formatDate";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
-import { Box, Typography } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
+import { Box, Checkbox, Typography } from "@mui/material";
 import { Room, User } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 type FavoriteButtonProps = {
   roomId: string;
   currentUser?: User | null;
 };
 const FavoriteButton = ({ roomId, currentUser }: FavoriteButtonProps) => {
-  console.log("CurrentUser in FavoriteButton:", currentUser);
-
-  const { hasFavorited, toggleFavorite } = useFavorite({
+  const { hasFavorited: hasFavoritedFromServer, toggleFavorite } = useFavorite({
     roomId,
     currentUser,
   });
 
+  const [hasFavorited, setHasFavorited] = useState(hasFavoritedFromServer);
+
+  useEffect(() => {
+    setHasFavorited(hasFavoritedFromServer);
+  }, [hasFavoritedFromServer]);
+
+  const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+    setHasFavorited(!hasFavorited);
+    toggleFavorite(event);
+  };
+
   return (
     <Box
       sx={{ position: "absolute", right: 10, top: 10, zIndex: 10 }}
-      onClick={toggleFavorite}
+      onClick={(event) => event.stopPropagation()}
     >
-      <IconButton>
-        {hasFavorited ? (
-          <FavoriteIcon sx={{ color: "primary.main" }} />
-        ) : (
-          <FavoriteTwoToneIcon sx={{ color: "common.white" }} />
-        )}
-      </IconButton>
+      <Checkbox
+        icon={<FavoriteTwoToneIcon sx={{ color: "common.white" }} />}
+        checkedIcon={<FavoriteIcon sx={{ color: "primary.main" }} />}
+        checked={hasFavorited}
+        onChange={handleClick}
+      />
     </Box>
   );
 };
@@ -55,7 +63,6 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
 
   const locationLabel = getByValue(data.locationValue)?.label;
 
-  
   const [activeStep, setActiveStep] = React.useState(0);
 
   const maxSteps = data.imageUrl.length;

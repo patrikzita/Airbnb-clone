@@ -3,24 +3,14 @@ import getAllRoomsIds from "@/actions/getAllRoomsIds";
 import getRoomById from "@/actions/getRoomById";
 import LocationInfo from "@/components/shared/rooms/LocationInfo";
 import MobileRoomBar from "@/components/shared/rooms/MobileRoomBar";
+import ReservationSummary from "@/components/shared/rooms/ReservationSummary";
 import RoomDetailInfo from "@/components/shared/rooms/RoomDetailInfo";
 import RoomHeader from "@/components/shared/rooms/RoomHeader";
 import RoomHeaderInfo from "@/components/shared/rooms/RoomHeaderInfo";
 import RoomReservation from "@/components/shared/rooms/RoomReservation";
 import useIsMobile from "@/hooks/useIsMobile";
 import { SafeReservation, SafeRoom } from "@/types";
-import { checkIfDatesAreEqual, getNightsBetween } from "@/utils/dateUtils";
-import { formatCurrency } from "@/utils/formatCurrency";
-import StarRateIcon from "@mui/icons-material/StarRate";
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Divider, Paper } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { Range } from "react-date-range";
@@ -52,10 +42,6 @@ export default function Page({ room, reservations }: PageProps) {
       });
   };
 
-  const nights = getNightsBetween(
-    dateRange.startDate ?? new Date(),
-    dateRange.endDate ?? new Date()
-  );
   return (
     <>
       <main>
@@ -87,7 +73,6 @@ export default function Page({ room, reservations }: PageProps) {
                 category={room.category}
               />
               <LocationInfo locationValue={room.locationValue} />
-
               <RoomReservation
                 locationValue={room.locationValue}
                 startDate={room.startDate}
@@ -110,107 +95,14 @@ export default function Page({ room, reservations }: PageProps) {
                   sx={{
                     position: "sticky",
                     top: 150,
+                    borderRadius: "1.5rem",
+                    boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
                   }}
                 >
-                  <Box
-                    p={2}
-                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: nights >= 1 ? "row" : "column",
-                        justifyContent:
-                          nights >= 1 ? "space-between" : "flex-start",
-                        alignItems: nights >= 1 ? "center" : "flex-start",
-                      }}
-                    >
-                      <Box>
-                        {nights >= 1 ? (
-                          <>
-                            <Typography
-                              component="span"
-                              sx={{
-                                fontSize: "1.4rem",
-                                fontWeight: 500,
-                              }}
-                            >
-                              {formatCurrency(room.price)}
-                            </Typography>
-                            <Typography component="span" ml={1}>
-                              night
-                            </Typography>
-                          </>
-                        ) : (
-                          <Typography
-                            component="span"
-                            sx={{
-                              fontSize: "1.4rem",
-                              fontWeight: 500,
-                            }}
-                          >
-                            Add dates for prices
-                          </Typography>
-                        )}
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "row",
-                        }}
-                      >
-                        <StarRateIcon sx={{ fontSize: "1.3rem" }} />
-                        <Typography component="span">5</Typography>
-                        <Typography component="span" sx={{ mx: 1 }}>
-                          ·
-                        </Typography>
-                        <Typography component="span">151 reviews</Typography>
-                      </Box>
-                    </Box>
-                    <Box>
-                      <Button variant="contained" sx={{ width: "100%" }}>
-                        Reserve
-                      </Button>
-                    </Box>
-                    {nights >= 1 && (
-                      <Box>
-                        <Typography textAlign="center" my={1}>
-                          You won't be charged yet
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Box>
-                            <Typography>{`${formatCurrency(
-                              room.price
-                            )} x ${nights} ${
-                              nights > 1 ? "nights" : "night"
-                            }`}</Typography>
-                          </Box>
-                          <Typography>
-                            {formatCurrency(room.price * nights)}
-                          </Typography>
-                        </Box>
-                        <Divider />
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Typography>Total</Typography>
-                          <Typography>
-                            {formatCurrency(room.price * nights)}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    )}
-                  </Box>
+                  <ReservationSummary
+                    price={room.price}
+                    dateRange={dateRange}
+                  />
                 </Paper>
               </Box>
             )}

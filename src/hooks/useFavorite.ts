@@ -21,28 +21,30 @@ const useFavorite = ({ roomId, currentUser }: useFavoriteProps) => {
   }, [roomId, currentUser]);
 
   const toggleFavorite = useCallback(
-    async (e: React.MouseEvent<HTMLDivElement>) => {
+    (e: React.ChangeEvent<HTMLInputElement>) => {
       e.stopPropagation();
 
       if (!currentUser) {
-        return registerModal.onOpen();
-      }
-
-      try {
-        let request;
-        if (!hasFavorited) {
-          request = () => axios.post(`/api/favorite/${roomId}`);
-        } else {
-          request = () => axios.delete(`/api/favorite/${roomId}`);
-        }
-        await request();
-        router.refresh();
-        toast.success("Success");
-      } catch (err) {
-        toast.error("Something went wrong");
+        registerModal.onOpen();
+      } else {
+        // Spustíme asynchronní operaci v novém call stacku, aby se zabránilo blokování
+        setTimeout(async () => {
+          try {
+            let request;
+            if (!hasFavorited) {
+              request = () => axios.post(`/api/favorite/${roomId}`);
+            } else {
+              request = () => axios.delete(`/api/favorite/${roomId}`);
+            }
+            await request();
+            toast.success("Success");
+          } catch (err) {
+            toast.error("Something went wrong");
+          }
+        }, 0);
       }
     },
-    [roomId, registerModal, router, currentUser, hasFavorited]
+    [roomId, registerModal, currentUser, hasFavorited]
   );
   return {
     hasFavorited,
