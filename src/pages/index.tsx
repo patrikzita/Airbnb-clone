@@ -24,6 +24,8 @@ export default function Home({ rooms, currentUser }: any) {
     async ({ pageParam = 0 }) => {
       console.log("I was called");
       const response = await axios.get(`/api/get-rooms?page=${pageParam + 1}`);
+      console.log(response);
+
       return response.data;
     },
     {
@@ -32,7 +34,7 @@ export default function Home({ rooms, currentUser }: any) {
       },
     }
   );
-  console.log(data?.pages);
+  console.log(data);
 
   return (
     <>
@@ -53,7 +55,7 @@ export default function Home({ rooms, currentUser }: any) {
               justifyContent: { xs: "center", md: "flex-start" },
             }}
           >
-            {data?.pages.map((room: any) => (
+            {rooms.map((room: any) => (
               <Grid item xs={12} sm={6} md={4} key={room.id}>
                 <CarouselRoomCard data={room} currentUser={currentUser} />
               </Grid>
@@ -83,7 +85,7 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
 }
 
 export async function getServerSideProps({ req, res }: any) {
-  const rooms = await getRoomsData(1);
+  const rooms = await getRoomsData(1, 10);
   const currentUser = await getCurrentUser(req, res);
 
   return {
