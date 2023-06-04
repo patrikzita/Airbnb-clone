@@ -64,7 +64,7 @@ const Footer = () => {
           }}
         >
           {Object.entries(footerData).map(([headline, links]) => (
-            <Box flex={1} component="section">
+            <Box flex={1} component="section" key={headline + links}>
               <Typography fontWeight={500}>{headline}</Typography>
               <Box
                 sx={{ display: "flex", flexDirection: "column", mt: 3, gap: 3 }}
@@ -75,6 +75,7 @@ const Footer = () => {
                 */}
                 {links.map((link) => (
                   <Box
+                    key={link.name}
                     component="li"
                     sx={{
                       listStyle: "none",

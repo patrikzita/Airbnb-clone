@@ -2,13 +2,38 @@ import getCurrentUser from "@/actions/getCurrentUser";
 import getRoomsData from "@/actions/getRoomsData";
 import Categories from "@/components/Navbar/Categories";
 import CarouselRoomCard from "@/components/shared/rooms/RoomCard";
-import { Container, Grid, Box, AppBar, Typography } from "@mui/material";
+import {
+  Container,
+  Grid,
+  Box,
+  AppBar,
+  Typography,
+  Button,
+} from "@mui/material";
 import Head from "next/head";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 /* 
  TODO: Zvolit správné typování místo any
 */
+
 export default function Home({ rooms, currentUser }: any) {
+  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
+    ["rooms"],
+    async ({ pageParam = 0 }) => {
+      console.log("I was called");
+      const response = await axios.get(`/api/get-rooms?page=${pageParam + 1}`);
+      return response.data;
+    },
+    {
+      getNextPageParam: (_, pages) => {
+        return pages.length + 1;
+      },
+    }
+  );
+  console.log(data?.pages);
+
   return (
     <>
       <Head>
@@ -28,12 +53,19 @@ export default function Home({ rooms, currentUser }: any) {
               justifyContent: { xs: "center", md: "flex-start" },
             }}
           >
-            {rooms.map((room: any) => (
+            {data?.pages.map((room: any) => (
               <Grid item xs={12} sm={6} md={4} key={room.id}>
                 <CarouselRoomCard data={room} currentUser={currentUser} />
               </Grid>
             ))}
           </Grid>
+          <Button onClick={() => fetchNextPage()}>
+            {isFetchingNextPage
+              ? "Loading More..."
+              : (data?.pages.length ?? 0) < 3
+              ? "Load more"
+              : "Nothing more to load"}
+          </Button>
           <Box sx={{ my: 2 }}>
             {[...new Array(12)]
               .map(
@@ -51,7 +83,7 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
 }
 
 export async function getServerSideProps({ req, res }: any) {
-  const rooms = await getRoomsData();
+  const rooms = await getRoomsData(1);
   const currentUser = await getCurrentUser(req, res);
 
   return {
