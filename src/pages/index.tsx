@@ -13,28 +13,53 @@ import {
 import Head from "next/head";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useRef, useEffect } from "react";
+import { useIntersection } from "@mantine/hooks";
 
 /* 
  TODO: Zvolit správné typování místo any
 */
 
 export default function Home({ rooms, currentUser }: any) {
-  const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
-    ["rooms"],
-    async ({ pageParam = 1 }) => {
-      console.log("Page Param: ", pageParam);
-      const response = await axios.get(`/api/get-rooms?page=${pageParam}`);
+  /* 
+    TODO: šlo by nějak spojit rooms a data? 
+  */
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
+    useInfiniteQuery(
+      ["rooms"],
+      async ({ pageParam = 1 }) => {
+        console.log("Page Param: ", pageParam);
+        const response = await axios.get(`/api/get-rooms?page=${pageParam}`);
 
-      return response.data;
-    },
-    {
-      getNextPageParam: (_, pages) => {
-        return pages.length + 1;
+        return response.data;
       },
-    }
-  );
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          // Pokud na poslední stránce nebyl žádný záznam, vrátíte null.
+          if (lastPage.length === 0) {
+            return null;
+          }
+
+          // Jinak se vrátí číslo další stránky.
+          return allPages.length + 1;
+        },
+      }
+    );
+
+  const lastRoomRef = useRef<HTMLElement>(null);
+  const { ref, entry } = useIntersection({
+    root: lastRoomRef.current,
+    threshold: 1,
+  });
+
+  useEffect(() => {
+    if (entry?.isIntersecting && hasNextPage) fetchNextPage();
+  }, [entry, hasNextPage]);
+
+  const _rooms = data?.pages.flatMap((page) => page);
+
   console.log(data?.pages);
-  console.log(rooms);
+  console.log("hasNextPage?: ", hasNextPage);
 
   return (
     <>
@@ -55,13 +80,18 @@ export default function Home({ rooms, currentUser }: any) {
               justifyContent: { xs: "center", md: "flex-start" },
             }}
           >
-            {data?.pages.map((page: any[]) =>
-              page.map((room: any) => (
-                <Grid item xs={12} sm={6} md={4} key={room.id}>
-                  <CarouselRoomCard data={room} currentUser={currentUser} />
-                </Grid>
-              ))
-            )}
+            {_rooms?.map((room, i) => (
+              <Grid
+                ref={i === _rooms.length - 1 ? ref : null}
+                item
+                xs={12}
+                sm={6}
+                md={4}
+                key={room.id}
+              >
+                <CarouselRoomCard data={room} currentUser={currentUser} />
+              </Grid>
+            ))}
           </Grid>
           <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
             {isFetchingNextPage

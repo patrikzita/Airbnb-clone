@@ -26,7 +26,7 @@ const Layout = ({ children }: LayoutProps) => {
       <SearchModal />
       <CreateHomeModal />
       <main>{children}</main>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
