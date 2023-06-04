@@ -22,7 +22,6 @@ type RoomReservationProps = {
   endDate: string;
   dateRange: Range;
   setDateRange: Dispatch<SetStateAction<Range>>;
-  onSubmit: () => void;
   reservations?: SafeReservation[];
 };
 const RoomReservation = ({
@@ -31,7 +30,6 @@ const RoomReservation = ({
   endDate,
   dateRange,
   setDateRange,
-  onSubmit,
   reservations = [],
 }: RoomReservationProps) => {
   const { getByValue } = useCountries();

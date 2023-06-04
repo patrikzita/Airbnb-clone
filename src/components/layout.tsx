@@ -5,6 +5,7 @@ import LoginModal from "./modals/LoginModal";
 import SearchModal from "./modals/SearchModal";
 import { Toaster } from "react-hot-toast";
 import StickyHeader from "./Navbar/StickyHeader";
+import Footer from "./Footer";
 
 type LayoutProps = {
   children: ReactNode;
@@ -25,6 +26,7 @@ const Layout = ({ children }: LayoutProps) => {
       <SearchModal />
       <CreateHomeModal />
       <main>{children}</main>
+      <Footer />
     </>
   );
 };

@@ -16,7 +16,10 @@ type FavoriteButtonProps = {
   roomId: string;
   currentUser?: User | null;
 };
-const FavoriteButton = ({ roomId, currentUser }: FavoriteButtonProps) => {
+const FavoriteButtonWithUser = ({
+  roomId,
+  currentUser,
+}: FavoriteButtonProps) => {
   const { hasFavorited: hasFavoritedFromServer, toggleFavorite } = useFavorite({
     roomId,
     currentUser,
@@ -99,7 +102,7 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
       >
         <Image src={data.imageUrl} alt={data.title} fill />
       </Box>
-      <FavoriteButton currentUser={currentUser} roomId={data.id} />
+      <FavoriteButtonWithUser currentUser={currentUser} roomId={data.id} />
       <Box sx={{ mt: 2 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography

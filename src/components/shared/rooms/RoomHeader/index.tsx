@@ -1,14 +1,15 @@
 import { routes } from "@/config/siteConfig";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import IosShareIcon from "@mui/icons-material/IosShare";
 import { Box, IconButton, styled } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { FavoriteButton } from "../FavoriteButton";
 
 type RoomHeader = {
   imageUrl: string;
   title: string;
+  roomId: string;
 };
 
 const StyledImage = styled(Image)(({ theme }) => ({
@@ -18,7 +19,7 @@ const StyledImage = styled(Image)(({ theme }) => ({
   },
 }));
 
-const RoomHeader = ({ imageUrl, title }: RoomHeader) => {
+const RoomHeader = ({ imageUrl, title, roomId }: RoomHeader) => {
   const router = useRouter();
   return (
     <>
@@ -68,18 +69,7 @@ const RoomHeader = ({ imageUrl, title }: RoomHeader) => {
             >
               <IosShareIcon sx={{ color: "common.black" }} />
             </IconButton>
-            <IconButton
-              sx={{
-                backgroundColor: "common.white",
-                color: "common.black",
-                "&:hover": {
-                  backgroundColor: "common.white",
-                  transform: "scale(1.1)",
-                },
-              }}
-            >
-              <FavoriteBorderIcon sx={{ color: "common.black" }} />
-            </IconButton>
+            <FavoriteButton roomId={roomId} />
           </Box>
         </Box>
         <StyledImage fill src={imageUrl} alt={`${title}'s image`} />

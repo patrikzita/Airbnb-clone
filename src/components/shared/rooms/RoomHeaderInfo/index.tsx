@@ -1,15 +1,16 @@
 import useCountries from "@/hooks/useCountries";
 import useIsMobile from "@/hooks/useIsMobile";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import IosShareIcon from "@mui/icons-material/IosShare";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import { Box, Button, Typography } from "@mui/material";
+import { FavoriteButton } from "../FavoriteButton";
 
 type RoomInfoProps = {
   title: string;
   locationValue: string;
+  roomId: string;
 };
-const RoomHeaderInfo = ({ title, locationValue }: RoomInfoProps) => {
+const RoomHeaderInfo = ({ title, locationValue, roomId }: RoomInfoProps) => {
   const { getByValue } = useCountries();
   const locationLabel = getByValue(locationValue)?.label;
   const isMobile = useIsMobile();
@@ -23,7 +24,7 @@ const RoomHeaderInfo = ({ title, locationValue }: RoomInfoProps) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          my: 1
+          my: 1,
         }}
       >
         <Box
@@ -52,13 +53,7 @@ const RoomHeaderInfo = ({ title, locationValue }: RoomInfoProps) => {
             >
               Share
             </Button>
-            <Button
-              variant="text"
-              color="secondary"
-              startIcon={<FavoriteBorderIcon />}
-            >
-              Save
-            </Button>
+            <FavoriteButton roomId={roomId} label="Save" />
           </Box>
         )}
       </Box>

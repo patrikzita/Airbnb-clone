@@ -7,9 +7,14 @@ import { Range } from "react-date-range";
 type ReservationSummaryProps = {
   dateRange: Range;
   price: number;
+  onSubmit: () => void;
 };
 
-const ReservationSummary = ({ price, dateRange }: ReservationSummaryProps) => {
+const ReservationSummary = ({
+  price,
+  dateRange,
+  onSubmit,
+}: ReservationSummaryProps) => {
   const nights = getNightsBetween(
     dateRange.startDate ?? new Date(),
     dateRange.endDate ?? new Date()
@@ -70,8 +75,13 @@ const ReservationSummary = ({ price, dateRange }: ReservationSummaryProps) => {
       <Box>
         <Button
           variant="contained"
-          sx={{ width: "100%", fontSize: "1.2rem", textTransform: "capitalize" }}
+          sx={{
+            width: "100%",
+            fontSize: "1.2rem",
+            textTransform: "capitalize",
+          }}
           disabled={nights < 1}
+          onClick={onSubmit}
         >
           Reserve
         </Button>

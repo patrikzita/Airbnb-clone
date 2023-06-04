@@ -12,6 +12,7 @@ import useIsMobile from "@/hooks/useIsMobile";
 import { SafeReservation, SafeRoom } from "@/types";
 import { Box, Container, Divider, Paper } from "@mui/material";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Range } from "react-date-range";
 import { toast } from "react-hot-toast";
@@ -21,6 +22,7 @@ type PageProps = {
   reservations: SafeReservation[];
 };
 export default function Page({ room, reservations }: PageProps) {
+  const router = useRouter();
   const isMobile = useIsMobile();
   const [dateRange, setDateRange] = useState<Range>({
     startDate: new Date(),
@@ -36,6 +38,9 @@ export default function Page({ room, reservations }: PageProps) {
       })
       .then(() => {
         toast.success("Reservation was successful!");
+        setTimeout(() => {
+          router.refresh();
+        }, 500);
       })
       .catch(() => {
         toast.error("Something get wrong!");
@@ -45,22 +50,34 @@ export default function Page({ room, reservations }: PageProps) {
   return (
     <>
       <main>
-        {isMobile && <RoomHeader title={room.title} imageUrl={room.imageUrl} />}
+        {isMobile && (
+          <RoomHeader
+            title={room.title}
+            imageUrl={room.imageUrl}
+            roomId={room.id}
+          />
+        )}
 
         <Container sx={{ mt: 2, pb: 8 }}>
           {!isMobile && (
             <RoomHeaderInfo
               title={room.title}
               locationValue={room.locationValue}
+              roomId={room.id}
             />
           )}
           {isMobile ? (
             <RoomHeaderInfo
               title={room.title}
               locationValue={room.locationValue}
+              roomId={room.id}
             />
           ) : (
-            <RoomHeader title={room.title} imageUrl={room.imageUrl} />
+            <RoomHeader
+              title={room.title}
+              imageUrl={room.imageUrl}
+              roomId={room.id}
+            />
           )}
           <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
             <Box sx={{ flex: { xs: "1 1 100%", md: "1 1 60%" } }}>
@@ -79,7 +96,6 @@ export default function Page({ room, reservations }: PageProps) {
                 endDate={room.endDate}
                 dateRange={dateRange}
                 setDateRange={setDateRange}
-                onSubmit={onSubmit}
                 reservations={reservations}
               />
             </Box>
@@ -102,6 +118,7 @@ export default function Page({ room, reservations }: PageProps) {
                   <ReservationSummary
                     price={room.price}
                     dateRange={dateRange}
+                    onSubmit={onSubmit}
                   />
                 </Paper>
               </Box>
