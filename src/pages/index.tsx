@@ -21,10 +21,9 @@ import axios from "axios";
 export default function Home({ rooms, currentUser }: any) {
   const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery(
     ["rooms"],
-    async ({ pageParam = 0 }) => {
-      console.log("I was called");
-      const response = await axios.get(`/api/get-rooms?page=${pageParam + 1}`);
-      console.log(response);
+    async ({ pageParam = 1 }) => {
+      console.log("Page Param: ", pageParam);
+      const response = await axios.get(`/api/get-rooms?page=${pageParam}`);
 
       return response.data;
     },
@@ -34,7 +33,8 @@ export default function Home({ rooms, currentUser }: any) {
       },
     }
   );
-  console.log(data);
+  console.log(data?.pages);
+  console.log(rooms);
 
   return (
     <>
@@ -55,13 +55,15 @@ export default function Home({ rooms, currentUser }: any) {
               justifyContent: { xs: "center", md: "flex-start" },
             }}
           >
-            {rooms.map((room: any) => (
-              <Grid item xs={12} sm={6} md={4} key={room.id}>
-                <CarouselRoomCard data={room} currentUser={currentUser} />
-              </Grid>
-            ))}
+            {data?.pages.map((page: any[]) =>
+              page.map((room: any) => (
+                <Grid item xs={12} sm={6} md={4} key={room.id}>
+                  <CarouselRoomCard data={room} currentUser={currentUser} />
+                </Grid>
+              ))
+            )}
           </Grid>
-          <Button onClick={() => fetchNextPage()}>
+          <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
             {isFetchingNextPage
               ? "Loading More..."
               : (data?.pages.length ?? 0) < 3
@@ -85,7 +87,7 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
 }
 
 export async function getServerSideProps({ req, res }: any) {
-  const rooms = await getRoomsData(1, 10);
+  const rooms = await getRoomsData(1, 1);
   const currentUser = await getCurrentUser(req, res);
 
   return {

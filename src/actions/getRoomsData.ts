@@ -2,8 +2,6 @@ import client from "@/libs/prisma";
 
 const getRoomsData = async (page: number, pageSize: number = 1) => {
   try {
-    console.log("Dostal jsem se do getRoomsData");
-
     const rooms = await client.room.findMany({
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -19,8 +17,6 @@ const getRoomsData = async (page: number, pageSize: number = 1) => {
       startDate: room.startDate.toISOString(),
       endDate: room.endDate.toISOString(),
     }));
-
-    console.log("SafeListings: ", safeListings);
 
     return safeListings;
   } catch (err: any) {
