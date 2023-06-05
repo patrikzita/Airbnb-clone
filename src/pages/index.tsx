@@ -20,28 +20,24 @@ import { useIntersection } from "@mantine/hooks";
  TODO: Zvolit správné typování místo any
 */
 
-export default function Home({ rooms, currentUser }: any) {
-  /* 
-    TODO: šlo by nějak spojit rooms a data? 
-  */
+export default function Home({ initialRooms, currentUser }: any) {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
       ["rooms"],
       async ({ pageParam = 1 }) => {
-        console.log("Page Param: ", pageParam);
         const response = await axios.get(`/api/get-rooms?page=${pageParam}`);
-
         return response.data;
       },
       {
         getNextPageParam: (lastPage, allPages) => {
-          // Pokud na poslední stránce nebyl žádný záznam, vrátíte null.
           if (lastPage.length === 0) {
             return null;
           }
-
-          // Jinak se vrátí číslo další stránky.
           return allPages.length + 1;
+        },
+        initialData: {
+          pages: [initialRooms],
+          pageParams: [1],
         },
       }
     );
@@ -58,9 +54,6 @@ export default function Home({ rooms, currentUser }: any) {
 
   const _rooms = data?.pages.flatMap((page) => page);
 
-  console.log(data?.pages);
-  console.log("hasNextPage?: ", hasNextPage);
-
   return (
     <>
       <Head>
@@ -69,60 +62,49 @@ export default function Home({ rooms, currentUser }: any) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/airbnb-icon.svg" />
       </Head>
-      <main>
-        <Container sx={{ my: "3rem", paddingBottom: "5rem" }}>
-          <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            px={"2rem"}
-            sx={{
-              justifyContent: { xs: "center", md: "flex-start" },
-            }}
-          >
-            {_rooms?.map((room, i) => (
-              <Grid
-                ref={i === _rooms.length - 1 ? ref : null}
-                item
-                xs={12}
-                sm={6}
-                md={4}
-                key={room.id}
-              >
-                <CarouselRoomCard data={room} currentUser={currentUser} />
-              </Grid>
-            ))}
-          </Grid>
-          <Button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-            {isFetchingNextPage
-              ? "Loading More..."
-              : (data?.pages.length ?? 0) < 3
-              ? "Load more"
-              : "Nothing more to load"}
-          </Button>
-          <Box sx={{ my: 2 }}>
-            {[...new Array(12)]
-              .map(
-                () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-              )
-              .join("\n")}
-          </Box>
-        </Container>
-      </main>
+
+      <Container sx={{ my: "3rem", paddingBottom: "5rem" }}>
+        <Grid
+          container
+          rowSpacing={1}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          px={"2rem"}
+          sx={{
+            justifyContent: { xs: "center", md: "flex-start" },
+          }}
+        >
+          {_rooms?.map((room, i) => (
+            <Grid
+              ref={i === _rooms.length - 1 ? ref : null}
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              key={room.id}
+            >
+              <CarouselRoomCard data={room} currentUser={currentUser} />
+            </Grid>
+          ))}
+        </Grid>
+        <Button disabled={isFetchingNextPage}>
+          {isFetchingNextPage
+            ? "Loading More..."
+            : (data?.pages.length ?? 0) < 3
+            ? "Load more"
+            : "Nothing more to load"}
+        </Button>
+      </Container>
     </>
   );
 }
 
 export async function getServerSideProps({ req, res }: any) {
-  const rooms = await getRoomsData(1, 1);
+  const initialRooms = await getRoomsData(1, 6);
   const currentUser = await getCurrentUser(req, res);
 
   return {
     props: {
-      rooms,
+      initialRooms,
       currentUser,
     },
   };
