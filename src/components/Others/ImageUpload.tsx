@@ -1,6 +1,5 @@
 import { OurFileRouter } from "@/libs/uploadthing";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Button, IconButton, Paper, Typography } from "@mui/material";
+import { Paper } from "@mui/material";
 import { UploadButton } from "@uploadthing/react";
 
 type ImageUploadProps = {
