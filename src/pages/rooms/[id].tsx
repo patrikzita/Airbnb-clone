@@ -12,6 +12,7 @@ import useIsMobile from "@/hooks/useIsMobile";
 import { SafeReservation, SafeRoom } from "@/types";
 import { Box, Container, Divider, Paper } from "@mui/material";
 import axios from "axios";
+import Head from "next/head";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Range } from "react-date-range";
@@ -49,6 +50,10 @@ export default function Page({ room, reservations }: PageProps) {
 
   return (
     <>
+      <Head>
+        <title>{room.title}</title>
+        <meta property="og:title" content={room.title} key="title" />
+      </Head>
       <main>
         {isMobile && (
           <RoomHeader

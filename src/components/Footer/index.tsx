@@ -69,6 +69,7 @@ const StyledFixedFooter = styled(Box)(({ theme }) => ({
   bottom: 0,
   left: 0,
   right: 0,
+  zIndex: 999,
   backgroundColor: "#f7f7f7",
   borderTop: "1px solid #cccccc",
   paddingInline: theme.spacing(4),
