@@ -1,22 +1,13 @@
 import getCurrentUser from "@/actions/getCurrentUser";
 import getRoomsData from "@/actions/getRoomsData";
-import Categories from "@/components/Navbar/Categories";
 import CarouselRoomCard from "@/components/shared/rooms/RoomCard";
-import {
-  Container,
-  Grid,
-  Box,
-  AppBar,
-  Typography,
-  Button,
-  Skeleton,
-} from "@mui/material";
-import Head from "next/head";
+import RoomCardSkeleton from "@/components/shared/rooms/RoomCardSkeleton";
+import { useIntersection } from "@mantine/hooks";
+import { Container, Grid } from "@mui/material";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useRef, useEffect } from "react";
-import { useIntersection } from "@mantine/hooks";
-import RoomCardSkeleton from "@/components/shared/rooms/RoomCardSkeleton";
+import Head from "next/head";
+import { useEffect, useRef } from "react";
 
 /* 
  TODO: Zvolit správné typování místo any

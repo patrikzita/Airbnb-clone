@@ -20,20 +20,13 @@ const FavoriteButtonWithUser = ({
   roomId,
   currentUser,
 }: FavoriteButtonProps) => {
-  const { hasFavorited: hasFavoritedFromServer, toggleFavorite } = useFavorite({
+  const { hasFavorited, toggleFavorite } = useFavorite({
     roomId,
     currentUser,
   });
 
-  const [hasFavorited, setHasFavorited] = useState(hasFavoritedFromServer);
-
-  useEffect(() => {
-    setHasFavorited(hasFavoritedFromServer);
-  }, [hasFavoritedFromServer]);
-
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
-    setHasFavorited(!hasFavorited);
     toggleFavorite(event);
   };
 
@@ -66,22 +59,8 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
 
   const locationLabel = getByValue(data.locationValue)?.label;
 
-  const [activeStep, setActiveStep] = React.useState(0);
-
-  const maxSteps = data.imageUrl.length;
   const router = useRouter();
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1); // jumps when we click the next arrow
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1); // when we click the back arrow
-  };
-
-  const handleStepChange = (step: number) => {
-    setActiveStep(step); // handle swipe change
-  };
   return (
     <Box
       className="carouselCard"

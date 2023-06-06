@@ -27,20 +27,13 @@ export const FavoriteButton = ({ roomId, label }: FavoriteButtonProps) => {
       });
   }, []);
 
-  const { hasFavorited: hasFavoritedFromServer, toggleFavorite } = useFavorite({
+  const { hasFavorited, toggleFavorite } = useFavorite({
     roomId,
     currentUser,
   });
 
-  const [hasFavorited, setHasFavorited] = useState(hasFavoritedFromServer);
-
-  useEffect(() => {
-    setHasFavorited(hasFavoritedFromServer);
-  }, [hasFavoritedFromServer]);
-
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
-    setHasFavorited(!hasFavorited);
     toggleFavorite(event);
   };
 
@@ -48,7 +41,6 @@ export const FavoriteButton = ({ roomId, label }: FavoriteButtonProps) => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.stopPropagation();
-    setHasFavorited(!hasFavorited);
     toggleFavorite(event);
   };
 
