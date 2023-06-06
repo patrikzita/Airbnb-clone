@@ -1,16 +1,18 @@
+import { useRouter } from "next/router";
 import { ReactNode } from "react";
-import Navbar from "./Navbar/Navbar";
+import { Toaster } from "react-hot-toast";
+import Footer from "./Footer";
+import StickyHeader from "./Navbar/StickyHeader";
 import CreateHomeModal from "./modals/CreateHomeModal";
 import LoginModal from "./modals/LoginModal";
 import SearchModal from "./modals/SearchModal";
-import { Toaster } from "react-hot-toast";
-import StickyHeader from "./Navbar/StickyHeader";
-import Footer from "./Footer";
+import { routes } from "@/config/siteConfig";
 
 type LayoutProps = {
   children: ReactNode;
 };
 const Layout = ({ children }: LayoutProps) => {
+  const router = useRouter();
   return (
     <>
       <StickyHeader />
@@ -26,7 +28,7 @@ const Layout = ({ children }: LayoutProps) => {
       <SearchModal />
       <CreateHomeModal />
       <main>{children}</main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 };

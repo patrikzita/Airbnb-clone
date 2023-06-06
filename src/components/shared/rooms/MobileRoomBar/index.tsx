@@ -59,7 +59,7 @@ const MobileRoomBar = ({ price, dateRange, onSubmit }: MobileBarProps) => {
   );
   return (
     <AppBar
-      position="sticky"
+      position="fixed"
       sx={{
         top: "auto",
         bottom: 0,

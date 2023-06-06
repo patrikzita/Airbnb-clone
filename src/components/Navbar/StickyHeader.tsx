@@ -1,9 +1,9 @@
-import React from "react";
-import { useRouter } from "next/router";
-import Navbar from "./Navbar";
-import Categories from "./Categories";
 import { routes } from "@/config/siteConfig";
-import { AppBar, CssBaseline, useScrollTrigger } from "@mui/material";
+import { AppBar, useScrollTrigger } from "@mui/material";
+import { useRouter } from "next/router";
+import React from "react";
+import Categories from "./Categories";
+import Navbar from "./Navbar";
 
 type ElevationScrollProps = {
   children: React.ReactElement;
