@@ -79,7 +79,15 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
           paddingTop: "56.25%",
         }}
       >
-        <Image src={data.imageUrl} alt={data.title} fill />
+        <Image
+          src={data.imageUrl}
+          alt={data.title}
+          placeholder="blur"
+          blurDataURL="/images/placeholder.jpg"
+          fill
+          priority={true}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+        />
       </Box>
       <FavoriteButtonWithUser currentUser={currentUser} roomId={data.id} />
       <Box sx={{ mt: 2 }}>
