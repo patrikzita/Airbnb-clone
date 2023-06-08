@@ -1,11 +1,23 @@
-import { Box, Container, Typography, styled, Divider } from "@mui/material";
+import {
+  Box,
+  Container,
+  Typography,
+  styled,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  Drawer,
+  Button,
+} from "@mui/material";
 import Link from "next/link";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { routes } from "@/config/siteConfig";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 const footerData = {
   Support: [
     { name: "Help Center", url: "/help-center" },
@@ -56,6 +68,7 @@ const footerIcons = [
 const CustomLink = styled(Link)(({ theme }) => ({
   fontFamily: "Poppins",
   fontWeight: 300,
+  fontSize: ".9rem",
   [theme.breakpoints.down("md")]: {
     borderRadius: 0,
   },
@@ -81,41 +94,111 @@ const StyledFixedFooter = styled(Box)(({ theme }) => ({
 
 const Footer = () => {
   const router = useRouter();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const toggleDrawer =
+    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+
+      setDrawerOpen(open);
+    };
+
+  const list = () => (
+    <Box
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+      sx={{
+        borderTopLeftRadius: "1rem",
+        borderTopRightRadius: "1rem",
+      }}
+    >
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: 4,
+        }}
+      >
+        {Object.entries(footerData).map(([headline, links]) => (
+          <Box component="section" key={headline}>
+            <Typography fontWeight={500}>{headline}</Typography>
+            <List component="ul">
+              {links.map((link) => (
+                <ListItem key={link.name} component="li" disableGutters>
+                  <CustomLink href={link.url}>{link.name}</CustomLink>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        ))}
+      </Container>
+    </Box>
+  );
   return (
     <>
       {router.pathname === routes.home && (
-        <StyledFixedFooter>
-          <Container
+        <>
+          <StyledFixedFooter>
+            <Container
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Box>
+                  <Typography>© 2023 PZ</Typography>
+                </Box>
+                {footerLinks.map((link, index) => (
+                  <React.Fragment key={index}>
+                    <Typography component="span" fontSize="1.5rem">
+                      ·
+                    </Typography>
+                    <Link href={link.url}>
+                      <Typography>{link.name}</Typography>
+                    </Link>
+                  </React.Fragment>
+                ))}
+              </Box>
+              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                {footerIcons.map((item, index) => (
+                  <Link key={index} href={item.url} target={item.target}>
+                    <item.Icon />
+                  </Link>
+                ))}
+                <Button
+                  onClick={toggleDrawer(true)}
+                  color="secondary"
+                  disableElevation
+                  endIcon={<ExpandLessIcon />}
+                >
+                  Support & Resources
+                </Button>
+              </Box>
+            </Container>
+          </StyledFixedFooter>
+          <Drawer
+            anchor={"bottom"}
+            open={drawerOpen}
+            onClose={toggleDrawer(false)}
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              ".MuiPaper-root": {
+                borderTopLeftRadius: "1rem",
+                borderTopRightRadius: "1rem",
+              },
             }}
           >
-            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-              <Box>
-                <Typography>© 2023 PZ</Typography>
-              </Box>
-              {footerLinks.map((link, index) => (
-                <React.Fragment key={index}>
-                  <Typography component="span" fontSize="1.5rem">
-                    ·
-                  </Typography>
-                  <Link href={link.url}>
-                    <Typography>{link.name}</Typography>
-                  </Link>
-                </React.Fragment>
-              ))}
-            </Box>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              {footerIcons.map((item, index) => (
-                <Link key={index} href={item.url} target={item.target}>
-                  <item.Icon />
-                </Link>
-              ))}
-            </Box>
-          </Container>
-        </StyledFixedFooter>
+            {list()}
+          </Drawer>
+        </>
       )}
       {router.pathname !== routes.home && (
         <Box
