@@ -1,9 +1,9 @@
 import useFavorite from "@/hooks/useFavorite";
+import { SafeUser } from "@/types";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import { Checkbox } from "@mui/material";
 import Button from "@mui/material/Button";
-import { User } from "@prisma/client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -12,7 +12,7 @@ type FavoriteButtonProps = {
   label?: string;
 };
 export const FavoriteButton = ({ roomId, label }: FavoriteButtonProps) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<SafeUser | null>(null);
   /* 
     TODO: Change for use react-query, Suspense?, Loading? 
   */
