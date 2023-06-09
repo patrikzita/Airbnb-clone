@@ -1,6 +1,8 @@
 import getCurrentUser from "@/actions/getCurrentUser";
 import type { NextApiRequest, NextApiResponse } from "next";
 import client from "@/libs/prisma";
+import axios from "axios";
+import { getPlaiceholder } from "plaiceholder";
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,6 +30,11 @@ export default async function handler(
       description,
       price,
     } = body;
+
+    const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+    const buffer = Buffer.from(response.data, "binary");
+    const { base64 } = await getPlaiceholder(buffer);
+
     const room = await client.room.create({
       data: {
         category,
@@ -37,6 +44,7 @@ export default async function handler(
         startDate: date.startDate,
         endDate: date.endDate,
         imageUrl,
+        imagePlaceholder: base64,
         title,
         description,
         price: parseInt(price, 10),

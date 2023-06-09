@@ -2,18 +2,25 @@ import getCurrentUser from "@/actions/getCurrentUser";
 import getRoomsData from "@/actions/getRoomsData";
 import CarouselRoomCard from "@/components/shared/rooms/RoomCard";
 import RoomCardSkeleton from "@/components/shared/rooms/RoomCardSkeleton";
+import { SafeRoom, SafeUser } from "@/types";
 import { useIntersection } from "@mantine/hooks";
 import { Container, Grid } from "@mui/material";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Head from "next/head";
 import { useEffect, useRef } from "react";
+import type {
+  NextApiRequest,
+  NextApiResponse,
+  GetServerSidePropsContext,
+} from "next";
 
-/* 
- TODO: Zvolit správné typování místo any
-*/
+type HomeProps = {
+  initialRooms: SafeRoom[];
+  currentUser: SafeUser;
+};
 
-export default function Home({ initialRooms, currentUser }: any) {
+export default function Home({ initialRooms, currentUser }: HomeProps) {
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
       ["rooms"],
@@ -51,7 +58,7 @@ export default function Home({ initialRooms, currentUser }: any) {
     if (entry?.isIntersecting && hasNextPage) fetchNextPage();
   }, [entry, hasNextPage]);
 
-  const _rooms = data?.pages.flatMap((page) => page);
+  const rooms = data?.pages.flatMap((page) => page);
 
   return (
     <>
@@ -72,9 +79,9 @@ export default function Home({ initialRooms, currentUser }: any) {
             justifyContent: { xs: "center", md: "flex-start" },
           }}
         >
-          {_rooms?.map((room, i) => (
+          {rooms?.map((room, i) => (
             <Grid
-              ref={i === _rooms.length - 1 ? ref : null}
+              ref={i === rooms.length - 1 ? ref : null}
               item
               xs={12}
               sm={6}
@@ -84,7 +91,7 @@ export default function Home({ initialRooms, currentUser }: any) {
               <CarouselRoomCard data={room} currentUser={currentUser} />
             </Grid>
           ))}
-          {isFetchingNextPage && skeletons}
+          {isFetchingNextPage && hasNextPage && skeletons}
         </Grid>
       </Container>
     </>
@@ -92,9 +99,8 @@ export default function Home({ initialRooms, currentUser }: any) {
 }
 
 export async function getServerSideProps({ req, res }: any) {
-  const initialRooms = await getRoomsData(1, 6);
+  const initialRooms = await getRoomsData(1, 9);
   const currentUser = await getCurrentUser(req, res);
-
   return {
     props: {
       initialRooms,

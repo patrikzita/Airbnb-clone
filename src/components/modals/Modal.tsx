@@ -87,7 +87,11 @@ const ModalContainer = ({
               Next
             </Button>
           ) : (
-            <Button variant="contained" onClick={onSubmit} sx={{ width: "100%" }}>
+            <Button
+              variant="contained"
+              onClick={onSubmit}
+              sx={{ width: "100%" }}
+            >
               {submitLabel}
             </Button>
           )}
@@ -151,7 +155,9 @@ const ModalContainer = ({
               gap={2}
               mt={2}
               sx={{
-                display: mobileBar ? { xs: "none", sm: "flex" } : {xs: "flex", sm: "flex"},
+                display: mobileBar
+                  ? { xs: "none", sm: "flex" }
+                  : { xs: "flex", sm: "flex" },
               }}
             >
               {step > 0 && (
@@ -167,6 +173,7 @@ const ModalContainer = ({
               {step < totalSteps - 1 ? (
                 <Button
                   variant="contained"
+                  color="primary"
                   onClick={onNext}
                   sx={{ width: "100%" }}
                 >

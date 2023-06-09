@@ -8,6 +8,7 @@ import { FavoriteButton } from "../FavoriteButton";
 
 type RoomHeader = {
   imageUrl: string;
+  imagePlaceholder?: string | null;
   title: string;
   roomId: string;
 };
@@ -19,7 +20,12 @@ const StyledImage = styled(Image)(({ theme }) => ({
   },
 }));
 
-const RoomHeader = ({ imageUrl, title, roomId }: RoomHeader) => {
+const RoomHeader = ({
+  imageUrl,
+  title,
+  roomId,
+  imagePlaceholder,
+}: RoomHeader) => {
   const router = useRouter();
   return (
     <>
@@ -72,7 +78,13 @@ const RoomHeader = ({ imageUrl, title, roomId }: RoomHeader) => {
             <FavoriteButton roomId={roomId} />
           </Box>
         </Box>
-        <StyledImage fill src={imageUrl} alt={`${title}'s image`} />
+        <StyledImage
+          fill
+          src={imageUrl}
+          alt={`${title}'s image`}
+          placeholder="blur"
+          blurDataURL={imagePlaceholder || "/public/placeholder.jpg"}
+        />
       </Box>
     </>
   );

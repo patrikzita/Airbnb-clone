@@ -11,7 +11,7 @@ export default async function handler(
   }
 
   const page = Number(req.query.page) || 0;
-  const pageSize = Number(req.query.pageSize) || 6;
+  const pageSize = Number(req.query.pageSize) || 9;
   try {
     const room = await getRoomsData(page, pageSize);
     res.status(200).json(room);

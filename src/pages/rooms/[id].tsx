@@ -59,6 +59,7 @@ export default function Page({ room, reservations }: PageProps) {
           <RoomHeader
             title={room.title}
             imageUrl={room.imageUrl}
+            imagePlaceholder={room.imagePlaceholder}
             roomId={room.id}
           />
         )}
@@ -81,6 +82,7 @@ export default function Page({ room, reservations }: PageProps) {
             <RoomHeader
               title={room.title}
               imageUrl={room.imageUrl}
+              imagePlaceholder={room.imagePlaceholder}
               roomId={room.id}
             />
           )}

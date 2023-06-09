@@ -1,4 +1,5 @@
 import Layout from "@/components/layout";
+import "@uploadthing/react/styles.css";
 import "@/styles/globals.css";
 import theme from "@/theme";
 import { ThemeProvider } from "@mui/material/styles";
@@ -7,7 +8,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { useState } from "react";
 

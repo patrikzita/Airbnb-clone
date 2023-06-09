@@ -1,5 +1,8 @@
-import { PaletteOptions, ThemeOptions, createTheme } from "@mui/material/styles";
-
+import {
+  PaletteOptions,
+  ThemeOptions,
+  createTheme,
+} from "@mui/material/styles";
 
 interface CustomPaletteOptions extends PaletteOptions {
   customGray?: {
@@ -11,11 +14,11 @@ interface CustomThemeOptions extends ThemeOptions {
   palette?: CustomPaletteOptions;
 }
 
-
 const theme = createTheme({
   palette: {
     primary: {
       main: "#e01660",
+      light: "#e01660",
     },
     secondary: {
       main: "#000",

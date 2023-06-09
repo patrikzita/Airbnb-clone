@@ -1,20 +1,21 @@
 import { routes } from "@/config/siteConfig";
 import useCountries from "@/hooks/useCountries";
 import useFavorite from "@/hooks/useFavorite";
+import { SafeUser } from "@/types";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatDate } from "@/utils/formatDate";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import { Box, Checkbox, Typography } from "@mui/material";
-import { Room, User } from "@prisma/client";
+import { Room } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 type FavoriteButtonProps = {
   roomId: string;
-  currentUser?: User | null;
+  currentUser?: SafeUser | null;
 };
 const FavoriteButtonWithUser = ({
   roomId,
@@ -50,7 +51,7 @@ type SafeDataListing = Omit<Room, "createdAt"> & {
 };
 
 type CarouselListingCardProps = {
-  currentUser?: User | null;
+  currentUser?: SafeUser | null;
   data: SafeDataListing;
 };
 
@@ -60,7 +61,6 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
   const locationLabel = getByValue(data.locationValue)?.label;
 
   const router = useRouter();
-
   return (
     <Box
       className="carouselCard"
@@ -83,7 +83,7 @@ const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {
           src={data.imageUrl}
           alt={data.title}
           placeholder="blur"
-          blurDataURL="/images/placeholder.jpg"
+          blurDataURL={data.imagePlaceholder || "/public/placeholder.jpg"}
           fill
           priority={true}
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
