@@ -20,3 +20,12 @@ export type SafeUser = Omit<User, "createdAt" | "updatedAt"> & {
   createdAt: string;
   updatedAt: string;
 };
+
+export type RoomParams = {
+  guestCount?: number;
+  roomCount?: number;
+  startDate?: string;
+  endDate?: string;
+  locationValue?: string;
+  category?: string;
+};

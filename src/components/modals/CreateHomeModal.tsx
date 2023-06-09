@@ -155,8 +155,6 @@ const CreateHomeModal = () => {
         .catch(() => {
           toast.error("Something get wrong!");
         });
-
-      console.log(values);
     },
     validationSchema: toFormikValidationSchema(Schema),
   });

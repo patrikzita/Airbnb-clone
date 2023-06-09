@@ -2,30 +2,66 @@ import getCurrentUser from "@/actions/getCurrentUser";
 import getRoomsData from "@/actions/getRoomsData";
 import CarouselRoomCard from "@/components/shared/rooms/RoomCard";
 import RoomCardSkeleton from "@/components/shared/rooms/RoomCardSkeleton";
-import { SafeRoom, SafeUser } from "@/types";
+import { RoomParams, SafeRoom, SafeUser } from "@/types";
 import { useIntersection } from "@mantine/hooks";
-import { Container, Grid } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Head from "next/head";
 import { useEffect, useRef } from "react";
-import type {
-  NextApiRequest,
-  NextApiResponse,
-  GetServerSidePropsContext,
-} from "next";
+import { useRouter } from "next/router";
+import { useRouter as useNavRouter } from "next/navigation";
+import queryString from "query-string";
 
-type HomeProps = {
-  initialRooms: SafeRoom[];
-  currentUser: SafeUser;
+const EmptyResults = () => {
+  const router = useNavRouter();
+  return (
+    <Container sx={{ my: "3rem", paddingBottom: "5rem" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "center",
+        }}
+      >
+        <Typography
+          component="h2"
+          sx={{
+            fontSize: { xs: "1.4rem", sm: "1.9rem" },
+            fontWeight: 500,
+          }}
+        >
+          No exact matches
+        </Typography>
+        <Typography>Try changing or removing some filters</Typography>
+        <Box>
+          <Button onClick={() => router.push("/")}>Remove all filters</Button>
+        </Box>
+      </Box>
+    </Container>
+  );
 };
 
-export default function Home({ initialRooms, currentUser }: HomeProps) {
+type HomeProps = {
+  currentUser: SafeUser;
+  initialRooms: SafeRoom[];
+};
+
+export default function Home({ currentUser, initialRooms }: HomeProps) {
+  const router = useRouter();
+  const searchParams = router.query;
+
   const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useInfiniteQuery(
-      ["rooms"],
+      ["rooms", searchParams],
       async ({ pageParam = 1 }) => {
-        const response = await axios.get(`/api/get-rooms?page=${pageParam}`);
+        const response = await axios.get(
+          `/api/get-rooms?${queryString.stringify({
+            page: pageParam,
+            ...searchParams,
+          })}`
+        );
         return response.data;
       },
       {
@@ -59,6 +95,10 @@ export default function Home({ initialRooms, currentUser }: HomeProps) {
   }, [entry, hasNextPage]);
 
   const rooms = data?.pages.flatMap((page) => page);
+
+  if (rooms?.length === 0) {
+    return <EmptyResults />;
+  }
 
   return (
     <>
@@ -98,13 +138,13 @@ export default function Home({ initialRooms, currentUser }: HomeProps) {
   );
 }
 
-export async function getServerSideProps({ req, res }: any) {
-  const initialRooms = await getRoomsData(1, 9);
+export async function getServerSideProps({ req, res, query }: any) {
+  const initialRooms = await getRoomsData(1, 9, query);
   const currentUser = await getCurrentUser(req, res);
   return {
     props: {
-      initialRooms,
       currentUser,
+      initialRooms,
     },
   };
 }

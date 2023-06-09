@@ -18,7 +18,6 @@ export default async function handler(
       return res.status(500).send({ error: "Fatal error" });
     }
     const body = req.body;
-    console.log("body", body);
     const {
       category,
       location,
