@@ -257,16 +257,26 @@ const Footer = () => {
               }}
             >
               <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                <Box>
-                  <Typography>© 2023 PZ</Typography>
-                </Box>
+                <Typography
+                  sx={{
+                    fontSize: { xs: ".7rem", md: "1rem" },
+                  }}
+                >
+                  © 2023 PZ
+                </Typography>
                 {footerLinks.map((link, index) => (
                   <React.Fragment key={index}>
                     <Typography component="span" fontSize="1.5rem">
                       ·
                     </Typography>
                     <Link href={link.url}>
-                      <Typography>{link.name}</Typography>
+                      <Typography
+                        sx={{
+                          fontSize: { xs: ".7rem", md: "1rem" },
+                        }}
+                      >
+                        {link.name}
+                      </Typography>
                     </Link>
                   </React.Fragment>
                 ))}
