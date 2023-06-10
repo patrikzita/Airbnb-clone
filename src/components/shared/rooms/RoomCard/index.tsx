@@ -1,7 +1,7 @@
 import { routes } from "@/config/siteConfig";
 import useCountries from "@/hooks/useCountries";
 import useFavorite from "@/hooks/useFavorite";
-import { SafeUser } from "@/types";
+import { SafeRoom, SafeUser } from "@/types";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { formatDate } from "@/utils/formatDate";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -46,13 +46,9 @@ const FavoriteButtonWithUser = ({
   );
 };
 
-type SafeDataListing = Omit<Room, "createdAt"> & {
-  createdAt: string;
-};
-
 type CarouselListingCardProps = {
   currentUser?: SafeUser | null;
-  data: SafeDataListing;
+  data: SafeRoom;
 };
 
 const CarouselRoomCard = ({ currentUser, data }: CarouselListingCardProps) => {

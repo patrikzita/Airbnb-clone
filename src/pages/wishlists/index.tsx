@@ -1,16 +1,21 @@
+import getFavoriteUserRoom from "@/actions/getFavoriteUserRoom";
 import Loading from "@/components/shared/feedback/Loading";
 import useRegisterModal from "@/hooks/useRegisterModal";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, Grid } from "@mui/material";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
+import { SafeRoom, SafeUser } from "@/types";
+import CarouselRoomCard from "@/components/shared/rooms/RoomCard";
+import getCurrentUser from "@/actions/getCurrentUser";
 
-const Wishlists = () => {
+type WishlistsProps = {
+  favoriteRooms: SafeRoom[];
+  currentUser: SafeUser;
+};
+
+const Wishlists = ({ favoriteRooms, currentUser }: WishlistsProps) => {
   const registerModal = useRegisterModal();
-  const { data: session, status } = useSession();
 
-  if (status === "loading") {
-    return <Loading />;
-  }
   return (
     <>
       <Head>
@@ -19,7 +24,12 @@ const Wishlists = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/airbnb-icon.svg" />
       </Head>
-      <main>
+      <Box
+        component="main"
+        sx={{
+          height: "80vh",
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -33,17 +43,38 @@ const Wishlists = () => {
           <Typography variant="h4" component="h1">
             Wishlists
           </Typography>
-          {session ? (
+          {currentUser ? (
             <>
-              <Box>
-                <Typography variant="h6" component="h2">
-                  Create your first wishlist
-                </Typography>
-                <Typography component="p">
-                  As you search, click the heart icon to save your favorite
-                  places and Experiences to a wishlist.
-                </Typography>
-              </Box>
+              {favoriteRooms && favoriteRooms.length > 0 ? (
+                <Grid
+                  container
+                  rowSpacing={1}
+                  columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                  sx={{
+                    justifyContent: { xs: "center", md: "flex-start" },
+                  }}
+                >
+                  {favoriteRooms.map((room) => (
+                    <Grid item xs={12} sm={6} md={4} key={room.id}>
+                      <CarouselRoomCard
+                        key={room.id}
+                        data={room}
+                        currentUser={currentUser}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              ) : (
+                <Box>
+                  <Typography variant="h6" component="h2">
+                    Create your first wishlist
+                  </Typography>
+                  <Typography component="p">
+                    As you search, click the heart icon to save your favorite
+                    places and Experiences to a wishlist.
+                  </Typography>
+                </Box>
+              )}
             </>
           ) : (
             <>
@@ -67,9 +98,19 @@ const Wishlists = () => {
             </>
           )}
         </Box>
-      </main>
+      </Box>
     </>
   );
 };
-
 export default Wishlists;
+
+export async function getServerSideProps({ req, res }: any) {
+  const favoriteRooms = await getFavoriteUserRoom(req, res);
+  const currentUser = await getCurrentUser(req, res);
+  return {
+    props: {
+      favoriteRooms,
+      currentUser,
+    },
+  };
+}

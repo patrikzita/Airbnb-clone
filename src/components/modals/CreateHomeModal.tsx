@@ -138,7 +138,7 @@ const CreateHomeModal = () => {
         endDate: new Date(),
         key: "selection",
       },
-      imageUrl: "dsds",
+      imageUrl: "",
       title: "",
       description: "",
       price: 1,

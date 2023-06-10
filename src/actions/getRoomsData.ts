@@ -35,6 +35,9 @@ const getRoomsData = async (
       };
     }
 
+    if (page < 1) {
+      page = 1;
+    }
     const rooms = await client.room.findMany({
       skip: (page - 1) * pageSize,
       take: pageSize,

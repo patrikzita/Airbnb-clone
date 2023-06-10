@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import client from "@/libs/prisma";
 import axios from "axios";
 import { getPlaiceholder } from "plaiceholder";
+import { createRoomRequestValidator } from "@/libs/apiRequestValidators";
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,7 +18,7 @@ export default async function handler(
     if (!currentUser) {
       return res.status(500).send({ error: "Fatal error" });
     }
-    const body = req.body;
+
     const {
       category,
       location,
@@ -28,7 +29,7 @@ export default async function handler(
       title,
       description,
       price,
-    } = body;
+    } = createRoomRequestValidator.parse(req.body);
 
     const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
     const buffer = Buffer.from(response.data, "binary");

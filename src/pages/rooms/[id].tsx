@@ -9,6 +9,7 @@ import RoomHeader from "@/components/shared/rooms/RoomHeader";
 import RoomHeaderInfo from "@/components/shared/rooms/RoomHeaderInfo";
 import RoomReservation from "@/components/shared/rooms/RoomReservation";
 import useIsMobile from "@/hooks/useIsMobile";
+import { createReservationRequestValidator } from "@/libs/apiRequestValidators";
 import { SafeReservation, SafeRoom } from "@/types";
 import { Box, Container, Divider, Paper } from "@mui/material";
 import axios from "axios";
@@ -17,11 +18,17 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Range } from "react-date-range";
 import { toast } from "react-hot-toast";
+import { z } from "zod";
 
 type PageProps = {
   room: SafeRoom;
   reservations: SafeReservation[];
 };
+
+type CreateReservationApiRequest = z.infer<
+  typeof createReservationRequestValidator
+>;
+
 export default function Page({ room, reservations }: PageProps) {
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -31,12 +38,13 @@ export default function Page({ room, reservations }: PageProps) {
     key: "selection",
   });
   const onSubmit = () => {
+    const payload: CreateReservationApiRequest = {
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      roomId: room.id,
+    };
     axios
-      .post("/api/create-reservation", {
-        startDate: dateRange.startDate,
-        endDate: dateRange.endDate,
-        roomId: room.id,
-      })
+      .post("/api/create-reservation", payload)
       .then(() => {
         toast.success("Reservation was successful!");
         setTimeout(() => {

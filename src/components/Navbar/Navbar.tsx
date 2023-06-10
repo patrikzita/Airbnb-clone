@@ -1,3 +1,5 @@
+import { routes } from "@/config/siteConfig";
+import { useActiveTabIndex } from "@/hooks/useActiveTabIndex";
 import useCountries from "@/hooks/useCountries";
 import useCreateHomeModal from "@/hooks/useCreateHomeModal";
 import useRegisterModal from "@/hooks/useRegisterModal";
@@ -15,7 +17,6 @@ import {
   Avatar,
   Box,
   Button,
-  CssBaseline,
   Divider,
   IconButton,
   Menu,
@@ -32,17 +33,14 @@ import {
   useScrollTrigger,
   useTheme,
 } from "@mui/material";
+import { Session } from "next-auth";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRouter as useRouterFromRouter } from "next/router";
 import React, { useMemo, useState } from "react";
-import Categories from "./Categories";
 import SearchBar from "./SearchBar";
-import { Session } from "next-auth";
-import { useActiveTabIndex } from "@/hooks/useActiveTabIndex";
-import { routes } from "@/config/siteConfig";
 
 const MobileSearch = () => {
   const searchModal = useSearchModal();
@@ -356,10 +354,10 @@ const Navbar = () => {
               {session
                 ? React.Children.toArray([
                     <MenuItem>
-                      <Typography textAlign="center">My trips</Typography>
+                      <Typography textAlign="center">Trips</Typography>
                     </MenuItem>,
-                    <MenuItem>
-                      <Typography textAlign="center">My favorites</Typography>
+                    <MenuItem onClick={() => router.push(routes.wishlists)}>
+                      <Typography textAlign="center">Wishlists</Typography>
                     </MenuItem>,
                     <MenuItem>
                       <Typography textAlign="center">

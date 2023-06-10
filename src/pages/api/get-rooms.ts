@@ -1,12 +1,9 @@
 import getRoomsData from "@/actions/getRoomsData";
-import { RoomParams } from "@/types";
+import { getRoomsDataRequestValidator } from "@/libs/apiRequestValidators";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { z } from "zod";
 
-type SearchParams = {
-  page: number;
-  pageSize: number;
-  restParams: RoomParams;
-};
+type GetRoomRequest = z.infer<typeof getRoomsDataRequestValidator>;
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,14 +14,27 @@ export default async function handler(
     return;
   }
 
+  let query;
+  try {
+    query = getRoomsDataRequestValidator.parse(req.query);
+  } catch (err) {
+    return res.status(400).send({ error: "Invalid query parameters." });
+  }
   const {
-    page = 0,
-    pageSize = 9,
+    page = "0",
+    pageSize = "9",
     ...restParams
-  } = req.query as Partial<SearchParams>;
+  } = req.query as Partial<GetRoomRequest>;
+
+  const pageNumber = Number(page);
+  const pageSizeNumber = Number(pageSize);
+
+  if (isNaN(pageNumber) || isNaN(pageSizeNumber)) {
+    return res.status(400).send({ error: "Invalid page or pageSize value." });
+  }
 
   try {
-    const room = await getRoomsData(page, pageSize, restParams);
+    const room = await getRoomsData(pageNumber, pageSizeNumber, restParams);
     res.status(200).json(room);
   } catch (err) {
     console.error(err);

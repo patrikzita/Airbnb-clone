@@ -1,17 +1,16 @@
 import getCurrentUser from "@/actions/getCurrentUser";
-import getRoomsData from "@/actions/getRoomsData";
 import CarouselRoomCard from "@/components/shared/rooms/RoomCard";
 import RoomCardSkeleton from "@/components/shared/rooms/RoomCardSkeleton";
-import { RoomParams, SafeRoom, SafeUser } from "@/types";
+import { SafeUser } from "@/types";
 import { useIntersection } from "@mantine/hooks";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Head from "next/head";
-import { useEffect, useRef } from "react";
-import { useRouter } from "next/router";
 import { useRouter as useNavRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import queryString from "query-string";
+import { useEffect, useRef } from "react";
 
 const EmptyResults = () => {
   const router = useNavRouter();
@@ -45,10 +44,9 @@ const EmptyResults = () => {
 
 type HomeProps = {
   currentUser: SafeUser;
-  initialRooms: SafeRoom[];
 };
 
-export default function Home({ currentUser, initialRooms }: HomeProps) {
+export default function Home({ currentUser }: HomeProps) {
   const router = useRouter();
   const searchParams = router.query;
 
@@ -70,10 +68,6 @@ export default function Home({ currentUser, initialRooms }: HomeProps) {
             return null;
           }
           return allPages.length + 1;
-        },
-        initialData: {
-          pages: [initialRooms],
-          pageParams: [1],
         },
       }
     );
@@ -116,7 +110,7 @@ export default function Home({ currentUser, initialRooms }: HomeProps) {
           columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           px={"2rem"}
           sx={{
-            justifyContent: { xs: "center", md: "flex-start" },
+            justifyContent: { xs: "center", sm: "flex-start" },
           }}
         >
           {rooms?.map((room, i) => (
@@ -138,13 +132,11 @@ export default function Home({ currentUser, initialRooms }: HomeProps) {
   );
 }
 
-export async function getServerSideProps({ req, res, query }: any) {
-  const initialRooms = await getRoomsData(1, 9, query);
+export async function getServerSideProps({ req, res }: any) {
   const currentUser = await getCurrentUser(req, res);
   return {
     props: {
       currentUser,
-      initialRooms,
     },
   };
 }
