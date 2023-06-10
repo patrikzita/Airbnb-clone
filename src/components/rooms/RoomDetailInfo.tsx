@@ -1,5 +1,4 @@
 import { categories } from "@/utils/categories";
-import StarRateIcon from "@mui/icons-material/StarRate";
 import { Avatar, Box, Divider, Typography } from "@mui/material";
 
 type RoomInfoProps = {

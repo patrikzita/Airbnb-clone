@@ -5,6 +5,7 @@ import StickyHeader from "./home/Navbar/StickyHeader";
 import CreateHomeModal from "./modals/CreateHomeModal";
 import LoginModal from "./modals/LoginModal";
 import SearchModal from "./modals/SearchModal";
+import Head from "next/head";
 
 type LayoutProps = {
   children: ReactNode;
@@ -12,6 +13,9 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
+      <Head>
+       
+      </Head>
       <StickyHeader />
       <Toaster
         toastOptions={{

@@ -1,12 +1,10 @@
-import getFavoriteUserRoom from "@/actions/getFavoriteUserRoom";
-import Loading from "@/components/Others/Loading";
-import useRegisterModal from "@/hooks/useRegisterModal";
-import { Box, Button, Typography, Grid } from "@mui/material";
-import { useSession } from "next-auth/react";
-import Head from "next/head";
-import { SafeRoom, SafeUser } from "@/types";
-import CarouselRoomCard from "@/components/rooms/RoomCard";
 import getCurrentUser from "@/actions/getCurrentUser";
+import getFavoriteUserRoom from "@/actions/getFavoriteUserRoom";
+import CarouselRoomCard from "@/components/rooms/RoomCard";
+import useRegisterModal from "@/hooks/useRegisterModal";
+import { SafeRoom, SafeUser } from "@/types";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import Head from "next/head";
 
 type WishlistsProps = {
   favoriteRooms: SafeRoom[];
