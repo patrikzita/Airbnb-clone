@@ -8,7 +8,7 @@ import {
   tabsClasses,
 } from "@mui/material";
 import { useSearchParams } from "next/navigation";
-import CategoryItem from "../Others/CategoryItem";
+import CategoryItem from "../../Others/CategoryItem";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 const Categories = () => {

@@ -8,7 +8,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteTwoToneIcon from "@mui/icons-material/FavoriteTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import { Box, Checkbox, Typography } from "@mui/material";
-import { Room } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";

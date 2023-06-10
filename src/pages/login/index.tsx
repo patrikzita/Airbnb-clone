@@ -1,5 +1,5 @@
-import CountryPhoneNumberSelect from "@/components/shared/inputs/CountryNumberSelect";
-import SocialButtons from "@/components/shared/inputs/SocialButtons";
+import CountryPhoneNumberSelect from "@/components/inputs/CountryNumberSelect";
+import SocialButtons from "@/components/Others/SocialButtons";
 import {
   Box,
   Divider,

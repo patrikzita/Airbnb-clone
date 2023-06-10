@@ -13,7 +13,7 @@ import dynamic from "next/dynamic";
 import { useMemo } from "react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { FormikValues } from "../../../modals/CreateHomeModal";
+import { FormikValues } from "../modals/CreateHomeModal";
 
 export type CountrySelectValue = {
   flag: string;
@@ -34,7 +34,7 @@ const CountrySelect = ({
   const { getAll } = useCountries();
   const Map = useMemo(
     () =>
-      dynamic(() => import("../../../Others/Map"), {
+      dynamic(() => import("../Others/Map"), {
         ssr: false,
       }),
     [value]

@@ -1,7 +1,7 @@
 import useCountries from "@/hooks/useCountries";
 import { Box, Divider, Typography } from "@mui/material";
 import dynamic from "next/dynamic";
-const Map = dynamic(() => import("../../../Others/Map"), {
+const Map = dynamic(() => import("../Others/Map"), {
   ssr: false,
 });
 

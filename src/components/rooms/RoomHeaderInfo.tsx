@@ -3,7 +3,7 @@ import useIsMobile from "@/hooks/useIsMobile";
 import IosShareIcon from "@mui/icons-material/IosShare";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import { Box, Button, Typography } from "@mui/material";
-import { FavoriteButton } from "../FavoriteButton";
+import { FavoriteButton } from "./FavoriteButton";
 
 type RoomInfoProps = {
   title: string;

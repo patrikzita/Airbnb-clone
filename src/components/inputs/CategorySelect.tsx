@@ -2,7 +2,7 @@ import CategoryInput from "@/components/Others/CategoryInput";
 import { categories } from "@/utils/categories";
 import { Grid } from "@mui/material";
 import { FormikProps } from "formik";
-import { FormikValues } from "../../../modals/CreateHomeModal";
+import { FormikValues } from "../modals/CreateHomeModal";
 
 type CategorySelectProps = {
   selectedCategory: string;

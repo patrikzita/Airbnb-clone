@@ -6,8 +6,8 @@ import Box from "@mui/material/Box";
 import Fade from "@mui/material/Fade";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-import CountryPhoneNumberSelect from "../shared/inputs/CountryNumberSelect";
-import SocialButtons from "../shared/inputs/SocialButtons";
+import CountryPhoneNumberSelect from "../inputs/CountryNumberSelect";
+import SocialButtons from "../Others/SocialButtons";
 
 const LoginModal = () => {
   const theme = useTheme();

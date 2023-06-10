@@ -7,12 +7,10 @@ import "react-date-range/dist/theme/default.css";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import ImageUpload from "../Others/ImageUpload";
-import CategorySelect from "../shared/inputs/CategorySelect";
-import CountrySelect, {
-  CountrySelectValue,
-} from "../shared/inputs/CountrySelect";
-import DateSelect from "../shared/inputs/DateSelect";
-import InfoSelect from "../shared/inputs/InfoSelect";
+import CategorySelect from "../inputs/CategorySelect";
+import CountrySelect, { CountrySelectValue } from "../inputs/CountrySelect";
+import DateSelect from "../inputs/DataSelect";
+import InfoSelect from "../inputs/InfoSelect";
 import ModalContainer from "./Modal";
 import axios from "axios";
 import toast from "react-hot-toast";

@@ -1,6 +1,6 @@
 import getCurrentUser from "@/actions/getCurrentUser";
-import CarouselRoomCard from "@/components/shared/rooms/RoomCard";
-import RoomCardSkeleton from "@/components/shared/rooms/RoomCardSkeleton";
+import CarouselRoomCard from "@/components/rooms/RoomCard";
+import RoomCardSkeleton from "@/components/rooms/RoomCardSkeleton";
 import { SafeUser } from "@/types";
 import { useIntersection } from "@mantine/hooks";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";

@@ -1,4 +1,4 @@
-import DateSelect from "@/components/shared/inputs/DateSelect";
+import DateSelect from "@/components/inputs/DataSelect";
 import useCountries from "@/hooks/useCountries";
 import { SafeReservation } from "@/types";
 import { checkIfDatesAreEqual, getNightsBetween } from "@/utils/dateUtils";

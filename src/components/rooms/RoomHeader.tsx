@@ -4,7 +4,7 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import { Box, IconButton, styled } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { FavoriteButton } from "../FavoriteButton";
+import { FavoriteButton } from "./FavoriteButton";
 
 type RoomHeader = {
   imageUrl: string;

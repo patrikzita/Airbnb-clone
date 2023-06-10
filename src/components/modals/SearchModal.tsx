@@ -18,7 +18,7 @@ import { Range } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Counter from "../Others/Counter";
-import DateSelect from "../shared/inputs/DateSelect";
+import DateSelect from "../inputs/DataSelect";
 import ModalContainer from "./Modal";
 
 type CountrySelectValue = {
