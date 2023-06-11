@@ -14,17 +14,13 @@ export default async function handler(
     return;
   }
 
-  let query;
+  let query: GetRoomRequest;
   try {
     query = getRoomsDataRequestValidator.parse(req.query);
   } catch (err) {
     return res.status(400).send({ error: "Invalid query parameters." });
   }
-  const {
-    page = "0",
-    pageSize = "9",
-    ...restParams
-  } = req.query as Partial<GetRoomRequest>;
+  const { page = "0", pageSize = "9", ...restParams } = query;
 
   const pageNumber = Number(page);
   const pageSizeNumber = Number(pageSize);

@@ -1,15 +1,14 @@
 import { categories } from "@/utils/categories";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import {
-  AppBar,
   Box,
   Button,
   Container,
   Tabs,
-  tabsClasses,
+  tabsClasses
 } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import CategoryItem from "../../Others/CategoryItem";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 const Categories = () => {
   const params = useSearchParams();

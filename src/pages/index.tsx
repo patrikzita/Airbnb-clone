@@ -11,6 +11,7 @@ import { useRouter as useNavRouter } from "next/navigation";
 import { useRouter } from "next/router";
 import queryString from "query-string";
 import { useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 
 const EmptyResults = () => {
   const router = useNavRouter();

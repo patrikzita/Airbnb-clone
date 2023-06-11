@@ -6,10 +6,9 @@ import { useCallback } from "react";
 type CategoryItemProps = {
   icon: typeof SvgIcon;
   label: string;
-  selected?: boolean
 };
 
-const CategoryItem = ({ label, icon: Icon, selected }: CategoryItemProps) => {
+const CategoryItem = ({ label, icon: Icon }: CategoryItemProps) => {
   const router = useRouter();
   const params = useSearchParams();
 

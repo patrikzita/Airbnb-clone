@@ -193,11 +193,6 @@ const SearchModal = () => {
     selectedCountry,
   ]);
 
-  const handleClearQuery = () => {
-    router.push("/");
-    searchModal.onClose();
-  };
-
   let body = (
     <>
       <Typography component="h2" variant="h5">

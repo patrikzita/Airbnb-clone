@@ -7,7 +7,6 @@ const getRoomsData = async (
 ) => {
   try {
     let query: any = {};
-
     if (searchParams.category) {
       query.category = searchParams.category;
     }
@@ -30,14 +29,32 @@ const getRoomsData = async (
 
     if (searchParams.startDate && searchParams.endDate) {
       query.startDate = {
-        gte: new Date(searchParams.startDate),
-        lte: new Date(searchParams.endDate),
+        lte: new Date(searchParams.startDate),
+      };
+      query.endDate = {
+        gte: new Date(searchParams.endDate),
+      };
+      query.NOT = {
+        reservations: {
+          some: {
+            OR: [
+              {
+                endDate: { gte: new Date(searchParams.startDate) },
+                startDate: { lte: new Date(searchParams.startDate) },
+              },
+              {
+                startDate: { lte: new Date(searchParams.endDate) },
+                endDate: { gte: new Date(searchParams.endDate) },
+              },
+            ],
+          },
+        },
       };
     }
-
     if (page < 1) {
       page = 1;
     }
+
     const rooms = await client.room.findMany({
       skip: (page - 1) * pageSize,
       take: pageSize,
@@ -48,14 +65,14 @@ const getRoomsData = async (
       return null;
     }
 
-    const safeListings = rooms.map((room) => ({
+    const safeRooms = rooms.map((room) => ({
       ...room,
       createdAt: room.createdAt.toISOString(),
       startDate: room.startDate.toISOString(),
       endDate: room.endDate.toISOString(),
     }));
 
-    return safeListings;
+    return safeRooms;
   } catch (err: any) {
     throw new Error(err);
   }
