@@ -29,7 +29,9 @@ export default async function handler(
       title,
       description,
       price,
-    } = createRoomRequestValidator.parse(req.body);
+    } = req.body;
+
+    console.log("I´m here.")
 
     const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
     const buffer = Buffer.from(response.data, "binary");

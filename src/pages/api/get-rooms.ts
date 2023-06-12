@@ -1,4 +1,4 @@
-import getRoomsData from "@/actions/getRoomsData";
+import getPaginatedRoomsData from "@/actions/getPaginatedRoomsData";
 import { getRoomsDataRequestValidator } from "@/libs/apiRequestValidators";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
@@ -30,7 +30,7 @@ export default async function handler(
   }
 
   try {
-    const room = await getRoomsData(pageNumber, pageSizeNumber, restParams);
+    const room = await getPaginatedRoomsData(pageNumber, pageSizeNumber, restParams);
     res.status(200).json(room);
   } catch (err) {
     console.error(err);

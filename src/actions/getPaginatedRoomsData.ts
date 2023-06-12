@@ -1,6 +1,6 @@
 import client from "@/libs/prisma";
 
-const getRoomsData = async (
+const getPaginatedRoomsData = async (
   page: number,
   pageSize: number = 1,
   searchParams: any = {}
@@ -78,4 +78,4 @@ const getRoomsData = async (
   }
 };
 
-export default getRoomsData;
+export default getPaginatedRoomsData;
