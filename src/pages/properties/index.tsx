@@ -1,19 +1,14 @@
 import getCurrentUser from "@/actions/getCurrentUser";
 import getUserRoomsData from "@/actions/getUserRoomsData";
-import CarouselRoomCard from "@/components/rooms/RoomCard";
-import { routes } from "@/config/siteConfig";
-import useCountries from "@/hooks/useCountries";
 import useRegisterModal from "@/hooks/useRegisterModal";
 import { SafeRoom, SafeUser } from "@/types";
-import { formatCurrency } from "@/utils/formatCurrency";
-import { formatDate } from "@/utils/formatDate";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, useCallback } from "react"
+import { useCallback, useState } from "react";
 import { toast } from "react-hot-toast";
 
 type PropertyCardProps = {

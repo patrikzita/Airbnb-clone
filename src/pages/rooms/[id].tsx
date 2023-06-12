@@ -25,10 +25,6 @@ type PageProps = {
   reservations: SafeReservation[];
 };
 
-type CreateReservationApiRequest = z.infer<
-  typeof createReservationRequestValidator
->;
-
 export default function Page({ room, reservations }: PageProps) {
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -38,7 +34,7 @@ export default function Page({ room, reservations }: PageProps) {
     key: "selection",
   });
   const onSubmit = () => {
-    const payload: CreateReservationApiRequest = {
+    const payload = {
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
       roomId: room.id,
