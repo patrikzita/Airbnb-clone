@@ -1,9 +1,8 @@
 import getCurrentUser from "@/actions/getCurrentUser";
-import type { NextApiRequest, NextApiResponse } from "next";
 import client from "@/libs/prisma";
 import axios from "axios";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { getPlaiceholder } from "plaiceholder";
-import { createRoomRequestValidator } from "@/libs/apiRequestValidators";
 
 export default async function handler(
   req: NextApiRequest,
@@ -31,8 +30,6 @@ export default async function handler(
       price,
     } = req.body;
 
-    console.log("I´m here.")
-
     const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
     const buffer = Buffer.from(response.data, "binary");
     const { base64 } = await getPlaiceholder(buffer);
@@ -41,8 +38,8 @@ export default async function handler(
       data: {
         category,
         locationValue: location.value,
-        guestCount,
-        roomCount,
+        guestCount: Number(guestCount),
+        roomCount: Number(roomCount),
         startDate: date.startDate,
         endDate: date.endDate,
         imageUrl,

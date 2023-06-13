@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const createReservationRequestValidator = z.object({
-  startDate: z.string().optional(),
-  endDate: z.string().optional(),
+  startDate: z.string().or(z.date()).optional(),
+  endDate: z.string().or(z.date()).optional(),
   roomId: z.string(),
 });
 
@@ -11,15 +11,15 @@ export const createRoomRequestValidator = z.object({
   location: z.object({
     flag: z.string(),
     value: z.string(),
-    latlng: z.array(z.number()),
+    latlng: z.array(z.number().or(z.string())),
     region: z.string(),
   }),
-  guestCount: z.number(),
-  roomCount: z.number(),
+  guestCount: z.number().or(z.string()),
+  roomCount: z.number().or(z.string()),
   date: z.object({
     key: z.string(),
-    startDate: z.date(),
-    endDate: z.date(),
+    startDate: z.date().or(z.string()),
+    endDate: z.date().or(z.string()),
   }),
   imageUrl: z.string(),
   title: z.string(),
@@ -37,4 +37,3 @@ export const getRoomsDataRequestValidator = z.object({
   locationValue: z.string().nonempty().optional(),
   category: z.string().nonempty().optional(),
 });
-

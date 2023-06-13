@@ -142,6 +142,8 @@ const CreateHomeModal = () => {
       price: 1,
     },
     onSubmit: (values) => {
+      console.log(values);
+      
       axios
         .post("/api/create-room", values)
         .then(() => {

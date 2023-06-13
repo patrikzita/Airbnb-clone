@@ -7,15 +7,17 @@ import Typography from "@mui/material/Typography";
 import { signIn } from "next-auth/react";
 
 const SocialButtons = () => {
-  const handleFacebookSignIn = () => {};
+  const handleFacebookSignIn = () => {
+    signIn("facebook");
+  };
 
   const handleGoogleSignIn = () => {
     signIn("google");
   };
 
-  const handleAppleSignIn = () => {};
+  const handleAppleSignIn = () => { };
 
-  const handleEmailSignIn = () => {};
+  const handleEmailSignIn = () => { };
 
   return (
     <Stack spacing={2} direction="column">

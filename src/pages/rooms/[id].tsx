@@ -20,6 +20,9 @@ import { Range } from "react-date-range";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
 
+
+type PayloadRequest = z.infer<typeof createReservationRequestValidator>
+
 type PageProps = {
   room: SafeRoom;
   reservations: SafeReservation[];
@@ -34,7 +37,7 @@ export default function Page({ room, reservations }: PageProps) {
     key: "selection",
   });
   const onSubmit = () => {
-    const payload = {
+    const payload: PayloadRequest = {
       startDate: dateRange.startDate,
       endDate: dateRange.endDate,
       roomId: room.id,
