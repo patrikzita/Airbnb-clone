@@ -4,7 +4,7 @@ import {
   Divider,
   FormGroup,
   Stack,
-  TextField
+  TextField,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -27,10 +27,7 @@ type CountrySelectProps = {
   value?: CountrySelectValue | null;
   onChange: (location: CountrySelectValue) => void;
 };
-const CountrySelect = ({
-  value,
-  onChange,
-}: CountrySelectProps) => {
+const CountrySelect = ({ value, onChange }: CountrySelectProps) => {
   const { getAll } = useCountries();
   const Map = useMemo(
     () =>

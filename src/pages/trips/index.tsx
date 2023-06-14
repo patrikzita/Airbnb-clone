@@ -24,24 +24,28 @@ const ReservationRoomCard = ({ reservation }: PropertyCardProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const onDelete = useCallback((e: MouseEvent<HTMLButtonElement>, id: string) => {
-    e.stopPropagation();
-    setLoading(true);
+  const onDelete = useCallback(
+    (e: MouseEvent<HTMLButtonElement>, id: string) => {
+      e.stopPropagation();
+      setLoading(true);
 
-    axios.delete("/api/delete-reservation", {
-      params: { reservationId: id }
-    })
-      .then(() => {
-        toast.success('Your reservation deleted!');
-        router.refresh();
-      })
-      .catch((error) => {
-        toast.error(error?.response?.data?.error)
-      })
-      .finally(() => {
-        setLoading(false);
-      })
-  }, [router]);
+      axios
+        .delete("/api/delete-reservation", {
+          params: { reservationId: id },
+        })
+        .then(() => {
+          toast.success("Your reservation deleted!");
+          router.refresh();
+        })
+        .catch((error) => {
+          toast.error(error?.response?.data?.error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    },
+    [router]
+  );
 
   return (
     <Box
@@ -95,31 +99,33 @@ const ReservationRoomCard = ({ reservation }: PropertyCardProps) => {
 
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
         <Typography>Total:</Typography>
-        <Typography
-          component="span"
-          sx={{ fontWeight: "500" }}
-        >
+        <Typography component="span" sx={{ fontWeight: "500" }}>
           {formatCurrency(reservation.totalPrice)}
         </Typography>
       </Box>
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
         <Typography>Reservation:</Typography>
-        <Typography
-          component="span"
-          sx={{ fontWeight: "500" }}
-        >
-          {`${formatDate(new Date(reservation.startDate))} - ${formatDate(new Date(reservation.endDate))}`}
+        <Typography component="span" sx={{ fontWeight: "500" }}>
+          {`${formatDate(new Date(reservation.startDate))} - ${formatDate(
+            new Date(reservation.endDate)
+          )}`}
         </Typography>
       </Box>
-      <Button variant="contained" sx={{
-        backgroundColor: "error.main",
-        width: "100%",
-        mt: 2
-      }} disabled={loading} onClick={(e) => onDelete(e, reservation.id)}>Delete Reservation</Button>
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: "error.main",
+          width: "100%",
+          mt: 2,
+        }}
+        disabled={loading}
+        onClick={(e) => onDelete(e, reservation.id)}
+      >
+        Delete Reservation
+      </Button>
     </Box>
-
   );
-}
+};
 
 type PropertiesProps = {
   currentUser: SafeUser;
@@ -128,19 +134,39 @@ type PropertiesProps = {
 
 const TripsPage = ({ currentUser, userReservation }: PropertiesProps) => {
   if (!currentUser) {
-    return (<CustomHead title="Trips - Airbnb" description="Manage your upcoming and past trips and keep track of your booking details.">
-      <StateMessage title="Unauthorized" subtitle="You´ve to be login, if you want to manage your trips." showLoginButton />
-    </CustomHead>)
+    return (
+      <CustomHead
+        title="Trips - Airbnb"
+        description="Manage your upcoming and past trips and keep track of your booking details."
+      >
+        <StateMessage
+          title="Unauthorized"
+          subtitle="You´ve to be login, if you want to manage your trips."
+          showLoginButton
+        />
+      </CustomHead>
+    );
   }
   if (userReservation.length === 0) {
-    return (<CustomHead title="Your Trips - Trips - Airbnb" description="Manage your upcoming and past trips and keep track of your booking details."
-    ><StateMessage title="No trips found" subtitle="Looks like you haven't reserved any trips." />
-    </CustomHead>)
+    return (
+      <CustomHead
+        title="Your Trips - Trips - Airbnb"
+        description="Manage your upcoming and past trips and keep track of your booking details."
+      >
+        <StateMessage
+          title="No trips found"
+          subtitle="Looks like you haven't reserved any trips."
+        />
+      </CustomHead>
+    );
   }
 
   return (
     <>
-      <CustomHead title="Your Trips - Trips - Airbnb" description="Manage your upcoming and past trips and keep track of your booking details.">
+      <CustomHead
+        title="Your Trips - Trips - Airbnb"
+        description="Manage your upcoming and past trips and keep track of your booking details."
+      >
         <MainContent>
           <Typography variant="h4" component="h1">
             Manage your Trips
@@ -171,7 +197,9 @@ export default TripsPage;
 
 export async function getServerSideProps({ req, res }: any) {
   const currentUser = await getCurrentUser(req, res);
-  const userReservation = await getUsersReservations({ userId: currentUser?.id })
+  const userReservation = await getUsersReservations({
+    userId: currentUser?.id,
+  });
 
   return {
     props: {

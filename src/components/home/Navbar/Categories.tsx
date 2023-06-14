@@ -1,12 +1,6 @@
 import { categories } from "@/utils/categories";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import {
-  Box,
-  Button,
-  Container,
-  Tabs,
-  tabsClasses
-} from "@mui/material";
+import { Box, Button, Container, Tabs, tabsClasses } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import CategoryItem from "../../Others/CategoryItem";
 

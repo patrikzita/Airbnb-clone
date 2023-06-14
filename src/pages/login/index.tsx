@@ -27,8 +27,8 @@ const Login = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            marginTop: isMobile ? 0 : "3rem"
-           }}
+            marginTop: isMobile ? 0 : "3rem",
+          }}
         >
           <Box
             sx={{

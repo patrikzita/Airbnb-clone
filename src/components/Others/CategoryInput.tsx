@@ -21,16 +21,14 @@ const CategoryInput = ({
         cursor: "pointer",
         padding: 2,
         gap: ".5rem",
-        border: selected ? "2px solid" :"1px solid",
-        borderColor: selected ? "grey-800" :"grey.500",
-        borderRadius: "0.75rem", 
-
+        border: selected ? "2px solid" : "1px solid",
+        borderColor: selected ? "grey-800" : "grey.500",
+        borderRadius: "0.75rem",
       }}
-      onClick={()=> onSelectCategory(label)}
+      onClick={() => onSelectCategory(label)}
     >
-        <Icon />
-        <Typography>{label}</Typography>
-
+      <Icon />
+      <Typography>{label}</Typography>
     </Box>
   );
 };

@@ -13,22 +13,39 @@ type WishlistsProps = {
 };
 
 const Wishlists = ({ favoriteRooms, currentUser }: WishlistsProps) => {
-
   if (!currentUser) {
     return (
-      <CustomHead title="Wishlists - Airbnb" description="Keep track of your favourite properties and find them easily when planning your next holiday.">
-        <StateMessage title="Unauthorized" subtitle="You´ve to be login, if you want to manage your properties." showLoginButton />
-      </CustomHead>)
+      <CustomHead
+        title="Wishlists - Airbnb"
+        description="Keep track of your favourite properties and find them easily when planning your next holiday."
+      >
+        <StateMessage
+          title="Unauthorized"
+          subtitle="You´ve to be login, if you want to manage your properties."
+          showLoginButton
+        />
+      </CustomHead>
+    );
   }
   if (favoriteRooms.length === 0) {
     return (
-      <CustomHead title="Wishlists - Airbnb" description="Keep track of your favourite properties and find them easily when planning your next holiday.">
-        <StateMessage title="No wish room found" subtitle="Looks like you haven't favorite properties." />
-      </CustomHead>)
+      <CustomHead
+        title="Wishlists - Airbnb"
+        description="Keep track of your favourite properties and find them easily when planning your next holiday."
+      >
+        <StateMessage
+          title="No wish room found"
+          subtitle="Looks like you haven't favorite properties."
+        />
+      </CustomHead>
+    );
   }
 
   return (
-    <CustomHead title="Wishlists - Airbnb" description="Keep track of your favourite properties and find them easily when planning your next holiday.">
+    <CustomHead
+      title="Wishlists - Airbnb"
+      description="Keep track of your favourite properties and find them easily when planning your next holiday."
+    >
       <MainContent>
         <Typography variant="h4" component="h1">
           Wishlists
@@ -53,7 +70,6 @@ const Wishlists = ({ favoriteRooms, currentUser }: WishlistsProps) => {
         </Grid>
       </MainContent>
     </CustomHead>
-
   );
 };
 export default Wishlists;

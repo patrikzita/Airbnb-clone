@@ -52,7 +52,12 @@ type CarouselListingCardProps = {
   onDelete?: (id: string) => void;
 };
 
-const CarouselRoomCard = ({ currentUser, room, showDeleteButton = false, onDelete }: CarouselListingCardProps) => {
+const CarouselRoomCard = ({
+  currentUser,
+  room,
+  showDeleteButton = false,
+  onDelete,
+}: CarouselListingCardProps) => {
   const { getByValue } = useCountries();
 
   const locationLabel = getByValue(room.locationValue)?.label;
@@ -60,12 +65,15 @@ const CarouselRoomCard = ({ currentUser, room, showDeleteButton = false, onDelet
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
-  const handleDelete = useCallback((e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    setLoading(true);
-    onDelete && onDelete(room.id);
-    setLoading(false);
-  }, [onDelete, room.id]);
+  const handleDelete = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      e.stopPropagation();
+      setLoading(true);
+      onDelete && onDelete(room.id);
+      setLoading(false);
+    },
+    [onDelete, room.id]
+  );
 
   return (
     <Box
@@ -128,19 +136,36 @@ const CarouselRoomCard = ({ currentUser, room, showDeleteButton = false, onDelet
           <Typography component="span">night</Typography>
         </Box>
       </Box>
-      {showDeleteButton && (<Box sx={{
-        display: "flex",
-        justifyContent: "flex-end",
-        flexDirection: { xs: "column", md: "row" },
-        gap: 2, py: 2
-      }}>
-        <Button variant="contained" sx={{
-          backgroundColor: "info.main"
-        }}>Edit</Button>
-        <Button variant="contained" sx={{
-          backgroundColor: "error.main"
-        }} disabled={loading} onClick={handleDelete}>Delete</Button>
-      </Box>)}
+      {showDeleteButton && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            flexDirection: { xs: "column", md: "row" },
+            gap: 2,
+            py: 2,
+          }}
+        >
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "info.main",
+            }}
+          >
+            Edit
+          </Button>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: "error.main",
+            }}
+            disabled={loading}
+            onClick={handleDelete}
+          >
+            Delete
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };

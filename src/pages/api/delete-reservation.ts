@@ -19,7 +19,7 @@ export default async function handler(
 
     const { reservationId } = req.query;
     console.log(reservationId);
-    
+
     if (!reservationId || typeof reservationId !== "string") {
       throw new Error("Invalid ID");
     }

@@ -1,10 +1,10 @@
 import { CountryType, countries } from "@/utils/countries";
 import {
-    Autocomplete,
-    Button,
-    FormGroup,
-    InputAdornment,
-    TextField
+  Autocomplete,
+  Button,
+  FormGroup,
+  InputAdornment,
+  TextField,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useState } from "react";

@@ -5,7 +5,7 @@ import StateMessage from "@/components/Others/StateMessage";
 import MainContent from "@/components/layouts/MainContent";
 import CarouselRoomCard from "@/components/rooms/RoomCard";
 import { SafeRoom, SafeUser } from "@/types";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
@@ -13,37 +13,61 @@ import { toast } from "react-hot-toast";
 
 type PropertiesProps = {
   currentUser: SafeUser;
-  userRooms: SafeRoom[]
+  userRooms: SafeRoom[];
 };
 
 const PropertiesPage = ({ currentUser, userRooms }: PropertiesProps) => {
   if (!currentUser) {
-    return (<CustomHead title="Properties - Airbnb" description="Managing your properties ">
-      <StateMessage title="Unauthorized" subtitle="You´ve to be login, if you want to manage your properties." showLoginButton />
-    </CustomHead>)
+    return (
+      <CustomHead
+        title="Properties - Airbnb"
+        description="Managing your properties "
+      >
+        <StateMessage
+          title="Unauthorized"
+          subtitle="You´ve to be login, if you want to manage your properties."
+          showLoginButton
+        />
+      </CustomHead>
+    );
   }
   if (userRooms.length === 0) {
-    return (<CustomHead title="Your lists - Properties - Airbnb" description="Managing your properties ">
-      <StateMessage title="No trips found" subtitle="Looks like you haven't reserved any trips." />
-    </CustomHead>)
+    return (
+      <CustomHead
+        title="Your lists - Properties - Airbnb"
+        description="Managing your properties "
+      >
+        <StateMessage
+          title="No trips found"
+          subtitle="Looks like you haven't reserved any trips."
+        />
+      </CustomHead>
+    );
   }
 
   const router = useRouter();
-  const onDelete = useCallback((id: string) => {
-    axios.delete("/api/delete-room", {
-      params: { roomId: id }
-    })
-      .then(() => {
-        toast.success('Rooom deleted!');
-        router.refresh();
-      })
-      .catch((error) => {
-        toast.error(error?.response?.data?.error)
-      })
-  }, [router]);
+  const onDelete = useCallback(
+    (id: string) => {
+      axios
+        .delete("/api/delete-room", {
+          params: { roomId: id },
+        })
+        .then(() => {
+          toast.success("Rooom deleted!");
+          router.refresh();
+        })
+        .catch((error) => {
+          toast.error(error?.response?.data?.error);
+        });
+    },
+    [router]
+  );
 
   return (
-    <CustomHead title="Your lists - Properties - Airbnb" description="Managing your properties">
+    <CustomHead
+      title="Your lists - Properties - Airbnb"
+      description="Managing your properties"
+    >
       <MainContent>
         <Typography variant="h4" component="h1" marginY={4}>
           Manage My Properties
@@ -68,14 +92,14 @@ const PropertiesPage = ({ currentUser, userRooms }: PropertiesProps) => {
           ))}
         </Grid>
       </MainContent>
-    </CustomHead >
+    </CustomHead>
   );
 };
 export default PropertiesPage;
 
 export async function getServerSideProps({ req, res }: any) {
   const currentUser = await getCurrentUser(req, res);
-  const userRooms = await getUserRoomsData(currentUser?.id)
+  const userRooms = await getUserRoomsData(currentUser?.id);
 
   return {
     props: {

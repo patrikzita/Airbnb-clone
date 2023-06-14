@@ -68,7 +68,6 @@ const SearchBar = () => {
           borderWidth: "1px",
           borderRadius: "4rem",
           borderColor: "rgba(209, 209, 209, 0.5)",
-
         },
         "&:hover": {
           borderRadius: "4rem",
@@ -87,7 +86,6 @@ const SearchBar = () => {
             borderColor: "rgba(209, 209, 209, 0.5)",
             borderRight: "1px solid rgba(209, 209, 209, 0.5)",
             borderLeft: "1px solid rgba(209, 209, 209, 0.5)",
-
           },
         }}
         onClick={searchModal.onOpen}
@@ -120,7 +118,15 @@ const SearchBar = () => {
         onClick={searchModal.onOpen}
       >
         {guestLabel}
-        <Box sx={{ display: "flex", bgcolor: "red", p: "6px", borderRadius: "50%", marginLeft: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            bgcolor: "red",
+            p: "6px",
+            borderRadius: "50%",
+            marginLeft: 1,
+          }}
+        >
           <SearchIcon sx={{ color: "common.white", fontSize: "1.4rem" }} />
         </Box>
       </Button>

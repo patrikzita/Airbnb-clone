@@ -99,18 +99,33 @@ export default function Home({ currentUser }: HomeProps) {
     <>
       <Head>
         <title>Vacation Homes & Condo Rentals - Airbnb</title>
-        <meta name="description" content="Discover the best vacation homes and condo rentals. AirbnbClone makes it easy to find and book unique accommodations anywhere in the world." />
+        <meta
+          name="description"
+          content="Discover the best vacation homes and condo rentals. AirbnbClone makes it easy to find and book unique accommodations anywhere in the world."
+        />
 
-        <meta property="og:title" content="Vacation Homes & Condo Rentals - AirbnbClone" />
-        <meta property="og:description" content="Discover the best vacation homes and condo rentals. AirbnbClone makes it easy to find and book unique accommodations anywhere in the world." />
+        <meta
+          property="og:title"
+          content="Vacation Homes & Condo Rentals - AirbnbClone"
+        />
+        <meta
+          property="og:description"
+          content="Discover the best vacation homes and condo rentals. AirbnbClone makes it easy to find and book unique accommodations anywhere in the world."
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={router.asPath} />
         <meta property="og:image" content="/airbnb-icon.svg" />
 
         <meta name="twitter:card" content="/airbnb-icon.svg" />
         <meta name="twitter:creator" content="@patrikzit" />
-        <meta name="twitter:title" content="Vacation Homes & Condo Rentals - AirbnbClone" />
-        <meta name="twitter:description" content="Discover the best vacation homes and condo rentals. AirbnbClone makes it easy to find and book unique accommodations anywhere in the world." />
+        <meta
+          name="twitter:title"
+          content="Vacation Homes & Condo Rentals - AirbnbClone"
+        />
+        <meta
+          name="twitter:description"
+          content="Discover the best vacation homes and condo rentals. AirbnbClone makes it easy to find and book unique accommodations anywhere in the world."
+        />
         <meta name="twitter:image" content="/airbnb-icon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

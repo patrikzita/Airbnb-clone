@@ -13,9 +13,7 @@ type LayoutProps = {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
-      <Head>
-       
-      </Head>
+      <Head></Head>
       <StickyHeader />
       <Toaster
         toastOptions={{

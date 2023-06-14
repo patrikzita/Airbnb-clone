@@ -9,7 +9,9 @@ import { toast } from "react-hot-toast";
 
 const SocialButtons = () => {
   const handleSignIn = () => {
-    toast.error("For the simplicity of the app, it only works by logging in via google.")
+    toast.error(
+      "For the simplicity of the app, it only works by logging in via google."
+    );
   };
 
   const handleGoogleSignIn = () => {

@@ -3,7 +3,6 @@ import { Paper } from "@mui/material";
 import { UploadButton } from "@uploadthing/react";
 import { toast } from "react-hot-toast";
 
-
 type ImageUploadProps = {
   onSetImage: (value: string) => void;
 };

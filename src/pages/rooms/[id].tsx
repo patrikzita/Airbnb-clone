@@ -21,8 +21,7 @@ import { Range } from "react-date-range";
 import { toast } from "react-hot-toast";
 import { z } from "zod";
 
-
-type PayloadRequest = z.infer<typeof createReservationRequestValidator>
+type PayloadRequest = z.infer<typeof createReservationRequestValidator>;
 
 type PageProps = {
   room: SafeRoom;
@@ -64,7 +63,11 @@ export default function Page({ room, reservations }: PageProps) {
         <meta name="description" content={room.description} />
 
         <meta property="og:title" content={room.title} key="title" />
-        <meta property="og:description" content={room.description} key="description" />
+        <meta
+          property="og:description"
+          content={room.description}
+          key="description"
+        />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={routerik.asPath} />
         <meta property="og:image" content={room.imageUrl} />

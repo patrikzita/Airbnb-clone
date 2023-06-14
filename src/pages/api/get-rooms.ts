@@ -30,7 +30,11 @@ export default async function handler(
   }
 
   try {
-    const room = await getPaginatedRoomsData(pageNumber, pageSizeNumber, restParams);
+    const room = await getPaginatedRoomsData(
+      pageNumber,
+      pageSizeNumber,
+      restParams
+    );
     res.status(200).json(room);
   } catch (err) {
     console.error(err);
