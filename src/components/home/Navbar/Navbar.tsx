@@ -260,6 +260,11 @@ const Navbar = () => {
     registerModal.onOpen();
   };
 
+  const handlePushToUrl = (url: string) => {
+    router.push(url);
+    handleCloseUserMenu();
+  }
+
   return (
     <>
       <AppBar
@@ -356,14 +361,14 @@ const Navbar = () => {
                   <MenuItem>
                     <Typography textAlign="center">Messages</Typography>
                   </MenuItem>,
-                  <MenuItem>
+                  <MenuItem onClick={() => handlePushToUrl(routes.trips)}>
                     <Typography textAlign="center">Trips</Typography>
                   </MenuItem>,
-                  <MenuItem onClick={() => router.push(routes.wishlists)}>
+                  <MenuItem onClick={() => handlePushToUrl(routes.wishlists)}>
                     <Typography textAlign="center">Wishlists</Typography>
                   </MenuItem>,
                   <Divider light />,
-                  <MenuItem onClick={() => router.push(routes.properties)}>
+                  <MenuItem onClick={() => handlePushToUrl(routes.properties)}>
                     <Typography textAlign="center" >
                       My properties
                     </Typography>

@@ -7,6 +7,7 @@ export type SafeReservation = Omit<
   createdAt: string;
   startDate: string;
   endDate: string;
+  room: SafeRoom;
 };
 
 export type SafeRoom = Omit<Room, "createdAt" | "startDate" | "endDate"> & {

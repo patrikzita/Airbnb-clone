@@ -5,27 +5,23 @@ import GoogleIcon from "@mui/icons-material/Google";
 import { Button, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { signIn } from "next-auth/react";
+import { toast } from "react-hot-toast";
 
 const SocialButtons = () => {
-  const handleFacebookSignIn = () => {
-    signIn("facebook");
+  const handleSignIn = () => {
+    toast.error("For the simplicity of the app, it only works by logging in via google.")
   };
 
   const handleGoogleSignIn = () => {
     signIn("google");
   };
-
-  const handleAppleSignIn = () => { };
-
-  const handleEmailSignIn = () => { };
-
   return (
     <Stack spacing={2} direction="column">
       <Button
         variant="outlined"
         color="secondary"
         startIcon={<FacebookIcon sx={{ color: "#1877F2" }} />}
-        onClick={handleFacebookSignIn}
+        onClick={handleSignIn}
       >
         <Typography sx={{ minWidth: "20ch" }}>
           Continue with Facebook
@@ -43,7 +39,7 @@ const SocialButtons = () => {
         variant="outlined"
         color="secondary"
         startIcon={<AppleIcon />}
-        onClick={handleAppleSignIn}
+        onClick={handleSignIn}
       >
         <Typography sx={{ minWidth: "20ch" }}>Continue with Apple</Typography>
       </Button>
@@ -51,7 +47,7 @@ const SocialButtons = () => {
         variant="outlined"
         color="secondary"
         startIcon={<EmailIcon />}
-        onClick={handleEmailSignIn}
+        onClick={handleSignIn}
       >
         <Typography sx={{ minWidth: "20ch" }}>Continue with email</Typography>
       </Button>

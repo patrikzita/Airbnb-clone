@@ -15,6 +15,7 @@ import { Box, Container, Divider, Paper } from "@mui/material";
 import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
+import { useRouter as useRouterik } from "next/router";
 import { useState } from "react";
 import { Range } from "react-date-range";
 import { toast } from "react-hot-toast";
@@ -30,6 +31,7 @@ type PageProps = {
 
 export default function Page({ room, reservations }: PageProps) {
   const router = useRouter();
+  const routerik = useRouterik();
   const isMobile = useIsMobile();
   const [dateRange, setDateRange] = useState<Range>({
     startDate: new Date(),
@@ -59,7 +61,13 @@ export default function Page({ room, reservations }: PageProps) {
     <>
       <Head>
         <title>{room.title}</title>
+        <meta name="description" content={room.description} />
+
         <meta property="og:title" content={room.title} key="title" />
+        <meta property="og:description" content={room.description} key="description" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={routerik.asPath} />
+        <meta property="og:image" content={room.imageUrl} />
       </Head>
       <main>
         {isMobile && (

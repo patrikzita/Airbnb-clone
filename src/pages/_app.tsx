@@ -1,5 +1,5 @@
 import Layout from "@/components/layout";
-import "@uploadthing/react/styles.css";
+// import "@uploadthing/react/styles.css";
 import "@/styles/globals.css";
 import theme from "@/theme";
 import { ThemeProvider } from "@mui/material/styles";
