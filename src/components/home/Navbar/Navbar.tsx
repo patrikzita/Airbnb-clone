@@ -214,12 +214,13 @@ const BottomBar = ({ session, status }: BottomBarProps) => {
             onClick={() => router.push(routes.wishlists)}
           />
 
-          {session && <Tab icon={<AirbnbIcon />} label="Trips" disableRipple />}
+          {session && <Tab icon={<AirbnbIcon />} label="Trips" disableRipple onClick={() => router.push(routes.trips)} />}
           {session && (
             <Tab
               icon={<ChatBubbleOutlineOutlinedIcon />}
               label="Inbox"
               disableRipple
+
             />
           )}
 
@@ -291,7 +292,7 @@ const Navbar = () => {
             />
           </Link>
           {router.pathname === routes.home ||
-          router.pathname.startsWith(`${routes.rooms}/`) ? (
+            router.pathname.startsWith(`${routes.rooms}/`) ? (
             <SearchBar />
           ) : (
             <div></div>
@@ -358,62 +359,62 @@ const Navbar = () => {
             >
               {session
                 ? React.Children.toArray([
-                    <MenuItem>
-                      <Typography textAlign="center">Messages</Typography>
-                    </MenuItem>,
-                    <MenuItem onClick={() => handlePushToUrl(routes.trips)}>
-                      <Typography textAlign="center">Trips</Typography>
-                    </MenuItem>,
-                    <MenuItem onClick={() => handlePushToUrl(routes.wishlists)}>
-                      <Typography textAlign="center">Wishlists</Typography>
-                    </MenuItem>,
-                    <Divider light />,
-                    <MenuItem
-                      onClick={() => handlePushToUrl(routes.properties)}
-                    >
-                      <Typography textAlign="center">My properties</Typography>
-                    </MenuItem>,
-                    <MenuItem
-                      onClick={() => {
-                        if (!session) {
-                          registerModal.onOpen();
-                        } else {
-                          createHomeModal.onOpen();
-                        }
-                        handleCloseUserMenu();
-                      }}
-                    >
-                      <Typography textAlign="center">Airbnb my home</Typography>
-                    </MenuItem>,
-                    <Divider light />,
-                    <MenuItem onClick={() => signOut()}>
-                      <Typography textAlign="center">Logout</Typography>
-                    </MenuItem>,
-                  ])
+                  <MenuItem>
+                    <Typography textAlign="center">Messages</Typography>
+                  </MenuItem>,
+                  <MenuItem onClick={() => handlePushToUrl(routes.trips)}>
+                    <Typography textAlign="center">Trips</Typography>
+                  </MenuItem>,
+                  <MenuItem onClick={() => handlePushToUrl(routes.wishlists)}>
+                    <Typography textAlign="center">Wishlists</Typography>
+                  </MenuItem>,
+                  <Divider light />,
+                  <MenuItem
+                    onClick={() => handlePushToUrl(routes.properties)}
+                  >
+                    <Typography textAlign="center">My properties</Typography>
+                  </MenuItem>,
+                  <MenuItem
+                    onClick={() => {
+                      if (!session) {
+                        registerModal.onOpen();
+                      } else {
+                        createHomeModal.onOpen();
+                      }
+                      handleCloseUserMenu();
+                    }}
+                  >
+                    <Typography textAlign="center">Airbnb my home</Typography>
+                  </MenuItem>,
+                  <Divider light />,
+                  <MenuItem onClick={() => signOut()}>
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem>,
+                ])
                 : React.Children.toArray([
-                    <MenuItem onClick={handleOpenRegisterModal}>
-                      <Typography textAlign="center">Sign Up</Typography>
-                    </MenuItem>,
-                    <MenuItem onClick={handleOpenRegisterModal}>
-                      <Typography textAlign="center">Log In</Typography>
-                    </MenuItem>,
-                    <Divider light />,
-                    <MenuItem
-                      onClick={() => {
-                        if (!session) {
-                          registerModal.onOpen();
-                        } else {
-                          createHomeModal.onOpen();
-                        }
-                        handleCloseUserMenu();
-                      }}
-                    >
-                      <Typography textAlign="center">Airbnb my home</Typography>
-                    </MenuItem>,
-                    <MenuItem onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">Help</Typography>
-                    </MenuItem>,
-                  ])}
+                  <MenuItem onClick={handleOpenRegisterModal}>
+                    <Typography textAlign="center">Sign Up</Typography>
+                  </MenuItem>,
+                  <MenuItem onClick={handleOpenRegisterModal}>
+                    <Typography textAlign="center">Log In</Typography>
+                  </MenuItem>,
+                  <Divider light />,
+                  <MenuItem
+                    onClick={() => {
+                      if (!session) {
+                        registerModal.onOpen();
+                      } else {
+                        createHomeModal.onOpen();
+                      }
+                      handleCloseUserMenu();
+                    }}
+                  >
+                    <Typography textAlign="center">Airbnb my home</Typography>
+                  </MenuItem>,
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Help</Typography>
+                  </MenuItem>,
+                ])}
             </Menu>
           </Stack>
         </Toolbar>
