@@ -25,7 +25,7 @@ const StickyHeader = () => {
   return (
     <>
       <ElevationScroll>
-        <AppBar position="sticky" color="transparent">
+        <AppBar position="sticky" color="inherit">
           <Navbar />
           {router.pathname === routes.home && <Categories />}
         </AppBar>
