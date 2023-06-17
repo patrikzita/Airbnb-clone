@@ -11,18 +11,16 @@ import {
   Divider,
   Paper,
   Typography,
-  useMediaQuery,
-  useTheme,
+  useTheme
 } from "@mui/material";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
-import { signOut, useSession } from "next-auth/react";
 type AccountSettingsPage = {
   currentUser?: SafeUser;
 };
 
 const AccountSettingsPage = ({ currentUser }: AccountSettingsPage) => {
-  const theme = useTheme();
   const createHomeModal = useCreateHomeModal();
 
   return (
@@ -95,10 +93,10 @@ const AccountSettingsPage = ({ currentUser }: AccountSettingsPage) => {
               </Typography>
             </Box>
             <Image
-              src={"/images/b0021c55-05a2-4449-998a-5593567220f7.jpg"}
-              width={100}
-              height={100}
-              alt=""
+              src="/images/b0021c55-05a2-4449-998a-5593567220f7.jpg"
+              width={60}
+              height={60}
+              alt="Airbnb home"
             />
           </Box>
         </Paper>

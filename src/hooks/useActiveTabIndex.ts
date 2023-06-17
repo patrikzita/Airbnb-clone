@@ -1,11 +1,21 @@
-import { routes } from "@/config/siteConfig";
+import {
+  authenticatedRoutes,
+  routes,
+  unauthenticatedRoutes,
+} from "@/config/siteConfig";
+import type { Session } from "next-auth";
 import { useRouter } from "next/router";
 
-export const useActiveTabIndex = () => {
+export const useActiveTabIndex = (session: Session | null) => {
   const router = useRouter();
   const currentPath = router.pathname;
-  const tabsRoutes = Object.values(routes);
-  let activeIndex = tabsRoutes.findIndex((route) => currentPath === route);
+
+  const tabsRoutes = session ? authenticatedRoutes : unauthenticatedRoutes;
+
+  let activeIndex = Object.values(tabsRoutes).findIndex(
+    (route) => currentPath === route
+  );
+
   if (activeIndex === -1) {
     activeIndex = 0;
   }

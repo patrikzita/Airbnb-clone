@@ -41,6 +41,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useRouter as useRouterFromRouter } from "next/router";
 import React, { useMemo, useState } from "react";
 import SearchBar from "./SearchBar";
+import { toast } from "react-hot-toast";
 
 const MobileSearch = () => {
   const searchModal = useSearchModal();
@@ -139,7 +140,7 @@ type BottomBarProps = {
 };
 const BottomBar = ({ session, status }: BottomBarProps) => {
   const router = useRouter();
-  const activeTabIndex = useActiveTabIndex();
+  const activeTabIndex = useActiveTabIndex(session);
 
   if (status === "loading") {
     const circleSize = 40;
@@ -179,6 +180,71 @@ const BottomBar = ({ session, status }: BottomBarProps) => {
       </HideOnScroll>
     );
   }
+  if (session) {
+    return (
+      <HideOnScroll>
+        <AppBar
+          position="fixed"
+          sx={{ top: "auto", bottom: 0, backgroundColor: "common.white" }}
+        >
+          <Tabs
+            value={activeTabIndex}
+            aria-label="Mobile Menu Tabs"
+            variant="fullWidth"
+            sx={{
+              "& .MuiTabs-indicator": {
+                display: "none",
+              },
+              "& .MuiTab-root": {
+                "@media (max-width: 450px)": {
+                  minWidth: 0,
+                  fontSize: "12px",
+                },
+              },
+            }}
+          >
+            <Tab
+              icon={<SearchIcon />}
+              label="Explore"
+              disableRipple
+              onClick={() => router.push(routes.home)}
+            />
+            <Tab
+              icon={<FavoriteBorderOutlinedIcon />}
+              label="Wishlist"
+              disableRipple
+              onClick={() => router.push(routes.wishlists)}
+            />
+
+            <Tab
+              icon={<AirbnbIcon />}
+              label="Trips"
+              disableRipple
+              onClick={() => router.push(routes.trips)}
+            />
+
+            <Tab
+              icon={<ChatBubbleOutlineOutlinedIcon />}
+              label="Inbox"
+              disableRipple
+              onClick={() =>
+                toast.error(
+                  "Page is not available. It´s here just because better UI"
+                )
+              }
+            />
+
+            <Tab
+              icon={<AccountCircleOutlinedIcon />}
+              label={"Profile"}
+              disableRipple
+              onClick={() => router.push(routes.accountSettings)}
+            />
+          </Tabs>
+        </AppBar>
+      </HideOnScroll>
+    );
+  }
   return (
     <HideOnScroll>
       <AppBar
@@ -214,29 +280,11 @@ const BottomBar = ({ session, status }: BottomBarProps) => {
             onClick={() => router.push(routes.wishlists)}
           />
 
-          {session && (
-            <Tab
-              icon={<AirbnbIcon />}
-              label="Trips"
-              disableRipple
-              onClick={() => router.push(routes.trips)}
-            />
-          )}
-          {session && (
-            <Tab
-              icon={<ChatBubbleOutlineOutlinedIcon />}
-              label="Inbox"
-              disableRipple
-            />
-          )}
-
           <Tab
             icon={<AccountCircleOutlinedIcon />}
-            label={session ? "Profile" : "Log in"}
+            label="Log in"
             disableRipple
-            onClick={() =>
-              router.push(`${session ? routes.accountSettings : routes.login}`)
-            }
+            onClick={() => router.push(routes.login)}
           />
         </Tabs>
       </AppBar>
@@ -365,7 +413,13 @@ const Navbar = () => {
             >
               {session
                 ? React.Children.toArray([
-                    <MenuItem>
+                    <MenuItem
+                      onClick={() =>
+                        toast.error(
+                          "Page is not available. It´s here just because better UI"
+                        )
+                      }
+                    >
                       <Typography textAlign="center">Messages</Typography>
                     </MenuItem>,
                     <MenuItem onClick={() => handlePushToUrl(routes.trips)}>
@@ -417,7 +471,14 @@ const Navbar = () => {
                     >
                       <Typography textAlign="center">Airbnb my home</Typography>
                     </MenuItem>,
-                    <MenuItem onClick={handleCloseUserMenu}>
+                    <MenuItem
+                      onClick={() => {
+                        toast.error(
+                          "Page is not available. It´s here just because better UI"
+                        );
+                        handleCloseUserMenu();
+                      }}
+                    >
                       <Typography textAlign="center">Help</Typography>
                     </MenuItem>,
                   ])}

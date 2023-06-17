@@ -1,5 +1,11 @@
 import useCreateHomeModal from "@/hooks/useCreateHomeModal";
-import { Box, InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { FormikProps, useFormik } from "formik";
 import { useState } from "react";
 import "react-date-range/dist/styles.css";
@@ -14,6 +20,7 @@ import InfoSelect from "../inputs/InfoSelect";
 import ModalContainer from "./Modal";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Counter from "../Others/Counter";
 
 type MainInfoSelectProps = {
   formik: FormikProps<FormikValues>;
@@ -174,7 +181,7 @@ const CreateHomeModal = () => {
       <Box
         sx={{
           overflow: "auto",
-          maxHeight: "calc(100vh - 270px)", // Nastavte maximální výšku podle potřeby
+          maxHeight: "calc(100vh - 270px)",
         }}
       >
         <CategorySelect
@@ -217,11 +224,18 @@ const CreateHomeModal = () => {
         <Typography component="h2" variant="h5">
           Share some information about your place
         </Typography>
-        <InfoSelect
-          valueGuest={formik.values.guestCount}
-          onChangeGuest={(value) => formik.setFieldValue("guestCount", value)}
-          valueRoom={formik.values.roomCount}
-          onChangeRoom={(value) => formik.setFieldValue("roomCount", value)}
+        <Counter
+          title="Guests"
+          subtitle="How many guests can you accommodate?"
+          onChange={(value) => formik.setFieldValue("guestCount", value)}
+          value={formik.values.guestCount}
+        />
+        <Divider />
+        <Counter
+          title="Rooms"
+          subtitle="How many rooms are available?"
+          onChange={(value) => formik.setFieldValue("roomCount", value)}
+          value={formik.values.roomCount}
         />
       </>
     );
