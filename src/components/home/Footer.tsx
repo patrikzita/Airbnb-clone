@@ -1,23 +1,23 @@
+import { routes } from "@/config/siteConfig";
+import useIsMobile from "@/hooks/useIsMobile";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import TwitterIcon from "@mui/icons-material/Twitter";
 import {
   Box,
+  Button,
   Container,
-  Typography,
-  styled,
   Divider,
+  Drawer,
   List,
   ListItem,
-  ListItemText,
-  Drawer,
-  Button,
+  Typography,
+  styled,
 } from "@mui/material";
 import Link from "next/link";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { routes } from "@/config/siteConfig";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import React, { useState } from "react";
 const footerData = {
   Support: [
     { name: "Help Center", url: "/help-center" },
@@ -95,6 +95,7 @@ const StyledFixedFooter = styled(Box)(({ theme }) => ({
 const Footer = () => {
   const router = useRouter();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   const toggleDrawer =
     (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -200,7 +201,7 @@ const Footer = () => {
           </Drawer>
         </>
       )}
-      {router.pathname !== routes.home && (
+      {router.pathname !== routes.home && !isMobile && (
         <Box
           component="footer"
           sx={{
