@@ -29,7 +29,6 @@ const getUsersReservations = async ({ userId }: Params) => {
         },
       };
     });
-    console.log("getUsersReservations", safeReservations);
     return safeReservations;
   } catch (err: any) {
     throw new Error("Failed to fetch reservations");

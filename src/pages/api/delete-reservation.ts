@@ -18,7 +18,6 @@ export default async function handler(
     }
 
     const { reservationId } = req.query;
-    console.log(reservationId);
 
     if (!reservationId || typeof reservationId !== "string") {
       throw new Error("Invalid ID");
@@ -30,8 +29,6 @@ export default async function handler(
         userId: currentUser?.id,
       },
     });
-    console.log("room deleted: ", room);
-
     res.status(200).json(room);
   } catch (err) {
     console.error(err);

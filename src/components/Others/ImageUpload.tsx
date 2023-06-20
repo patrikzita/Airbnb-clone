@@ -23,7 +23,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onSetImage }) => {
         <UploadButton<OurFileRouter>
           endpoint="imageUploader"
           onClientUploadComplete={(res) => {
-            console.log("Files: ", res);
             toast.success("Upload completed.");
             if (res && res.length > 0) {
               onSetImage(res[0].fileUrl);

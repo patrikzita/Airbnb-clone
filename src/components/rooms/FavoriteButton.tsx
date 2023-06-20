@@ -13,9 +13,6 @@ type FavoriteButtonProps = {
 };
 export const FavoriteButton = ({ roomId, label }: FavoriteButtonProps) => {
   const [currentUser, setCurrentUser] = useState<SafeUser | null>(null);
-  /* 
-    TODO: Change for use react-query, Suspense?, Loading? 
-  */
   useEffect(() => {
     axios
       .get("/api/current-user")
