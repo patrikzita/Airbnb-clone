@@ -94,6 +94,7 @@ export default function Home({ currentUser }: HomeProps) {
   if (rooms?.length === 0) {
     return <EmptyResults />;
   }
+  console.log(hasNextPage);
 
   return (
     <>

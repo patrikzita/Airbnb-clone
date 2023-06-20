@@ -19,7 +19,7 @@ const LoginModal = () => {
     left: "50%",
     transform: isMobile ? "translateX(-50%)" : "translate(-50%, -50%)",
     width: isMobile ? "100%" : 568,
-    height: isMobile ? "80vh" : "auto",
+    height: isMobile ? "90vh" : "auto",
     bgcolor: "background.paper",
     boxShadow: 24,
     borderRadius: isMobile ? 0 : "1rem",
@@ -75,6 +75,8 @@ const LoginModal = () => {
               display: "flex",
               flexDirection: "column",
               gap: 2,
+              overflow: "auto",
+              maxHeight: "calc(100vh - 150px)",
             }}
           >
             <Typography variant="h5" component="h2" fontWeight={500}>
