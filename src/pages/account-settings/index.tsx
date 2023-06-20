@@ -11,7 +11,7 @@ import {
   Divider,
   Paper,
   Typography,
-  useTheme
+  useTheme,
 } from "@mui/material";
 import { signOut } from "next-auth/react";
 import Image from "next/image";

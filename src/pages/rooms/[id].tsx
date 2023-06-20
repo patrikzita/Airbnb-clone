@@ -9,6 +9,7 @@ import RoomHeader from "@/components/rooms/RoomHeader";
 import RoomHeaderInfo from "@/components/rooms/RoomHeaderInfo";
 import RoomReservation from "@/components/rooms/RoomReservation";
 import useIsMobile from "@/hooks/useIsMobile";
+import useRegisterModal from "@/hooks/useRegisterModal";
 import { createReservationRequestValidator } from "@/libs/apiRequestValidators";
 import { SafeReservation, SafeRoom } from "@/types";
 import { Box, Container, Divider, Paper } from "@mui/material";
@@ -32,6 +33,7 @@ export default function Page({ room, reservations }: PageProps) {
   const router = useRouter();
   const routerik = useRouterik();
   const isMobile = useIsMobile();
+  const registerModal = useRegisterModal();
   const [dateRange, setDateRange] = useState<Range>({
     startDate: new Date(),
     endDate: new Date(),
@@ -51,8 +53,15 @@ export default function Page({ room, reservations }: PageProps) {
           router.refresh();
         }, 500);
       })
-      .catch(() => {
-        toast.error("Something get wrong!");
+      .catch((error) => {
+        if (error.response) {
+          toast.error(error.response.data.error);
+          if (error.response.status === 401) {
+            registerModal.onOpen();
+          }
+        } else {
+          toast.error("Something went wrong!");
+        }
       });
   };
 

@@ -15,7 +15,9 @@ export default async function handler(
   try {
     const currentUser = await getCurrentUser(req, res);
     if (!currentUser) {
-      return res.status(500).send({ error: "Current use not found." });
+      return res.status(401).send({
+        error: "Sorry, you need to be logged in to perform this action.",
+      });
     }
 
     const { roomId, startDate, endDate } =
@@ -31,6 +33,12 @@ export default async function handler(
     });
     if (!room) {
       return res.status(404).send({ error: "Room not found." }); // Room not found
+    }
+
+    if (room.userId === currentUser.id) {
+      return res
+        .status(422)
+        .send({ error: "Sorry, but you cannot reserve your own property." });
     }
 
     const existingReservations = await client.reservation.findMany({
