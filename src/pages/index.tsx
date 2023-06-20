@@ -4,7 +4,7 @@ import CarouselRoomCard from "@/components/rooms/RoomCard";
 import RoomCardSkeleton from "@/components/rooms/RoomCardSkeleton";
 import { SafeUser } from "@/types";
 import { useIntersection } from "@mantine/hooks";
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Head from "next/head";
