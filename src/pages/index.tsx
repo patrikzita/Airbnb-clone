@@ -129,7 +129,6 @@ export default function Home({ currentUser }: HomeProps) {
         <meta name="twitter:image" content="/airbnb-icon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-
       <MainContent>
         <Grid
           container

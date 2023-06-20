@@ -47,7 +47,7 @@ const Wishlists = ({ favoriteRooms, currentUser }: WishlistsProps) => {
       description="Keep track of your favourite properties and find them easily when planning your next holiday."
     >
       <MainContent>
-        <Typography variant="h4" component="h1">
+        <Typography variant="h4" component="h1" mb={2}>
           Wishlists
         </Typography>
         <Grid
